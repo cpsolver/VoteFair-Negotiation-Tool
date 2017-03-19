@@ -1,0 +1,595 @@
+/*  CSS stylesheet for www.NegotiationTool.com  */
+/*  (c) Copyright 2008 by Richard Fobes at NegotiationTool.com  */
+
+
+/* Establish font size for em specs elsewhere */
+body{font-size:100%}
+
+/* Global */
+*{line-height:120%}
+*{margin:0;padding:0;outline:none}
+img{border:0}
+hr{color:black}
+*{font-family:"Trebuchet MS", "Lucida Sans Unicode", Verdana, sans-serif}
+body{width:850px;background-color:#FFFFFF}
+
+body,td,a{text-align:left;text-indent:0}
+#debuguse{border-style:solid;border-width:1px;border-color:#909090}
+
+a:link,{color:#802010}
+a:visited{color:#0000FF}
+a:active{color:#0000FF}
+
+.classInline{display:inline}
+.classClear{clear:both}
+
+table{display:table;border-collapse:collapse}
+tr{display:table-row}
+thead{display:table-header-group}
+tbody{display:table-row-group}
+tfoot{display:table-footer-group}
+col{display:table-column}
+colgroup{display:table-column-group}
+td, th{display:table-cell}
+caption{display:table-caption}
+
+
+/* ----  Headings  ---- */
+
+h1, h2, h3, h4 {
+    font-family: "Palatino Linotype", "Times New Roman", "Georgia", "Occidental", serif;
+    font-weight: bold;
+    text-align: left;
+    padding: 0.6em;
+    padding-top: 0.25em;
+    padding-left:0;
+    padding-right:10em;
+    padding-bottom: 0.25em;
+}
+
+h1 {
+    font-size:1.1em;
+    color:#802010;
+    padding-bottom: 0.35em;
+}
+
+h2 {
+    font-size:1.0em;
+    color:#002090;
+    padding-bottom: 0.4em;
+}
+
+h3 {
+    font-size: 0.9em;
+    color:#002090;
+    padding-bottom: 0.3em;
+}
+
+h4 {
+    font-size: 0.8em;
+    color:#002090;
+}
+
+
+/* ----  Main content  ---- */
+
+/* ----
+Colors from new FullRanking page:
+#800000
+#802010
+#efa000
+#ffb300
+#ffd330
+#002060
+#002090
+#183072
+#0000ee
+
+Colors tried and liked:
+#FFB300
+#FFC000
+#002090
+#a0c0f0
+#C0D0FC
+#D0E0FF
+---- */
+
+
+.divBackgroundOuter1 {
+    background-color:#802010;
+    padding:8px;
+}
+
+.divBackgroundOuter2 {
+    background-color:#C06400;
+    padding:4px;
+}
+
+.divBackgroundOuter3 {
+    background-color:#ffc020;
+    padding:16px;
+}
+
+.classPageTitle {
+    font-size:1.1em;
+    text-align:center;
+    font-weight:bold;
+    font-style: italic;
+    color: #0020D0;
+    padding:0.2em;
+}
+
+.classPageTitleByline {
+    font-size:0.8em;
+    text-align:center;
+    font-weight:normal;
+    color: #002090;
+    padding:0.2em;
+    padding-bottom:0.8em;
+    line-height:100%;
+}
+
+.divBackgroundOuter4 {
+    background-color:#C06400;
+    padding:4px;
+}
+
+.divBackgroundOuter5 {
+    background-color:#802010;
+    padding:6px;
+}
+
+.divBackgroundOuter6 {
+    background-color:#601060;
+    padding:2px;
+}
+
+.divBackgroundOuter7 {
+    background-color:#002090;
+    padding:8px;
+}
+
+.divBackgroundOuter8 {
+    background-color:#0020D0;
+    padding:8px;
+}
+
+.divBackgroundOuter9 {
+    background-color:#80A0F0;
+    padding:3px;
+}
+
+.divBackgroundOuter10 {
+    background-color:#A0C0E0;
+    padding:3px;
+}
+
+.divMainContent {
+    background-color:#D0E0FF;
+    padding:20px;
+    padding-top:8px;
+    padding-bottom:8px;
+}
+
+
+/* ----  Paragraphs  ---- */
+
+.classParagraphStandard, .classParagraphStandout, .classParagraphQuestion, .classParagraphAnswer {
+    font-size: 0.9em;
+    padding: 0.8em;
+    padding-left:0;
+}
+
+.classParagraphAnswer {
+    padding-left:0.5em;
+}
+
+.classBold {
+    font-weight: bold;
+}
+
+.classLabelForInputError {
+    font-size: 1.0em;
+    font-weight: bold;
+    color: red;
+}
+
+.classParagraphStandout {
+    background-color:#D0E0FF;
+    padding-left: 2em;
+}
+
+
+/* ----  Lists  ---- */
+
+.classListItem, .classListItemForSelection {
+    font-size: 0.9em;
+    padding: 0.5em;
+    padding-left: 0;
+    list-style-position: inside;
+}
+
+.classListItemForSelection {
+    text-decoration: none;
+    list-style-type: none;
+    font-weight: normal;
+}
+
+.classListOfTips {
+    padding-left: 1em;
+}
+
+.classListItemTips {
+    padding-left: 0.5em;
+}
+
+/* ----  All links  ---- */
+
+a:link {
+    color: rgb(0,0,50);
+    font-size: 0.9em;
+/*---
+    text-decoration: none;
+---*/
+}
+
+a:visited {
+    color: rgb(50,0,0);
+    font-size: 0.9em;
+/*---
+    text-decoration: none;
+---*/
+}
+
+a:active {
+    color: rgb(0,50,0);
+    font-size: 0.9em;
+/*---
+    text-decoration: none;
+---*/
+}
+
+
+/* ----  Links within content  ---- */
+
+.classDivLink {
+    padding: 0.5em;
+    padding-left:0;
+}
+
+.classLinkStandard {
+    font-size: 1.0em;
+    padding: 0.2em;
+    padding-left: 0em;
+}
+
+
+/* ----  Navigation links  ---- */
+
+.classDivLinksAtTop {
+    clear: both;
+    margin-top: 0.1em;
+    display: inline;
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: normal;
+    padding: 0.1em;
+    padding-top: 5em;
+    padding-bottom: 0.2em;
+    position: relative;
+    bottom: 0.3em;
+    left: 1em;
+}
+
+.classInfoLabel { }
+
+.classLinkTab, .classLinkTabCurrent {
+    border-style: solid;
+    border-color: #002090;
+    border-top-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+    padding: 0.2em;
+    line-height: 1.2em;
+}
+
+.classLinkTabCurrent {
+    font-size: 1em;
+    font-style: bold;
+    color: #002090;
+    padding-bottom: 0.45em;
+    background-color:#E0EDFF;
+}
+
+.classLinkTab {
+    font-size: 0.9em;
+    font-style: normal;
+    color: #001480;
+    padding-bottom: 0.2em;
+    background-color:#A0C0E0;
+}
+
+.classLinkAtBottom {
+    font-size: 0.9em;
+}
+
+/* ----  Outline  ---- */
+
+.classRectangleOutlineAttention {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #C0C0FF;
+    background-color:#D0E0FF;
+    padding: 0.5em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+
+.classRectangleOutlineTabbedArea {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #002090;
+    background-color:#E0EDFF;
+    padding: 0.5em;
+}
+
+
+/* ----  Tables  ---- */
+
+.classTableStandard, .classTableStandardMove, .classTableNoLines {
+    display:table;
+    border-collapse:collapse;
+    border:medium solid #E0EDFF;
+}
+
+.unused {
+    border-style:medium;
+    border-top-width:medium;
+    border-bottom-width:medium;
+    border-left-width:medium;
+    border-right-width:medium;
+    padding:3;
+    margin:0;
+}
+
+.classTableStandardMove {
+    border-style:none;
+}
+
+.classTableNoLines {
+    border-style:none;
+}
+
+.classCellMoveButton {
+    vertical-align:middle;
+    padding: 0.4em;
+    border-style: none;
+    text-align:right;
+}
+
+.classColumnHeadingStandard, .classColumnHeadingProposal, .classColumnHeadingRankingLevel, .classColumnHeadingIncompatibilities, .classColumnHeadingParticipantInfo, .classColumnHeadingIncompatibilityInfo, .classColumnHeadingPercentSupport, .classColumnHeadingPercentSupportPositive {
+    display:table-cell;
+    font-size: 0.9em;
+    font-weight:bold;
+    text-align:center;
+    padding: 0.4em;
+    border:medium solid #E0EDFF;
+    background-color: #D0D0F0;
+}
+
+.classCellStandard, .classCellNoLines, .classCellRankingLevel, .classCellRankingLevelPositive, .classCellRankingLevelNeutral, .classCellRankingLevelNegative, .classCellOverallRankingLevel, .classCellOverallRankingLevelPositive, .classCellOverallRankingLevelNeutral, .classCellOverallRankingLevelNegative, .classRowNeutralitySeparator, .classRowNeutralitySeparatorPositive, .classRowNeutralitySeparatorNegative, .classCellProposal, .classCellProposalPositive, .classCellProposalNeutral, .classCellProposalNegative, .classCellOverallProposal, .classCellOverallProposalPositive, .classCellOverallProposalNeutral, .classCellOverallProposalNegative, .classCellIncompatibilities, .classCellIncompatibilitiesPositive, .classCellIncompatibilitiesNeutral, .classCellIncompatibilitiesNegative, .classCellOverallIncompatibilities, .classCellOverallIncompatibilitiesPositive, .classCellOverallIncompatibilitiesNeutral, .classCellOverallIncompatibilitiesNegative, .classCellParticipantInfo, .classCellIncompatibilityInfo, .classCellNoMargin, .classCellPercentSupportPositive, .classCellPercentSupportNeutral, .classCellPercentSupportNegative, .classCellSelectionButtonAndLabel, .classRowTopPositive, .classRowBottomNegative {
+    font-size: 0.9em;
+    font-weight:normal;
+    text-align:left;
+    padding: 0.4em;
+    border:medium solid #E0EDFF;
+}
+
+.classCellNoMargin {
+    border-style:none;
+    padding:0;
+    margin:0;
+}
+
+.classCellNoLines {
+    border-style:none;
+    padding:0;
+    margin:0;
+}
+
+.classCellNoLinesRightAlign {
+    border-style:none;
+    text-align:right;
+    padding:0;
+    margin:0;
+}
+
+.classCellNoLinesRightAlign h1{
+    text-align: left;
+}
+
+.classCellOverallRankingLevel, .classCellOverallRankingLevelPositive, .classCellOverallRankingLevelNeutral, .classCellOverallRankingLevelNegative {
+    text-align:center;
+}
+
+.classCellRankingLevelPositive, .classRowNeutralitySeparatorPositive, .classCellOverallRankingLevelPositive, .classCellProposalPositive, .classCellRankingLevelPositive, .classCellIncompatibilitiesPositive, .classCellPercentSupportPositive, .classCellOverallProposalPositive, .classCellOverallIncompatibilitiesPositive {
+    background-color: #C0FFC0;
+}
+
+.classCellRankingLevelNegative, .classRowNeutralitySeparatorNegative, .classCellProposalNegative, .classCellRankingLevelNegative, .classCellIncompatibilitiesNegative,
+.classCellOverallRankingLevelNeutral, .classCellOverallProposalNeutral, .classCellOverallIncompatibilitiesNeutral, .classCellPercentSupportNeutral {
+    background-color: #FFC0C0;
+}
+
+.classCellRankingLevelNeutral, .classRowNeutralitySeparatorNeutral, .classCellProposalNeutral, .classCellRankingLevelNeutral, .classCellIncompatibilitiesNeutral,
+.classCellOverallRankingLevelNegative, .classCellOverallProposalNegative, .classCellOverallIncompatibilitiesNegative, .classCellPercentSupportNegative {
+    background-color: #C0C0FF;
+}
+
+.classRowNeutralitySeparator {
+    background-color: #C0C0C0;
+}
+
+.classRowTopPositive {
+    background-color: #80FF80;
+}
+
+.classRowBottomNegative {
+    background-color: #FF8080;
+}
+
+
+/* ----  Forms  ---- */
+
+.classLabelForTextInput {
+    font-size: 1em;
+    padding-top: 0.8em;
+    padding-bottom: 0.5em;
+    padding-left:0;
+}
+
+.classInputText, .classInputTextArea {
+    font-size: 1em;
+    padding: 0.1em;
+    padding-left:0.3em;
+}
+
+legend {
+    display: block;
+    font-weight: bold;
+}
+
+input, textarea {
+    background-color: #E0E0FF;
+    margin:0;
+    padding:0.2em;
+    padding-left:0;
+}
+
+input:focus textarea:focus {
+    background-color: yellow;
+    margin:0;
+}
+
+.classSelections {
+    display:inline;
+    background-color: yellow;
+    padding-left:0;
+}
+
+.classInputSelectionButton {
+    width: auto;
+    float: left;
+    padding-right: 1em;
+    padding-left:0.8em;
+}
+
+.classSelectionButtonLabel {
+    font-size: 0.9em;
+    padding: 0.1em;
+    padding-left:0;
+    padding-right:2em;
+}
+
+.classInputCheckbox {
+    width: auto;
+}
+
+.classInputSubmit {
+    font-size: 0.9em;
+    padding: 0.1em;
+}
+
+.classButton {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.classCellSelectionButtonAndLabel {
+    border-style:none;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+
+/* ----  Navigation  ---- */
+
+.classNav {
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    list-style-type: none;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.classListNav {
+    text-decoration: none;
+    display: block;
+    list-style-type: none;
+    line-height: 1.25em;
+    position: absolute;
+    left: 15px;
+    top: 30px;
+    padding: 0px;
+    width: 154px;
+}
+
+
+/* ----  Special headings  ---- */
+
+.classWelcomeTitle , .classTipsTitle {
+    text-align:center;
+    font-style: italic;
+}
+
+.classWelcomeIntro , .classTipsIntro {
+    text-align:center;
+    padding-bottom: 2em;
+}
+
+.classTipsTitle {
+    font-size:1.2em;
+}
+
+.classTipsIntro {
+    text-align: left;
+}
+
+.classCaseTitle {
+    padding-bottom: 1em;
+}
+
+.classParticipantTypeAtTop {
+    padding-bottom: 1em;
+}
+
+
+/* ----  Footer  ---- */
+
+.classCopyrightNotice {
+    font-size:0.8em;
+    text-align:center;
+    font-weight:normal;
+    padding:0.2em;
+    line-height:100%;
+}
+
+.classFooter {
+    font-size:0.9em;
+    text-align:center;
+    font-weight:normal;
+    padding:0.5em;
+    line-height:100%;
+}
+
+
+/* ----  Character formatting  ---- */
+
+.classParagraphBoldRed {
+    color:red;
+}
+

@@ -47,22 +47,13 @@ This code does NOT run as-is because:
 
 This code should be revised in the following ways:
 
-    * The core calculation code should be integrated into the VoteFair ranking code.
+    * The core calculation code, which is in the file sub_sort_proposals_overall.pl, should be integrated into the VoteFair ranking code, preferably the C++ version.
 
-    * The remaining Perl code should be replaced by equivalent Dashrep code.
+    * The remaining Perl code (which handles viewing proposals, ranking proposals, identifying incompatible pairs of proposals, logging in, etc.) should be replaced by equivalent Dashrep code.
 
     * All the Dashrep code should be updated to the current version of the Dashrep language.
 
 This code does include the old Dashrep interpreter that handles the older Dashrep code here.
-
-
-CORE CALCULATION
-
-The main calculation is implemented in the following file:
-
-* sub_sort_proposals_overall.pl
-
-The other files provide the general framework, including: viewing proposals, ranking proposals, identifying incompatible pairs of proposals, logging in, etc.
 
 
 SUPPORT AND DOCUMENTATION

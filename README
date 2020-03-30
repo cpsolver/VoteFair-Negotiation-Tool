@@ -56,6 +56,15 @@ This code should be revised in the following ways:
 This code does include the old Dashrep interpreter that handles the older Dashrep code here.
 
 
+CORE CALCULATION
+
+The main calculation is implemented in the following file:
+
+* sub_sort_proposals_overall.pl
+
+The other files provide the general framework, including: viewing proposals, ranking proposals, identifying incompatible pairs of proposals, logging in, etc.
+
+
 SUPPORT AND DOCUMENTATION
 
 Documentation is included within the code.

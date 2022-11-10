@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+  <url>
+   <loc>http://www.negotiationtool.com/index.html</loc>
+   <lastmod>2009-09-07</lastmod>
+   <changefreq>monthly</changefreq>
+   <priority>1.0</priority>
+  </url>
+  <url>
+   <loc>http://www.negotiationtool.com/negotationtips.html</loc>
+   <lastmod>2009-09-07</lastmod>
+   <changefreq>monthly</changefreq>
+   <priority>1.0</priority>
+  </url>
+  <url>
+      <loc>http://www.negotiationtool.com/cabinetministers.html</loc>
+      <lastmod>2009-09-07</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>1.0</priority>
+  </url>
+  <url>
+      <loc>http://www.negotiationtool.com/employmentexample.html</loc>
+      <lastmod>2009-09-07</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>1.0</priority>
+  </url>
+ </urlset>

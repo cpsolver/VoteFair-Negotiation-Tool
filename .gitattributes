@@ -1,0 +1,3 @@
+*.pl linguist-language=Perl
+*.txt linguist-detectable=false
+*.pm linguist-detectable=false

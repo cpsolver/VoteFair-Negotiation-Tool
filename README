@@ -29,7 +29,7 @@ Here are some important characteristics:
 
 * If the suggested combination of proposals includes proposals that are incompatible with each other, an administrator updates the information about which proposals are incompatible with specifid other proposals.  Then running the software again eliminates the incompatible proposals.
 
-* All the participants rank all the proposals, although lots of proposals can be ranked at level zero (0), which indicates the neutral level (neither liked nor disliked).  Liked proposals are ranked with positive integers up to 100.  Disliked proposals are ranked with negative integers down to minus 100 (-100).  Gaps between the numbers are not significant, only the relative ranking compared to other proposals is significant.
+* All the participants rank all the proposals, although lots of proposals can be ranked at level zero (0), which indicates the neutral level (neither liked nor disliked).  Liked proposals are ranked with positive integers up to 100.  Disliked proposals are ranked with negative integers down to minus 100 (-100).  Gaps between the numbers are not significant.  Only the relative ranking (compared to other rankings from the same participant) is significant.
 
 Version 2.00
 

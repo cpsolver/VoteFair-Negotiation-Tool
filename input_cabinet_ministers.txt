@@ -1,0 +1,259 @@
+0  Zero as first integer indicates a comment
+
+0  Scenario is MPs (members of parliament) electing cabinet members
+
+0  MPs by name and party:
+
+0  2  Kevin (Conservative)
+0  3  James (Conservative)
+0  4  Diane (Conservative)
+0  5  Patrick (Conservative)
+0  6  Olivia (Conservative)
+0  7  Eduard (Liberal)
+0  8  Andrew (Liberal)
+0  9  Betty (Liberal)
+0  10  Tina (Liberal)
+0  11  Claude (Bloc Qu&eacute;b&eacute;cois)
+0  12  Nicole (Bloc Qu&eacute;b&eacute;cois)
+0  13  Robert (New Democratic)
+
+
+0  Proposals, which specify a candidate and an office:
+
+0  1  Prime Minister: Hanson (Conservative)
+0  2  Prime Minister: Ferguson (Liberal)
+0  3  Prime Minister: Deschamps (Bloc Qu&eacute;b&eacute;cois)
+0  4  Prime Minister: Nash (New Democratic)
+0  5  Prime Minister: Thompson (Conservative)
+0  6  Prime Minister: Lambert (Liberal)
+0  7  Prime Minister: Duceppe (Bloc Qu&eacute;b&eacute;cois)
+0  8  Minister of Agriculture: Macdonald (Conservative)
+0  9  Minister of Agriculture: Graham (Liberal)
+0  10  Minister of Agriculture: Bell (New Democratic)
+0  11  Minister of Finance: Abbott (Conservative)
+0  12  Minister of Finance: Ferguson (Liberal)
+0  13  Minister of Finance: Beaudin (Bloc Qu&eacute;b&eacute;cois)
+0  14  Minister of Foreign Affairs: Thompson (Conservative)
+0  15  Minister of Foreign Affairs: Lambert (Liberal)
+0  16  Minister of Foreign Affairs: Deschamps (Bloc Qu&eacute;b&eacute;cois)
+0  17  Minister of Foreign Affairs: Nash (New Democratic)
+0  18  Minister of Labour: Abbott (Conservative)
+0  19  Minister of Labour: Johnston (Liberal)
+0  20  Minister of Labour: Picard (Bloc Qu&eacute;b&eacute;cois)
+0  21  Minister of Labour: Bell (New Democratic)
+0  22  Minister of National Defence: Macdonald (Conservative)
+0  23  Minister of National Defence: Graham (Liberal)
+0  24  Minister of National Defence: Beaudin (Bloc Qu&eacute;b&eacute;cois)
+0  25  Minister of National Defence: Martin (New Democratic)
+0  26  Minister of National Defence: Thomas (Green)
+0  27  Minister of Transport: Hanson (Conservative)
+0  28  Minister of Transport: Ferguson (Liberal)
+0  29  Minister of Transport: Deschamps (Bloc Qu&eacute;b&eacute;cois)
+0  30  Minister of Transport: Martin (New Democratic)
+0  31  Minister of Transport: Thomas (Green)
+0  32  Minister of Transport: Adams (Green)
+0  33  Minister of Industry: Macdonald (Conservative)
+0  34  Minister of Industry: Hanson (Conservative)
+0  35  Minister of Industry: Graham (Liberal)
+0  36  Minister of Industry: Beaudin (Bloc Qu&eacute;b&eacute;cois)
+0  37  Minister of Industry: Martin (New Democratic)
+0  38  Minister of Industry: Thomas (Green)
+
+
+0  Rankings of proposals by MPs:
+
+1,48,48,48,48,48,-37,-37,-37,-37,-29,-30,-37
+2,-33,-34,-33,-33,-36,44,44,44,44,26,26,35
+3,-24,-25,-24,-24,-27,-21,-21,-21,-21,42,48,-21
+4,-40,-41,-40,-40,-43,33,33,33,33,32,32,42
+5,47,47,47,47,47,-29,-29,-29,-29,-30,-22,-29
+6,-28,-29,-28,-28,-31,48,48,48,48,30,30,39
+7,-23,-24,-23,-23,-26,-27,-27,-27,-27,41,41,-27
+8,39,39,39,39,39,-28,-28,-28,-28,-21,-21,-28
+9,-27,-28,-27,-27,-30,40,40,40,40,22,22,31
+10,-34,-35,-34,-34,-37,39,39,39,39,37,37,48
+11,45,45,45,45,45,-36,-36,-36,-36,-28,-29,-36
+12,-26,-27,-26,-26,-29,47,47,47,47,29,29,38
+13,-21,-22,-21,-21,-23,-26,-26,-26,-26,43,42,-26
+14,42,42,42,42,42,-35,-35,-35,-35,-27,-28,-35
+15,-30,-31,-30,-30,-33,46,46,46,46,28,28,37
+16,-20,-20,-20,-20,-20,-25,-25,-25,-25,44,43,-25
+17,-35,-36,-35,-35,-38,38,38,38,38,40,40,47
+18,43,43,43,43,43,-34,-34,-34,-34,-26,-27,-34
+19,-32,-33,-32,-32,-35,45,45,45,45,27,27,36
+20,-22,-23,-22,-22,-25,-24,-24,-24,-24,45,44,-24
+21,-36,-37,-36,-36,-39,37,37,37,37,39,39,46
+22,41,41,41,41,41,-33,-33,-33,-33,-25,-26,-33
+23,-31,-32,-31,-31,-34,43,43,43,43,25,25,34
+24,-46,-47,-47,-45,-24,-23,-23,-23,-23,47,45,-23
+25,-37,-38,-37,-37,-40,36,36,36,34,36,36,45
+26,-41,-42,-41,-41,-44,32,32,32,32,-20,-20,30
+27,40,40,40,40,40,-32,-32,-32,-32,-24,-25,-32
+28,-25,-26,-25,-25,-28,42,42,42,42,24,24,33
+29,-45,-21,-45,-46,-22,-22,-22,-22,-22,48,46,-22
+30,-38,-39,-38,-38,-41,35,35,35,36,31,31,44
+31,-43,-44,-43,-43,-46,31,31,31,31,34,34,40
+32,-42,-43,-42,-42,-45,30,30,30,30,35,35,29
+33,46,46,46,46,46,-31,-31,-31,-31,-23,-24,-31
+34,44,44,44,44,44,-30,-30,-30,-30,-22,-23,-30
+35,-29,-30,-29,-29,-32,41,41,41,41,23,23,32
+36,-47,-46,-46,-47,-21,-20,-20,-20,-20,46,47,-20
+37,-39,-40,-39,-39,-42,34,34,34,35,38,38,43
+38,-44,-45,-44,-44,-47,29,29,29,29,33,33,41
+
+
+0  Incompatibilities between proposals:
+0  (If first proposal is adopted, second proposal cannot be adopted)
+
+-1,1,2
+-1,1,3
+-1,1,4
+-1,1,5
+-1,1,6
+-1,1,7
+-1,10,8
+-1,10,9
+-1,11,12
+-1,11,13
+-1,12,11
+-1,12,13
+-1,13,11
+-1,13,12
+-1,14,15
+-1,14,16
+-1,14,17
+-1,15,14
+-1,15,16
+-1,15,17
+-1,16,14
+-1,16,15
+-1,16,17
+-1,17,14
+-1,17,15
+-1,17,16
+-1,18,19
+-1,18,20
+-1,18,21
+-1,19,18
+-1,19,20
+-1,19,21
+-1,2,1
+-1,2,3
+-1,2,4
+-1,2,5
+-1,2,6
+-1,2,7
+-1,20,18
+-1,20,19
+-1,20,21
+-1,21,18
+-1,21,19
+-1,21,20
+-1,22,23
+-1,22,24
+-1,22,25
+-1,22,26
+-1,23,22
+-1,23,24
+-1,23,25
+-1,23,26
+-1,24,22
+-1,24,23
+-1,24,25
+-1,24,26
+-1,25,22
+-1,25,23
+-1,25,24
+-1,26,22
+-1,26,23
+-1,26,24
+-1,27,28
+-1,27,29
+-1,27,31
+-1,27,32
+-1,28,27
+-1,28,29
+-1,28,30
+-1,28,31
+-1,28,32
+-1,29,27
+-1,29,28
+-1,29,30
+-1,29,31
+-1,29,32
+-1,3,1
+-1,3,2
+-1,3,4
+-1,3,5
+-1,3,6
+-1,3,7
+-1,30,28
+-1,30,29
+-1,30,31
+-1,30,32
+-1,31,27
+-1,31,28
+-1,31,29
+-1,31,30
+-1,31,32
+-1,32,27
+-1,32,28
+-1,32,29
+-1,32,30
+-1,32,31
+-1,33,34
+-1,33,35
+-1,33,36
+-1,33,37
+-1,33,38
+-1,34,33
+-1,34,35
+-1,34,36
+-1,34,38
+-1,35,33
+-1,35,34
+-1,35,36
+-1,35,37
+-1,35,38
+-1,36,33
+-1,36,34
+-1,36,35
+-1,36,37
+-1,36,38
+-1,37,33
+-1,37,35
+-1,37,36
+-1,37,38
+-1,38,33
+-1,38,34
+-1,38,35
+-1,38,36
+-1,38,37
+-1,4,1
+-1,4,2
+-1,4,3
+-1,4,5
+-1,4,6
+-1,4,7
+-1,5,1
+-1,5,2
+-1,5,3
+-1,5,4
+-1,5,6
+-1,5,7
+-1,6,1
+-1,6,2
+-1,6,3
+-1,6,4
+-1,6,5
+-1,6,7
+-1,7,1
+-1,7,2
+-1,7,3
+-1,7,4
+-1,7,5
+-1,7,6
+-1,8,10
+-1,8,9
+-1,9,10
+-1,9,8

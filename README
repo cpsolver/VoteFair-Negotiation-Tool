@@ -13,47 +13,34 @@ This software negotiation tool can be used to negotiate fair outcomes for real-l
     * inheritance distributions
     * landlord-tenant contracts
 
-Notice that it handles both friendly and hostile situations.
+Here are some important characteristics:
 
-It's designed to handle dozens of participants, yet it also can accomodate just two people.
+* It handles both friendly and hostile situations.
 
-Using this negotiation tool primarily consists of adding proposals and ranking those proposals.  Whenever you request seeing the latest suggested resolution, the latest results are immediately calculated.
+* It can handle dozens of participants, it can handle just two people, or it could be used among all members of Congress.
 
-The calculation method is based on VoteFair ranking, which is a voting method explained at VoteFair.org and in the book Ending The Hidden Unfairness In U.S. Elections.
+* It can handle hundreds of proposals.
 
-A free demo of this code is running at:
+* Each participant submits proposals.  Each proposal is short, just a single sentence or single paragraph.
 
-    www.NegotiationTool.com
+* When new proposals are added, each participant indicates which proposals they like, and which proposals they dislike.  All other proposals are ranked as neutral.
 
-If your “negotiation” just involves choosing one or two “winning” choices based on their popularity, please use the also-free VoteFair Ranking tool at:
+* Each time the negotiation tool software runs, it identifies the optimum combination of proposals that are most strongly appreciated by the most participants.
 
-    VoteFair.org
+* If the suggested combination of proposals includes proposals that are incompatible with each other, an administrator updates the information about which proposals are incompatible with specifid other proposals.  Then running the software again eliminates the incompatible proposals.
 
-For security reasons Access IDs and related code have been removed from this open-source version.
+* All the participants rank all the proposals, although lots of proposals can be ranked at level zero (0), which indicates the neutral level (neither liked nor disliked).  Liked proposals are ranked with positive integers up to 100.  Disliked proposals are ranked with negative integers down to minus 100 (-100).  Gaps between the numbers are not significant, only the relative ranking compared to other proposals is significant.
 
-See www.NegotiationTool.com and www.VoteFair.org for more information.
-
-
-Version 1.00
+Version 2.00
 
 Please regard this as a beta version for experimentation purposes, and not yet ready to handle very important negotiations.
 
 
 RUNNING
 
-This code does NOT run as-is because:
+g++ negotiation_tool.cpp -o negotiation_tool.exe
 
-    * The Access ID code has been removed.
-
-This code should be revised in the following ways:
-
-    * The core calculation code, which is in the file sub_sort_proposals_overall.pl, should be integrated into the VoteFair ranking code, preferably the C++ version.
-
-    * The remaining Perl code (which handles viewing proposals, ranking proposals, identifying incompatible pairs of proposals, logging in, etc.) should be replaced by equivalent Dashrep code.
-
-    * All the Dashrep code should be updated to the current version of the Dashrep language.
-
-This code does include the old Dashrep interpreter that handles the older Dashrep code here.
+.\negotiation_tool < input_negotiation_tool.csv > output_negotiation_tool.json
 
 
 SUPPORT AND DOCUMENTATION
@@ -70,11 +57,10 @@ VoteFair, negotiation, tool, mediation, arbitration, ranking, prioritize, priori
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2003-2017 Richard Fobes at www.NegotiationTool.com, all rights reserved.
+Copyright (c) 2003-2025 Richard Fobes at www.VoteFair.org, all rights reserved.
 
-You can redistribute and/or modify this library module
-under the Perl Artistic License 2.0, a copy
-of which is included in the LICENSE file.
+You can redistribute and/or modify this library module under the MIT license,
+a copy of which is included in the LICENSE file.
 
 Conversions of this code into other languages are also
 covered by the above license terms.

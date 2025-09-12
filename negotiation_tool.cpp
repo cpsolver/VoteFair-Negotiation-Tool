@@ -238,8 +238,8 @@ const int global_no = 0 ;
 //  Specify flags.
 
 const int global_const_start_line_incompatibility_pairs = -1 ;
-const int global_const_start_line_percent_threshold_dislike_rejection = -10 ;
-const int global_const_start_line_limit_maximum_proposals_accepted = -11 ;
+const int global_const_start_line_limit_maximum_proposals_accepted = -10 ;
+const int global_const_start_line_percent_threshold_dislike_rejection = -20 ;
 
 
 // -----------------------------------------------
@@ -296,6 +296,7 @@ int global_elimination_round_count ;
 int global_endless_loop_counter ;
 int global_first_number_in_input_line ;
 int global_first_proposal_number ;
+int global_graph_scale_offset ;
 int global_highest_negative_ranked_count ;
 int global_highest_preference_level ;
 int global_highest_preference_level_of_any_remaining_proposal ;
@@ -306,6 +307,7 @@ int global_input_line_number ;
 int global_input_pointer_start_next_case ;
 int global_largest_disapproval_count ;
 int global_largest_or_smallest_count ;
+int global_largest_support_minus_opposition ;
 int global_largest_support_value ;
 int global_length_of_array_preference_level_for_participant_and_proposal ;
 int global_length_of_list_elimination_sequence ;
@@ -315,18 +317,15 @@ int global_length_of_list_of_all_proposals_ranked ;
 int global_length_of_list_of_integers_to_sort ;
 int global_length_of_list_of_proposals_accepted ;
 int global_length_of_list_of_proposals_contributing_to_support_minus_opposition_count ;
-int global_length_of_list_of_proposals_incompatible ;
+int global_length_of_list_of_proposals_rejected_as_incompatible ;
 int global_length_of_list_of_proposals_not_popular ;
 int global_length_of_list_of_proposals_ranked_negative ;
 int global_length_of_list_of_proposals_ranked_neutral ;
 int global_length_of_list_of_proposals_ranked_positive ;
-int global_length_of_list_of_proposals_rejected_as_incompatible ;
-int global_length_of_list_of_proposals_still_being_used ;
 int global_length_of_list_of_proposals_widely_disliked ;
 int global_length_of_list_of_tied_proposals ;
 int global_limit_maximum_proposals_accepted ;
 int global_list_pointer ;
-int global_list_proposals_still_being_used ;
 int global_list_tie_resolution_rank_level_for_proposal_being_checked ;
 int global_list_tie_resolution_rank_level_for_proposal_with_largest_sum ;
 int global_log_item_number ;
@@ -366,6 +365,7 @@ int global_opposition_or_support_count ;
 int global_opposition_score ;
 int global_pair_counter ;
 int global_pair_counter_maximum ;
+int global_pairwise_count_for_proposal ;
 int global_pairwise_losing_proposal ;
 int global_participant_number ;
 int global_percent_representation_based_on_negative_count ;
@@ -399,12 +399,17 @@ int global_quota_count ;
 int global_ranking_level ;
 int global_ranking_number ;
 int global_ranking_position ;
+int global_second_proposal_number ;
 int global_smallest_approval_or_largest_disapproval_count ;
+int global_smallest_support_minus_opposition ;
 int global_smallest_support_value ;
 int global_successive_elimination_loop_counter ;
 int global_sum_for_possible_dominant_coalition ;
 int global_sum_for_possible_provisional_coalition ;
+int global_sum_pairwise_count_for_dominant_coalition ;
+int global_sum_pairwise_count_for_provisional_coalition ;
 int global_support_minus_opposition_count ;
+int global_support_minus_opposition_range ;
 int global_supporting_count_from_this_participant ;
 int global_supporting_vote_count_that_exceeds_quota ;
 int global_supporting_votes_for_elected_proposal ;
@@ -430,14 +435,7 @@ int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
 
-int global_largest_support_minus_opposition ;
-int global_smallest_support_minus_opposition ;
-int global_support_minus_opposition_range ;
-int global_sum_pairwise_count_for_dominant_coalition ;
-int global_sum_pairwise_count_for_provisional_coalition ;
-int global_pairwise_count_for_proposal ;
-int global_second_proposal_number ;
-int global_graph_scale_offset ;
+int global_length_of_list_of_incompatible_pairs ;
 
 
 // -----------------------------------------------
@@ -527,6 +525,7 @@ std::string global_elim_sequence ;
 std::string global_json_key ;
 std::string global_json_value ;
 std::string global_logitem_message ;
+std::string global_logitem_text_store_longer ;
 std::string global_result_text ;
 
 
@@ -763,8 +762,7 @@ void read_data( )
     global_alias_proposal_number = 0 ;
     global_number_of_proposals = 0 ;
     global_number_of_participants = 0 ;
-    global_length_of_list_of_proposals_incompatible = 0 ;
-    global_length_of_list_of_proposals_rejected_as_incompatible = 0 ;
+    global_length_of_list_of_incompatible_pairs = 0 ;
     global_number_of_proposals_remaining_for_possible_adoption = 0 ;
     global_length_of_list_of_proposals_widely_disliked = 0 ;
     global_length_of_list_of_proposals_not_popular = 0 ;
@@ -938,32 +936,12 @@ void read_data( )
                     global_incompatible_proposal_number_first_in_pair = global_current_input_data_number ;
                 } else
                 {
-                    global_length_of_list_of_proposals_incompatible ++ ;
-                    global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_proposals_incompatible ] = global_incompatible_proposal_number_first_in_pair ;
-                    global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_proposals_incompatible ] = global_current_input_data_number ;
+                    global_length_of_list_of_incompatible_pairs ++ ;
+                    global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
+                    global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_current_input_data_number ;
 //                    global_logitem_message = "[proposal " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_current_input_data_number ) + "]" ;
 //                    write_logitem_message( ) ;
                 }
-            }
-
-
-// -----------------------------------------------
-//  If the first number in the line specifies the line
-//  contains the percentage of dislikes that cause a
-//  proposal to be rejected immediately, handle the next
-//  number in the same line.  Then repeat the loop for
-//  the next input number.
-//
-//  If this number is the second number in the line, it is
-//  the percentage of dislikes that cause a proposal to
-//  be rejected immediately, before the popularity
-//  calculations.
-
-            if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_percent_threshold_dislike_rejection ) )
-            {
-                global_percent_threshold_dislike_rejection = global_next_input_data_number ;
-                global_logitem_message = "[percent dislikes needed for early rejection " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_percent_threshold_dislike_rejection ) + "]" ;
-                write_logitem_message( ) ;
             }
 
 
@@ -976,9 +954,24 @@ void read_data( )
 
             if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_limit_maximum_proposals_accepted ) )
             {
-                global_limit_maximum_proposals_accepted = global_next_input_data_number ;
-                global_logitem_message = "[maximum number of proposals accepted is " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_limit_maximum_proposals_accepted ) + "]" ;
-                write_logitem_message( ) ;
+                global_limit_maximum_proposals_accepted = global_current_input_data_number ;
+//                global_logitem_message = "[maximum number of proposals accepted is " + convert_integer_to_text( global_limit_maximum_proposals_accepted ) + "]" ;
+//                write_logitem_message( ) ;
+            }
+
+
+// -----------------------------------------------
+//  If the first number in the line specified the line
+//  contains the percentage of dislikes that cause a
+//  proposal to be rejected immediately, and this is the
+//  second number, get this specified number, then repeat
+//  the loop for the next input number.
+
+            if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_percent_threshold_dislike_rejection ) )
+            {
+                global_percent_threshold_dislike_rejection = global_current_input_data_number ;
+//                global_logitem_message = "[percent dislikes needed for early rejection " + convert_integer_to_text( global_percent_threshold_dislike_rejection ) + "]" ;
+//                write_logitem_message( ) ;
             }
 
 
@@ -1837,8 +1830,11 @@ int comparison_for_sort(const void* a, const void* b) {
 // -----------------------------------------------
 //      sort_support_minus_opposition_counts
 //
-//  Create a sorted list of ballot weights.  The qsort
-//  function requires a list that starts at index zero.
+//  Create a sorted list of the latest pairwise
+//  support-minus-opposition counts.
+//
+//  The qsort function requires a list that starts at
+//  index zero.
 
 void sort_support_minus_opposition_counts( )
 {
@@ -1865,9 +1861,12 @@ void sort_support_minus_opposition_counts( )
 //      calculate_support_minus_opposition_for_one_participant
 //
 //  Calculate the pairwise support count minus the
-//  pairwise opposition count for one participant.  Only
-//  consider contributions from proposals that are
-//  relevant to this calculation.
+//  pairwise opposition count for a specific participant
+//  and a specific proposal.  Offset this count by the
+//  number of proposals so these counts are always
+//  positive, never negative.  Only consider
+//  contributions from proposals that are relevant to
+//  this calculation.
 
 void calculate_support_minus_opposition_for_one_participant( )
 {
@@ -1897,7 +1896,7 @@ void calculate_support_minus_opposition_for_one_participant( )
 //            write_logitem_message( ) ;
         }
         global_list_support_minus_opposition_for_participant[ global_participant_number ] = global_support_minus_opposition_count ;
-//        global_logitem_message = "[p" + convert_integer_to_text( global_participant_number ) ;
+//        global_logitem_message = "[pa" + convert_integer_to_text( global_participant_number ) ;
 //        for ( global_list_pointer = 1 ; global_list_pointer <= global_support_minus_opposition_count ; global_list_pointer ++ )
 //        {
 //            global_logitem_message = global_logitem_message + " " ;
@@ -1936,6 +1935,8 @@ void accept_one_proposal( )
 // -----------------------------------------------
 //  Add the accepted proposal to the list of accepted
 //  proposals, which tracks alias proposal numbers.
+//  Actual proposal numbers are written to the output
+//  JSON file.
 
     global_length_of_list_of_proposals_accepted ++ ;
     global_list_of_proposals_accepted[ global_length_of_list_of_proposals_accepted ] = global_alias_proposal_accepted ;
@@ -1956,7 +1957,7 @@ void accept_one_proposal( )
 //  Eliminate any proposals that are incompatible with the
 //  just-accepted proposal.
 
-    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= global_length_of_list_of_proposals_incompatible ; global_pointer_to_list ++ )
+    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= global_length_of_list_of_incompatible_pairs ; global_pointer_to_list ++ )
     {
         global_actual_proposal_trigger = global_list_of_trigger_proposal_number_for_pair[ global_pointer_to_list ] ;
         global_actual_proposal_incompatible = global_list_of_incompatible_proposal_number_for_pair[ global_pointer_to_list ] ;
@@ -1989,7 +1990,7 @@ void accept_one_proposal( )
 //  the current weight/influence amounts for the
 //  participants.  Exit with a fatal error if a winner is
 //  not found because the number of remaining proposals
-//  was checked to be at least one proposal.
+//  should have been checked to be at least one proposal.
 
 void calculate_weighted_most_popular_proposal( )
 {
@@ -2047,7 +2048,9 @@ void calculate_weighted_most_popular_proposal( )
 //      log_crude_plot
 //
 //  Write into log lines a crude plot of support minus
-//  opposition counts.
+//  opposition counts (with offset included).  Include a
+//  dotted line that separates the opposition coalition
+//  from the dominant coalition.
 
 void log_crude_plot( )
 {
@@ -2109,26 +2112,26 @@ void do_negotiation_tool_calculations( )
 
 
 //-----------------------------------------------
-//  If there is not at least one proposal, exit with an
+//  If there are not at least two proposals, exit with an
 //  error.
 
-    if ( global_number_of_proposals < 1 )
+    if ( global_number_of_proposals < 2 )
     {
         global_json_key = "error" ;
-        global_json_value = "The proposal count is zero, so there are no proposals to consider." ;
+        global_json_value = "The proposal count is zero or one, so there is nothing to calculate." ;
         write_json_key_value_pair( ) ;
         exit( EXIT_FAILURE ) ;
     }
 
 
 //-----------------------------------------------
-//  If there is not at least one participant, exit with an
-//  error.
+//  If there are not at least two participants, exit with
+//  an error.
 
-    if ( global_number_of_participants < 1 )
+    if ( global_number_of_participants < 2 )
     {
         global_json_key = "error" ;
-        global_json_value = "The participant count is zero, so there are no rankings to consider." ;
+        global_json_value = "The participant count is zero or one, so there is nothing to calculate." ;
         write_json_key_value_pair( ) ;
         exit( EXIT_FAILURE ) ;
     }
@@ -2139,13 +2142,12 @@ void do_negotiation_tool_calculations( )
 
     global_length_of_list_of_proposals_accepted = 0 ;
     global_length_of_list_of_proposals_contributing_to_support_minus_opposition_count = 0 ;
-    global_length_of_list_of_proposals_incompatible = 0 ;
+    global_length_of_list_of_proposals_rejected_as_incompatible = 0 ;
     global_length_of_list_of_proposals_not_popular = 0 ;
     global_length_of_list_of_proposals_ranked_negative = 0 ;
     global_length_of_list_of_proposals_ranked_neutral = 0 ;
     global_length_of_list_of_proposals_ranked_positive = 0 ;
     global_length_of_list_of_proposals_rejected_as_incompatible = 0 ;
-    global_length_of_list_of_proposals_still_being_used = 0 ;
     global_length_of_list_of_proposals_widely_disliked = 0 ;
 
 
@@ -2156,14 +2158,25 @@ void do_negotiation_tool_calculations( )
 //  These counts become available to resolve an exact
 //  tie.  These counts can be useful for summarizing
 //  participant preferences.  Also they can be used to
-//  resolve deep ties.
+//  resolve deep ties.  Log these counts.
 
     count_approvals_and_disapprovals( ) ;
+   	global_logitem_message = "[approval counts:" ;
+   	global_logitem_text_store_longer = "[disapproval counts:" ;
+    for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
+    {
+    	global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) ;
+    	global_logitem_text_store_longer = global_logitem_text_store_longer + " " + convert_integer_to_text( global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ) ;
+    }
+    global_logitem_message = global_logitem_message + "]" ;
+    write_logitem_message( ) ;
+    global_logitem_message = global_logitem_text_store_longer + "]" ;
+    write_logitem_message( ) ;
 
 
 // -----------------------------------------------
-//  If none of the proposals have any approval or
-//  disapproval, exit with an error.
+//  If none of the proposals have at least one approval or
+//  at least one disapproval, exit with an error.
 
     global_number_of_proposals_with_some_approval = 0 ;
     global_number_of_proposals_with_some_disapproval = 0 ;
@@ -2181,7 +2194,7 @@ void do_negotiation_tool_calculations( )
     if ( ( global_number_of_proposals_with_some_approval == 0 ) || ( global_number_of_proposals_with_some_disapproval == 0 ) )
     {
         global_json_key = "error" ;
-        global_json_value = "None of the proposals have both approvals and disapprovals." ;
+        global_json_value = "None of the proposals have any approvals or disapprovals." ;
         write_json_key_value_pair( ) ;
         exit( EXIT_FAILURE ) ;
     }
@@ -2202,9 +2215,6 @@ void do_negotiation_tool_calculations( )
 //  large enough percentage of participants, reject them
 //  as not worthy of getting accepted.
 
-    global_maximum_dislikes_allowed = int( float( global_number_of_participants * global_percent_threshold_dislike_rejection ) / 100.0 );
-    global_logitem_message = "[maximum dislikes allowed is " + convert_integer_to_text( global_maximum_dislikes_allowed ) + "]" ;
-    write_logitem_message( ) ;
     for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
     {
         global_dislikes_encountered = 0 ;
@@ -2232,7 +2242,7 @@ void do_negotiation_tool_calculations( )
 //  proposals are incompatible with which other
 //  proposals.
 
-    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= global_length_of_list_of_proposals_incompatible ; global_pointer_to_list ++ )
+    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= global_length_of_list_of_incompatible_pairs ; global_pointer_to_list ++ )
     {
         global_actual_proposal_trigger = global_list_of_trigger_proposal_number_for_pair[ global_pointer_to_list ] ;
         global_actual_proposal_incompatible = global_list_of_incompatible_proposal_number_for_pair[ global_pointer_to_list ] ;
@@ -2251,7 +2261,7 @@ void do_negotiation_tool_calculations( )
 //  participant preferences determine which participants
 //  are similar.  This number cannot exceed the number of
 //  participants.  It cannot be one because that would
-//  cause a "tyranny of the majority."
+//  not allow an opposition coalition to exist.
 
     global_maximum_provisional_coalition_count = global_number_of_participants ;
     if ( global_maximum_provisional_coalition_count > 7 )
@@ -2399,27 +2409,31 @@ void do_negotiation_tool_calculations( )
 // -----------------------------------------------
 //  For the remainder of this main loop, the provisional
 //  coalition count is larger than 1.  It specifies the
-//  number of equal-size coaltions within the full group
-//  of participants.
+//  number of equal-size coaltions that could fit within
+//  the full group of participants.
 //
-//  Calculate how many participants are in the provisional
-//  coalition based on the provisional coalition count.
-//  For example if the provisional coaltion count is 3,
+//  For example, if the provisional coaltion count is 3,
 //  the size of the provisional coalition is one-third of
 //  the participants (with rounding to the nearest
 //  smaller integer).
 //
-//  Also calculate how many participants oppose this
-//  provisional coalition.  It is not always equal to the
-//  number of participants minus the provisional
-//  coalition size.  For example, if there are an odd
-//  number of participants, and they are equally divided
-//  into two groups (provisional and dominant) there is
-//  one participant who is not in either group because
-//  the group sizes must be equal.  This concept is
-//  related to the idea that a "median" calculation can
-//  have one number that is exactly the median value and
-//  therefore is neither above nor below the median.
+//  Calculate how many participants would be in the
+//  opposition coalition based on the provisional
+//  coalition count.
+//
+//  Also calculate how many participants are in the
+//  dominant coalition, which is the majority coalition
+//  the opposition coalition opposes.  It is not always
+//  equal to the number of participants minus the
+//  provisional coalition size.  For example, if there
+//  are an odd number of participants, and they are
+//  equally divided into two groups (provisional and
+//  dominant) there is one participant who is not in
+//  either group because the group sizes must be equal.
+//  This concept is related to the idea that a "median"
+//  calculation can have one number that is exactly the
+//  median value and therefore is neither above nor below
+//  the median.
 
         global_provisional_coalition_size = int( float( global_number_of_participants ) / float ( global_provisional_coalition_count ) ) ;
 //        global_logitem_message = "[provisional coalition size is " + convert_integer_to_text( global_provisional_coalition_size ) + "]" ;
@@ -2473,7 +2487,7 @@ void do_negotiation_tool_calculations( )
 // -----------------------------------------------
 //  Log a crude graphical display of the sorted counts.
 
-        global_graph_scale_divisor = 1.0 ;
+        global_graph_scale_divisor = 25.0 / float( global_number_of_proposals ) ;
         log_crude_plot( ) ;
 
 
@@ -2518,7 +2532,7 @@ void do_negotiation_tool_calculations( )
 //-----------------------------------------------
 //  Identify the most popular proposal based on the
 //  provisional coalition having full influence and the
-//  opposing coalition having zero influence.
+//  dominant coalition having zero influence.
 
         calculate_weighted_most_popular_proposal( ) ;
 
@@ -2576,7 +2590,7 @@ void do_negotiation_tool_calculations( )
 
         global_logitem_message = "[ballot weights:]" ;
         write_logitem_message( ) ;
-        global_graph_scale_divisor = 50.0 ;
+        global_graph_scale_divisor = 125.0 / float( global_number_of_proposals ) ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
             global_logitem_message = "[" ;
@@ -2637,16 +2651,16 @@ void do_negotiation_tool_calculations( )
 // -----------------------------------------------
 //  Log a crude graphical display of the sorted counts.
 
-        global_logitem_message = "[pw counts, use to decide whether to accept]" ;
+        global_logitem_message = "[pw counts, use to decide whether to accept this proposal:]" ;
         write_logitem_message( ) ;
-        global_graph_scale_divisor = 1.0 ;
+        global_graph_scale_divisor = 25.0 / float( global_number_of_proposals ) ;
         log_crude_plot( ) ;
 
 
 // -----------------------------------------------
-//  Calculate the difference between the average
-//  pairwise-support-minus-opposition counts for the
-//  provisional coalition and the average
+//  Calculate the disparity gap, which is the difference
+//  between the average pairwise-support-minus-opposition
+//  counts for the opposition coalition and the average
 //  pairwise-support-minus-opposition counts for the
 //  dominant coalition.
 
@@ -2666,10 +2680,8 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  If there is a significant difference in the average
-//  pairwise-support-minus-opposition counts for the
-//  provisional coalition and the opposing coalition,
-//  accept this most popular proposal.
+//  If there is a significant disparity gap, accept this
+//  most-popular proposal.
 
         global_logitem_message = "[todo: as needed, refine this code which chooses whether to accept this proposal based on disparity gap]" ;
         write_logitem_message( ) ;
@@ -2701,7 +2713,7 @@ void do_negotiation_tool_calculations( )
 
     global_logitem_message = "[pairwise counts for accepted proposals:]" ;
     write_logitem_message( ) ;
-    global_graph_scale_divisor = 2.0 ;
+    global_graph_scale_divisor = 50.0 / float( global_number_of_proposals ) ;
     global_graph_scale_offset = 3 ;
     for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_accepted ; global_list_pointer ++ )
     {
@@ -2721,7 +2733,7 @@ void do_negotiation_tool_calculations( )
                 }
             }
         }
-        global_logitem_message = "[p" + convert_integer_to_text( global_actual_proposal_number ) + " " ;
+        global_logitem_message = "[pr" + convert_integer_to_text( global_actual_proposal_number ) + " " ;
         for ( global_column_pointer = 1 ; global_column_pointer <= ( int( float( global_pairwise_count_for_proposal ) / global_graph_scale_divisor ) + global_graph_scale_offset ) ; global_column_pointer ++ )
         {
             global_logitem_message = global_logitem_message + " " ;
@@ -2836,7 +2848,7 @@ int main() {
 
 
 // -----------------------------------------------
-//  Initialize text string.
+//  Initialize special (constant) text strings.
 
     global_double_quotation_mark = "\"" ;
     global_comma = "," ;
@@ -2849,14 +2861,13 @@ int main() {
     global_number_of_proposals = 0 ;
     global_input_line_number = 0 ;
     global_pointer_to_input_data_number = 0 ;
-    global_limit_maximum_proposals_accepted = 0 ;
 
 
 // -----------------------------------------------
 //  Initialize non-zero default values.
 
     global_percent_threshold_dislike_rejection = 80 ;
-    global_limit_maximum_proposals_accepted = 12 ;
+    global_limit_maximum_proposals_accepted = 0 ;
 
 
 // -----------------------------------------------
@@ -2867,27 +2878,13 @@ int main() {
 
 
 //-----------------------------------------------
-//  If the limit on the number of proposals that can be
-//  accepted is still zero, set this limit to allow as
-//  many proposals as the number of proposals.
+//  If there are not at least two participants, return
+//  with an error message.
 
-    if ( global_limit_maximum_proposals_accepted == 0 )
-    {
-        global_limit_maximum_proposals_accepted = global_number_of_proposals + 1 ;
-    }
-    global_json_key = "limit_number_of_proposals_to_accept" ;
-    global_json_value = convert_integer_to_text( global_limit_maximum_proposals_accepted ) ;
-    write_json_key_value_pair( ) ;
-
-
-//-----------------------------------------------
-//  If there is not at least one participant, return with
-//  an error message.
-
-    if ( global_number_of_participants < 1 )
+    if ( global_number_of_participants < 2 )
     {
         global_json_key = "error" ;
-        global_json_value = "there are no participants." ;
+        global_json_value = "There are not at least two participants." ;
         write_json_key_value_pair( ) ;
         exit( EXIT_FAILURE ) ;
     }
@@ -2900,10 +2897,39 @@ int main() {
     if ( global_number_of_proposals < 2 )
     {
         global_json_key = "error" ;
-        global_json_value = "there are no proposals." ;
+        global_json_value = "There are not at least two proposals." ;
         write_json_key_value_pair( ) ;
         exit( EXIT_FAILURE ) ;
     }
+
+
+//-----------------------------------------------
+//  If the limit on the number of proposals that can be
+//  accepted is less than zero, set this limit to allow
+//  as many proposals as the number of proposals.
+
+    if ( global_limit_maximum_proposals_accepted < 1 )
+    {
+        global_limit_maximum_proposals_accepted = global_number_of_proposals + 1 ;
+    }
+    global_json_key = "limit_number_of_proposals_to_accept" ;
+    global_json_value = convert_integer_to_text( global_limit_maximum_proposals_accepted ) ;
+    write_json_key_value_pair( ) ;
+
+
+// -----------------------------------------------
+//  Calculate how many participants must dislike a
+//  proposal to reject the proposal as not worthy of
+//  getting accepted.  This number is based on the
+//  percentage threshold for rejection.
+
+    global_maximum_dislikes_allowed = int( float( global_number_of_participants * global_percent_threshold_dislike_rejection ) / 100.0 );
+    global_json_key = "percent_threshold_dislike_rejection" ;
+    global_json_value = convert_integer_to_text( global_percent_threshold_dislike_rejection ) ;
+    write_json_key_value_pair( ) ;
+    global_json_key = "maximum_dislikes_allowed" ;
+    global_json_value = convert_integer_to_text( global_maximum_dislikes_allowed ) ;
+    write_json_key_value_pair( ) ;
 
 
 // -----------------------------------------------

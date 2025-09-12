@@ -55,7 +55,7 @@
 //  executes this software under Linux.
 //
 //      g++ negotiation_tool.cpp -o negotiation_tool
-//      .\negotiation_tool < input_negotiation_tool.csv > output_negotiation_tool.txt
+//      ./negotiation_tool.exe < input_negotiation_tool.csv > output_negotiation_tool.json
 //
 //  If this software is executed under under a typical Windows environment then the g++ compiler and the mingw32 library must be installed.  Also the following path command must be executed once:
 //

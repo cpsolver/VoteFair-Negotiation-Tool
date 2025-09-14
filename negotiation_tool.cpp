@@ -7,7 +7,7 @@
 //  VoteFair Negotiation Tool version 2.
 //
 //  The README file contains more documentation about what
-//  this software does and how to use it.
+//  this software does, how it works, and how to use it.
 //
 //  The infographic named "legislative_negotiation.png"
 //  summarizes what this program does, and how
@@ -74,40 +74,14 @@
 //
 // -----------------------------------------------
 //
-//  SAMPLE INPUT FILE
+//  SAMPLE INPUT FILES
 //
-//  The following text (excluding the "//" text)
-//  represents sample data.
-//  
-//  5,-97,44,68,-10,67,36,95,97,20,2,-53,4,9,-53,-72
-//  20,-97,22,-30,-65,71,86,37,14,100,52,60,-42,48,-33,-1
-//  18,-96,-13,98,-11,-33,7,85,67,-92,49,74,-62,68,52,-13
-//  22,-94,-13,-90,-97,-14,50,29,-19,-5,-43,56,-52,32,-10,-100
-//  19,-83,62,-97,25,-18,-63,-2,-27,67,-82,-48,-36,-16,14,-27
-//  17,-80,-37,29,-63,-15,-41,-70,59,-83,-16,58,-15,0,-45,-33
-//  7,-77,97,91,-18,3,-85,-86,0,80,89,41,41,86,90,31
-//  16,-69,62,74,-92,38,-19,13,-91,88,-90,-13,0,35,-77,14
-//  13,-59,90,29,4,93,65,64,-66,47,-59,17,-40,42,-40,13
-//  21,-52,-61,-78,-28,-33,9,64,75,-38,-62,37,-43,-60,-32,75
-//  23,-33,-51,43,91,-3,-96,13,-70,-10,-60,29,25,-61,-61,17
-//  15,-12,82,-92,80,-35,-43,64,-45,56,82,-10,30,-24,-84,27
-//  24,-6,-10,5,-32,-68,19,-36,-22,34,-76,21,-55,-4,20,-99
-//  1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
-//  8,14,89,14,-13,-15,-55,-88,-64,-55,-48,-23,89,94,19,-91
-//  26,23,-37,-79,66,-71,-55,-10,-49,-10,-4,88,45,89,-76,-48
-//  4,38,58,55,30,30,-45,63,-91,99,-64,-61,98,-89,-84,11
-//  6,38,43,73,69,43,63,46,19,-10,-9,-85,-40,49,96,-73
-//  25,43,-70,83,-46,98,91,21,-42,-74,98,-47,-38,-8,-48,37
-//  2,50,24,-26,25,7,-28,-83,51,-80,78,-76,-86,89,90,86
-//  12,64,99,-15,-94,-66,-78,-68,-70,43,-31,68,91,66,11,25
-//  9,75,-43,29,-59,25,39,-83,0,25,-74,-82,33,11,24,-31
-//  14,84,-67,-89,46,-75,18,35,53,63,-8,-47,-83,-2,-37,28
-//  3,91,-43,-92,-55,-41,-39,-16,-31,77,-29,-39,86,90,98,-17
-//  10,93,87,-36,-64,-56,85,-6,61,-96,11,8,-91,81,61,10
-//  11,100,-79,-80,8,41,97,26,-94,27,41,-66,34,58,-21,73
-//  -1,24,17,3,9
-//  -1,7,17,3,24
-//  -1,3,17,9,24
+//  The folder in which this software is stored includes
+//  the following sample input files:
+//
+//    input_negotiation_tool.csv
+//
+//    input_cabinet_ministers.txt
 //
 //
 // -----------------------------------------------
@@ -243,6 +217,72 @@ const int global_const_start_line_percent_threshold_dislike_rejection = -20 ;
 
 
 // -----------------------------------------------
+//  Declare the two-dimensional ranking-data array.
+
+int global_array_ranking_for_participant_and_proposal[ 501 ][ 2001 ] ;
+
+
+// -----------------------------------------------
+//  Declare lists.
+
+//  For speed reasons, lists are declared here,
+//  not within a function, even if a single
+//  function uses them.
+
+//  Position one -- [ 1 ] -- is used as the starting
+//  position for these lists, so the declared list length
+//  must exceed, by (at least) one, the number of items
+//  to be stored in the list.
+
+int global_list_actual_proposal_for_alias_proposal[ 2001 ] ;
+int global_list_adjustment_for_participant[ 501 ] ;
+int global_list_alias_proposal_for_actual_proposal[ 2001 ] ;
+int global_list_approval_count_for_proposal[ 2001 ] ;
+int global_list_disapproval_count_for_proposal[ 2001 ] ;
+int global_list_elimination_sequence[ 2001 ] ;
+int global_list_integer_count_for_proposal[ 2001 ] ;
+int global_list_loss_count_for_proposal[ 2001 ] ;
+int global_list_of_all_proposals_ranked[ 2001 ] ;
+int global_list_of_incompatible_proposal_number_for_pair[ 10001 ] ;
+int global_list_of_integers_to_sort[ 501 ] ;
+int global_list_of_proposals_accepted[ 2001 ] ;
+int global_list_of_proposals_contributing_to_support_minus_opposition_count[ 501 ] ;
+int global_list_of_proposals_incompatible[ 2001 ] ;
+int global_list_of_proposals_not_popular[ 2001 ] ;
+int global_list_of_proposals_ranked_negative[ 2001 ] ;
+int global_list_of_proposals_ranked_neutral[ 2001 ] ;
+int global_list_of_proposals_ranked_positive[ 2001 ] ;
+int global_list_of_proposals_tied[ 2001 ] ;
+int global_list_of_proposals_widely_disliked[ 2001 ] ;
+int global_list_of_tied_proposals[ 2001 ] ;
+int global_list_of_trigger_proposal_number_for_pair[ 10001 ] ;
+int global_list_opposing_count_for_proposal_count[ 2001 ] ;
+int global_list_overall_ranking_criteria_for_proposal[ 2001 ] ;
+int global_list_pairwise_opposition_or_support_count_for_proposal[ 2001 ] ;
+int global_list_percent_opposing_influence_so_far_for_participant[ 2001 ] ;
+int global_list_percent_supporting_influence_so_far_for_participant[ 2001 ] ;
+int global_list_percentage_positive_only_for_proposal[ 2001 ] ;
+int global_list_proposal_count_negative_ranked_for_participant[ 5001 ] ;
+int global_list_proposal_count_positive_ranked_for_participant[ 5001 ] ;
+int global_list_proposal_count_temporarily_ignored_for_proposal_pointer[ 2001 ] ;
+int global_list_proposal_first_at_pair_count[ 4001 ] ;
+int global_list_proposal_for_proposal_count[ 2001 ] ;
+int global_list_proposal_second_at_pair_count[4001 ] ;
+int global_list_remaining_ballot_weight_for_participant[ 501 ] ;
+int global_list_support_from_participant[ 2001 ] ;
+int global_list_support_minus_opposition_for_participant[ 501 ] ;
+int global_list_tally_first_equal_second_at_pair_count[ 4001 ] ;
+int global_list_tally_first_over_second_at_pair_count[ 4001 ] ;
+int global_list_tally_second_over_first_at_pair_count[ 4001 ] ;
+int global_list_tie_resolution_rank_level_for_proposal[ 2001 ] ;
+int global_list_vote_count_positive_only_for_proposal[ 2001 ] ;
+int global_list_yes_or_no_acceptance_possible_for_proposal[ 2001 ] ;
+int global_list_yes_or_no_elimination_continuing_for_proposal[ 2001 ] ;
+int global_list_yes_or_no_popularity_continuing_for_proposal[ 2001 ] ;
+int global_sorted_list_of_support_minus_opposition_counts[ 501 ] ;
+
+
+// -----------------------------------------------
 //  Declare global variables.
 
 int global_acceptance_criteria ;
@@ -272,7 +312,8 @@ int global_average_acceptance_if_this_proposal_accepted ;
 int global_ballot_count_for_shared_preference_level ;
 int global_ballot_info_repeat_count ;
 int global_bottom_support_minus_opposition_among_dominant_coalition ;
-int global_bottom_support_minus_opposition_among_provisional_coalition ;
+int global_bottom_support_minus_opposition_among_opposition_coalition ;
+int global_coalition_count ;
 int global_column_pointer ;
 int global_count_of_elimination_continuing_proposals ;
 int global_count_of_popularity_continuing_proposals ;
@@ -314,14 +355,15 @@ int global_length_of_list_elimination_sequence ;
 int global_length_of_list_incompatible_proposal_number_pairs ;
 int global_length_of_list_of_all_participant_participants ;
 int global_length_of_list_of_all_proposals_ranked ;
+int global_length_of_list_of_incompatible_pairs ;
 int global_length_of_list_of_integers_to_sort ;
 int global_length_of_list_of_proposals_accepted ;
 int global_length_of_list_of_proposals_contributing_to_support_minus_opposition_count ;
-int global_length_of_list_of_proposals_rejected_as_incompatible ;
 int global_length_of_list_of_proposals_not_popular ;
 int global_length_of_list_of_proposals_ranked_negative ;
 int global_length_of_list_of_proposals_ranked_neutral ;
 int global_length_of_list_of_proposals_ranked_positive ;
+int global_length_of_list_of_proposals_rejected_as_incompatible ;
 int global_length_of_list_of_proposals_widely_disliked ;
 int global_length_of_list_of_tied_proposals ;
 int global_limit_maximum_proposals_accepted ;
@@ -337,9 +379,9 @@ int global_majority_threshold_percent ;
 int global_majority_threshold_percent_based_on_majority_participant_count ;
 int global_matrix_column_number ;
 int global_matrix_row_number ;
+int global_maximum_coalition_count ;
 int global_maximum_dislikes_allowed ;
 int global_maximum_possible_influence_sum ;
-int global_maximum_provisional_coalition_count ;
 int global_minority_threshold_percent ;
 int global_need_comma ;
 int global_need_to_initialize_group_ballot_count ;
@@ -349,7 +391,7 @@ int global_number_of_ballots_getting_zero_influence ;
 int global_number_of_participants ;
 int global_number_of_proposals ;
 int global_number_of_proposals_being_pairwise_considered ;
-int global_number_of_proposals_remaining_for_possible_adoption ;
+int global_number_of_proposals_remaining_for_possible_acceptance ;
 int global_number_of_proposals_temporarily_not_considered ;
 int global_number_of_proposals_with_highest_vote_transfer_count ;
 int global_number_of_proposals_with_lowest_vote_transfer_count ;
@@ -361,6 +403,7 @@ int global_number_of_seats_to_fill ;
 int global_one_for_approval_two_for_disapproval ;
 int global_one_for_opposition_two_for_support ;
 int global_opposing_count_from_this_participant ;
+int global_opposition_coalition_size ;
 int global_opposition_or_support_count ;
 int global_opposition_score ;
 int global_pair_counter ;
@@ -392,8 +435,6 @@ int global_proposal_count_accepted ;
 int global_proposal_count_with_largest_sum ;
 int global_proposal_if_accepted ;
 int global_proposal_then_not_accepted ;
-int global_provisional_coalition_count ;
-int global_provisional_coalition_size ;
 int global_question_number ;
 int global_quota_count ;
 int global_ranking_level ;
@@ -405,9 +446,9 @@ int global_smallest_support_minus_opposition ;
 int global_smallest_support_value ;
 int global_successive_elimination_loop_counter ;
 int global_sum_for_possible_dominant_coalition ;
-int global_sum_for_possible_provisional_coalition ;
+int global_sum_for_possible_opposition_coalition ;
 int global_sum_pairwise_count_for_dominant_coalition ;
-int global_sum_pairwise_count_for_provisional_coalition ;
+int global_sum_pairwise_count_for_opposition_coalition ;
 int global_support_minus_opposition_count ;
 int global_support_minus_opposition_range ;
 int global_supporting_count_from_this_participant ;
@@ -420,7 +461,7 @@ int global_tie_resolution_rank_order ;
 int global_top_ranked_proposal_if_only_one_else_zero ;
 int global_top_ranked_proposals_to_find ;
 int global_top_support_minus_opposition_among_dominant_coalition ;
-int global_top_support_minus_opposition_among_provisional_coalition ;
+int global_top_support_minus_opposition_among_opposition_coalition ;
 int global_total ;
 int global_total_number_of_ballots_that_got_zero_influence ;
 int global_total_of_all_adjustment_values ;
@@ -435,68 +476,6 @@ int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
 
-int global_length_of_list_of_incompatible_pairs ;
-
-
-// -----------------------------------------------
-//  Declare lists.
-
-//  For speed reasons, lists are declared here,
-//  not within a function, even if a single
-//  function uses them.
-
-//  Position one -- [ 1 ] -- is used as the starting
-//  position for these lists, so the declared list length
-//  must exceed, by (at least) one, the number of items
-//  to be stored in the list.
-
-int global_list_actual_proposal_for_alias_proposal[ 2001 ] ;
-int global_list_adjustment_for_participant[ 501 ] ;
-int global_list_alias_proposal_for_actual_proposal[ 2001 ] ;
-int global_list_approval_count_for_proposal[ 2001 ] ;
-int global_list_disapproval_count_for_proposal[ 2001 ] ;
-int global_list_elimination_sequence[ 2001 ] ;
-int global_list_integer_count_for_proposal[ 2001 ] ;
-int global_list_loss_count_for_proposal[ 2001 ] ;
-int global_list_of_all_proposals_ranked[ 2001 ] ;
-int global_list_of_incompatible_proposal_number_for_pair[ 10001 ] ;
-int global_list_of_integers_to_sort[ 501 ] ;
-int global_list_of_proposals_accepted[ 2001 ] ;
-int global_list_of_proposals_contributing_to_support_minus_opposition_count[ 501 ] ;
-int global_list_of_proposals_incompatible[ 2001 ] ;
-int global_list_of_proposals_not_popular[ 2001 ] ;
-int global_list_of_proposals_ranked_negative[ 2001 ] ;
-int global_list_of_proposals_ranked_neutral[ 2001 ] ;
-int global_list_of_proposals_ranked_positive[ 2001 ] ;
-int global_list_of_proposals_tied[ 2001 ] ;
-int global_list_of_proposals_widely_disliked[ 2001 ] ;
-int global_list_of_tied_proposals[ 2001 ] ;
-int global_list_of_trigger_proposal_number_for_pair[ 10001 ] ;
-int global_list_support_minus_opposition_for_participant[ 501 ] ;
-int global_list_opposing_count_for_proposal_count[ 2001 ] ;
-int global_list_overall_ranking_criteria_for_proposal[ 2001 ] ;
-int global_list_pairwise_opposition_or_support_count_for_proposal[ 2001 ] ;
-int global_list_percent_opposing_influence_so_far_for_participant[ 2001 ] ;
-int global_list_percent_supporting_influence_so_far_for_participant[ 2001 ] ;
-int global_list_percentage_positive_only_for_proposal[ 2001 ] ;
-int global_list_proposal_count_negative_ranked_for_participant[ 5001 ] ;
-int global_list_proposal_count_positive_ranked_for_participant[ 5001 ] ;
-int global_list_proposal_count_temporarily_ignored_for_proposal_pointer[ 2001 ] ;
-int global_list_proposal_first_at_pair_count[ 4001 ] ;
-int global_list_proposal_for_proposal_count[ 2001 ] ;
-int global_list_proposal_second_at_pair_count[4001 ] ;
-int global_list_remaining_ballot_weight_for_participant[ 501 ] ;
-int global_list_support_from_participant[ 2001 ] ;
-int global_list_tally_first_equal_second_at_pair_count[ 4001 ] ;
-int global_list_tally_first_over_second_at_pair_count[ 4001 ] ;
-int global_list_tally_second_over_first_at_pair_count[ 4001 ] ;
-int global_list_tie_resolution_rank_level_for_proposal[ 2001 ] ;
-int global_list_vote_count_positive_only_for_proposal[ 2001 ] ;
-int global_list_yes_or_no_adoption_possible_for_proposal[ 2001 ] ;
-int global_list_yes_or_no_elimination_continuing_for_proposal[ 2001 ] ;
-int global_list_yes_or_no_popularity_continuing_for_proposal[ 2001 ] ;
-int global_sorted_list_of_support_minus_opposition_counts[ 501 ] ;
-
 
 // -----------------------------------------------
 //  Declare decimal variables.
@@ -507,12 +486,6 @@ float decimal_equivalent_multiply_by_100_and_divide_by_highest_preference_level 
 float global_decimal_scale_value_based_on_participant_count ;
 float global_decimal_scale_value_based_on_proposal_count ;
 float global_graph_scale_divisor ;
-
-
-// -----------------------------------------------
-//  Declare the two-dimensional ranking-data array.
-
-int global_array_ranking_for_participant_and_proposal[ 501 ][ 2001 ] ;
 
 
 // -----------------------------------------------
@@ -763,7 +736,7 @@ void read_data( )
     global_number_of_proposals = 0 ;
     global_number_of_participants = 0 ;
     global_length_of_list_of_incompatible_pairs = 0 ;
-    global_number_of_proposals_remaining_for_possible_adoption = 0 ;
+    global_number_of_proposals_remaining_for_possible_acceptance = 0 ;
     global_length_of_list_of_proposals_widely_disliked = 0 ;
     global_length_of_list_of_proposals_not_popular = 0 ;
 
@@ -1851,7 +1824,23 @@ void sort_support_minus_opposition_counts( )
         global_sorted_list_of_support_minus_opposition_counts[ global_pointer_to_list + 1 ] = global_list_of_integers_to_sort[ global_pointer_to_list ] ;
     }
 
+
+// -----------------------------------------------
+//  Identify the count values that are largest and
+//  smallest among the opposition coalition, and largest
+//  and smallest among the dominant coalition.
+
+        global_bottom_support_minus_opposition_among_opposition_coalition = global_sorted_list_of_support_minus_opposition_counts[ 1 ] ;
+        global_top_support_minus_opposition_among_opposition_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_opposition_coalition_size ] ;
+        global_bottom_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants - global_dominant_coalition_size + 1 ] ;
+        global_top_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants ] ;
+        global_logitem_message = "[key support minus opposition values are " + convert_integer_to_text( global_bottom_support_minus_opposition_among_opposition_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_opposition_coalition ) + "  " + convert_integer_to_text( global_bottom_support_minus_opposition_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_dominant_coalition ) + "]" ;
+        write_logitem_message( ) ;
+
+
+// -----------------------------------------------
 //  End of function sort_support_minus_opposition_counts.
+
     return ;
 }
 
@@ -1950,7 +1939,7 @@ void accept_one_proposal( )
 //  proposals to be considered when additional popularity
 //  calculations are done.
 
-    global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_accepted ] = global_no ;
+    global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_accepted ] = global_no ;
 
 
 // -----------------------------------------------
@@ -1964,7 +1953,7 @@ void accept_one_proposal( )
         if ( global_actual_proposal_trigger == global_actual_proposal_accepted )
         {
             global_alias_proposal_incompatible = global_list_alias_proposal_for_actual_proposal[ global_actual_proposal_incompatible ] ;
-            global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_incompatible ] = global_no ;
+            global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_incompatible ] = global_no ;
             global_length_of_list_of_proposals_rejected_as_incompatible ++ ;
             global_list_of_proposals_incompatible[ global_length_of_list_of_proposals_rejected_as_incompatible ] = global_alias_proposal_incompatible ;
             global_logitem_message = "[proposal " + convert_integer_to_text( global_actual_proposal_incompatible ) + " rejected as incompatible with just-accepted proposal]" ;
@@ -1986,11 +1975,12 @@ void accept_one_proposal( )
 //      calculate_weighted_most_popular_proposal
 //
 //  Calculate the most popular proposal among the
-//  remaining proposals available for adoption, based on
-//  the current weight/influence amounts for the
+//  remaining proposals available for acceptance, based
+//  on the current weight/influence amounts for the
 //  participants.  Exit with a fatal error if a winner is
 //  not found because the number of remaining proposals
-//  should have been checked to be at least one proposal.
+//  should have been checked to be at least one
+//  proposal.
 
 void calculate_weighted_most_popular_proposal( )
 {
@@ -1998,11 +1988,11 @@ void calculate_weighted_most_popular_proposal( )
 
 // -----------------------------------------------
 //  Specify the popularity calculation is based on the
-//  proposals still available for adoption.
+//  proposals still available for acceptance.
 
         for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
         {
-            global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] ;
+            global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] ;
             global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] ;
         }
 
@@ -2059,7 +2049,7 @@ void log_crude_plot( )
 // -----------------------------------------------
 //  Generate the plot.
 
-        for ( global_list_pointer = 1 ; global_list_pointer <= global_provisional_coalition_size ; global_list_pointer ++ )
+        for ( global_list_pointer = 1 ; global_list_pointer <= global_opposition_coalition_size ; global_list_pointer ++ )
         {
             global_logitem_message = "[" ;
             for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
@@ -2161,12 +2151,12 @@ void do_negotiation_tool_calculations( )
 //  resolve deep ties.  Log these counts.
 
     count_approvals_and_disapprovals( ) ;
-   	global_logitem_message = "[approval counts:" ;
-   	global_logitem_text_store_longer = "[disapproval counts:" ;
+       global_logitem_message = "[approval counts:" ;
+       global_logitem_text_store_longer = "[disapproval counts:" ;
     for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
     {
-    	global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) ;
-    	global_logitem_text_store_longer = global_logitem_text_store_longer + " " + convert_integer_to_text( global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ) ;
+        global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) ;
+        global_logitem_text_store_longer = global_logitem_text_store_longer + " " + convert_integer_to_text( global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ) ;
     }
     global_logitem_message = global_logitem_message + "]" ;
     write_logitem_message( ) ;
@@ -2202,11 +2192,11 @@ void do_negotiation_tool_calculations( )
 
 // -----------------------------------------------
 //  Specify that all proposals are currently being
-//  considered for possible adoption.
+//  considered for possible acceptance.
 
     for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
     {
-        global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] = global_yes ;
+        global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] = global_yes ;
     }
 
 
@@ -2227,7 +2217,7 @@ void do_negotiation_tool_calculations( )
         }
         if ( global_dislikes_encountered > global_maximum_dislikes_allowed )
         {
-            global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] = global_no ;
+            global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] = global_no ;
             global_length_of_list_of_proposals_widely_disliked ++ ;
             global_list_of_proposals_widely_disliked[ global_length_of_list_of_proposals_widely_disliked ] = global_alias_proposal_number ;
             global_json_key = "disliked_proposal_" + convert_integer_to_text( global_length_of_list_of_proposals_widely_disliked ) ;
@@ -2252,10 +2242,10 @@ void do_negotiation_tool_calculations( )
 
 
 //-----------------------------------------------
-//  Specify the maximum provisional coalition count.  This
-//  number indicates the maximum number of provisional
-//  coalitions.  A coalition is a group of participants
-//  who share similar preferences.  It is provisional
+//  Specify the maximum coalition count.  This number
+//  indicates the maximum number of possible coalitions.
+//  Acoalition is a group of participants who share
+//  similar preferences.  It is not a named coalition
 //  because the participants do not need to identify
 //  other participants in the same coalition.  Instead,
 //  participant preferences determine which participants
@@ -2263,17 +2253,17 @@ void do_negotiation_tool_calculations( )
 //  participants.  It cannot be one because that would
 //  not allow an opposition coalition to exist.
 
-    global_maximum_provisional_coalition_count = global_number_of_participants ;
-    if ( global_maximum_provisional_coalition_count > 7 )
+    global_maximum_coalition_count = global_number_of_participants ;
+    if ( global_maximum_coalition_count > 7 )
     {
-        global_maximum_provisional_coalition_count = 7 ;
+        global_maximum_coalition_count = 7 ;
     }
 
 
 //-----------------------------------------------
-//  Initialize the provisional coalition count.
+//  Initialize the coalition count.
 
-    global_provisional_coalition_count = 0 ;
+    global_coalition_count = 0 ;
 
 
 //-----------------------------------------------
@@ -2288,16 +2278,16 @@ void do_negotiation_tool_calculations( )
 //-----------------------------------------------
 //  Specify which proposals remain to be considered.
 
-        global_number_of_proposals_remaining_for_possible_adoption = 0 ;
+        global_number_of_proposals_remaining_for_possible_acceptance = 0 ;
         for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
         {
-            global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] ;
-            if ( global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] == global_yes )
+            global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] ;
+            if ( global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] == global_yes )
             {
-                global_number_of_proposals_remaining_for_possible_adoption ++ ;
+                global_number_of_proposals_remaining_for_possible_acceptance ++ ;
             }
         }
-        global_logitem_message = "[remaining " + convert_integer_to_text( global_number_of_proposals_remaining_for_possible_adoption ) + "   accepted " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + "   incompatible " + convert_integer_to_text( global_length_of_list_of_proposals_rejected_as_incompatible ) + "]" ;
+        global_logitem_message = "[remaining " + convert_integer_to_text( global_number_of_proposals_remaining_for_possible_acceptance ) + "   accepted " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + "   incompatible " + convert_integer_to_text( global_length_of_list_of_proposals_rejected_as_incompatible ) + "]" ;
         write_logitem_message( ) ;
 
 
@@ -2306,7 +2296,7 @@ void do_negotiation_tool_calculations( )
 //  considered is zero, the loop is done, so exit the
 //  loop.
 
-        if ( global_number_of_proposals_remaining_for_possible_adoption < 1 )
+        if ( global_number_of_proposals_remaining_for_possible_acceptance < 1 )
         {
             global_logitem_message = "[number of proposals remaining is zero, so calculations are done.]" ;
             write_logitem_message( ) ;
@@ -2332,7 +2322,7 @@ void do_negotiation_tool_calculations( )
             write_logitem_message( ) ;
             for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
             {
-                global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] = global_no ;
+                global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] = global_no ;
                 global_length_of_list_of_proposals_not_popular ++ ;
                 global_list_of_proposals_not_popular[ global_length_of_list_of_proposals_not_popular ] = global_alias_proposal_number ;
                 global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " not popular enough]" ;
@@ -2343,40 +2333,40 @@ void do_negotiation_tool_calculations( )
 
 
 //-----------------------------------------------
-//  Specify the current provisional coalition count for
-//  this cycle through the main loop.  When this count
-//  equals 1, all the participants have equal influence,
-//  without considering any possible coalition.  When
-//  this count reaches the maximum (which typically is
-//  about 7), restart at 1.  If it is larger than 2 and
-//  exceeds the number of adopted proposals, restart at
-//  1.
+//  Specify the current coalition count for this cycle
+//  through the main loop.  When this count equals 1, all
+//  the participants have equal influence, without
+//  considering any possible coalitions (within the full
+//  range of participants).  When this count reaches the
+//  maximum (which typically is about 7), restart at 1.
+//  If it is larger than 2 and exceeds the number of
+//  accepted proposals, restart at 1.
 
-        global_provisional_coalition_count ++ ;
-        if ( global_provisional_coalition_count > global_maximum_provisional_coalition_count )
+        global_coalition_count ++ ;
+        if ( global_coalition_count > global_maximum_coalition_count )
         {
-            global_provisional_coalition_count = 1 ;
+            global_coalition_count = 1 ;
         }
-        if ( ( global_provisional_coalition_count > 2 ) && ( global_provisional_coalition_count >= global_length_of_list_of_proposals_accepted ) )
+        if ( ( global_coalition_count > 2 ) && ( global_coalition_count >= global_length_of_list_of_proposals_accepted ) )
         {
-            global_provisional_coalition_count = 1 ;
+            global_coalition_count = 1 ;
             global_logitem_message = "[coalition count limited to number of proposals accepted so far, which is " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + "]" ;
             write_logitem_message( ) ;
         }
-        global_logitem_message = "[checking coalition count " + convert_integer_to_text( global_provisional_coalition_count ) + "]" ;
+        global_logitem_message = "[checking coalition count " + convert_integer_to_text( global_coalition_count ) + "]" ;
         write_logitem_message( ) ;
 
 
 // -----------------------------------------------
-//  If the provisional coalition count equals 1, then
-//  specify that all the ballots have the same ballot
-//  weight (influence amount), and identify which
-//  proposal is most popular, accept this proposal, and
-//  repeat the main loop.
+//  If the coalition count equals 1, then specify that all
+//  the ballots have the same ballot weight
+//  (influence amount), and identify which proposal is
+//  most popular, accept this proposal, and repeat the
+//  main loop.
 //
 //  When considering popularity, ignore proposals that
-//  have already been adopted, or are incompatible with
-//  adopted proposals, or were rejected because of too
+//  have already been accepted, or are incompatible with
+//  accepted proposals, or were rejected because of too
 //  many dislike rankings.
 //
 //  The ballot weight is an integer that can be divided
@@ -2385,10 +2375,10 @@ void do_negotiation_tool_calculations( )
 //  units.  The suggested number is 2000 units for one
 //  full weight for one ballot.  At some later steps
 //  during the calculations some ballots will have
-//  reduced weight after they contribute to adopting a
+//  reduced weight after they contribute to accepting a
 //  proposal.
 
-        if ( global_provisional_coalition_count == 1 )
+        if ( global_coalition_count == 1 )
         {
             for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
             {
@@ -2396,7 +2386,7 @@ void do_negotiation_tool_calculations( )
             }
             for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
             {
-                global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_adoption_possible_for_proposal[ global_alias_proposal_number ] ;
+                global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] ;
             }
             calculate_weighted_most_popular_proposal( ) ;
             global_alias_proposal_accepted = global_alias_proposal_winner_of_elimination_rounds ;
@@ -2407,27 +2397,25 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  For the remainder of this main loop, the provisional
-//  coalition count is larger than 1.  It specifies the
-//  number of equal-size coaltions that could fit within
-//  the full group of participants.
+//  For the remainder of this main loop, the coalition
+//  count is larger than 1.  It specifies the number of
+//  equal-size coaltions that could fit within the full
+//  group of participants.
 //
-//  For example, if the provisional coaltion count is 3,
-//  the size of the provisional coalition is one-third of
-//  the participants (with rounding to the nearest
-//  smaller integer).
+//  For example, if the coaltion count is 3, the size of
+//  the coalition is one-third of the participants
+//  (with rounding to the nearest smaller integer).
 //
 //  Calculate how many participants would be in the
-//  opposition coalition based on the provisional
-//  coalition count.
+//  opposition coalition based on the coalition count.
 //
 //  Also calculate how many participants are in the
 //  dominant coalition, which is the majority coalition
 //  the opposition coalition opposes.  It is not always
 //  equal to the number of participants minus the
-//  provisional coalition size.  For example, if there
+//  opposition coalition size.  For example, if there
 //  are an odd number of participants, and they are
-//  equally divided into two groups (provisional and
+//  equally divided into two groups (opposition and
 //  dominant) there is one participant who is not in
 //  either group because the group sizes must be equal.
 //  This concept is related to the idea that a "median"
@@ -2435,10 +2423,10 @@ void do_negotiation_tool_calculations( )
 //  median value and therefore is neither above nor below
 //  the median.
 
-        global_provisional_coalition_size = int( float( global_number_of_participants ) / float ( global_provisional_coalition_count ) ) ;
-//        global_logitem_message = "[provisional coalition size is " + convert_integer_to_text( global_provisional_coalition_size ) + "]" ;
+        global_opposition_coalition_size = int( float( global_number_of_participants ) / float ( global_coalition_count ) ) ;
+//        global_logitem_message = "[opposition coalition size is " + convert_integer_to_text( global_opposition_coalition_size ) + "]" ;
 //        write_logitem_message( ) ;
-        global_dominant_coalition_size = global_provisional_coalition_size * ( global_provisional_coalition_count - 1 ) ;
+        global_dominant_coalition_size = global_opposition_coalition_size * ( global_coalition_count - 1 ) ;
 //        global_logitem_message = "[dominant coalition size is " + convert_integer_to_text( global_dominant_coalition_size ) + "]" ;
 //        write_logitem_message( ) ;
 
@@ -2471,20 +2459,6 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  Identify the count values that are largest and
-//  smallest among the provisional coalition
-//  particpiants, and largest and smallest among the
-//  dominant coalition.
-
-        global_bottom_support_minus_opposition_among_provisional_coalition = global_sorted_list_of_support_minus_opposition_counts[ 1 ] ;
-        global_top_support_minus_opposition_among_provisional_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_provisional_coalition_size ] ;
-        global_bottom_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants - global_dominant_coalition_size + 1 ] ;
-        global_top_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants ] ;
-        global_logitem_message = "[key support minus opposition values are " + convert_integer_to_text( global_bottom_support_minus_opposition_among_provisional_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_provisional_coalition ) + "  " + convert_integer_to_text( global_bottom_support_minus_opposition_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_dominant_coalition ) + "]" ;
-        write_logitem_message( ) ;
-
-
-// -----------------------------------------------
 //  Log a crude graphical display of the sorted counts.
 
         global_graph_scale_divisor = 25.0 / float( global_number_of_proposals ) ;
@@ -2492,11 +2466,11 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  Identify the provisional coalition of participants who
-//  are not well-represented by the recently accepted
-//  proposals, and give them full influence, and give
-//  zero influence to the dominant coalition
-//  participants.
+//  Identify a possible opposition coalition of
+//  participants who are not well-represented by the
+//  recently accepted proposals, and give them full
+//  influence, and give zero influence to the dominant
+//  coalition participants.
 //
 //  The resulting most popular proposal will not
 //  necessarily be accepted.  Instead, the resulting most
@@ -2507,7 +2481,7 @@ void do_negotiation_tool_calculations( )
 //  If all the ballots will have zero influence, repeat
 //  the main loop.
 
-        if ( global_bottom_support_minus_opposition_among_provisional_coalition == global_bottom_support_minus_opposition_among_dominant_coalition )
+        if ( global_bottom_support_minus_opposition_among_opposition_coalition == global_bottom_support_minus_opposition_among_dominant_coalition )
         {
             global_logitem_message = "[cannot identify any opposition coalition]" ;
             write_logitem_message( ) ;
@@ -2531,8 +2505,8 @@ void do_negotiation_tool_calculations( )
 
 //-----------------------------------------------
 //  Identify the most popular proposal based on the
-//  provisional coalition having full influence and the
-//  dominant coalition having zero influence.
+//  possible opposition coalition having full influence
+//  and the dominant coalition having zero influence.
 
         calculate_weighted_most_popular_proposal( ) ;
 
@@ -2590,7 +2564,7 @@ void do_negotiation_tool_calculations( )
 
         global_logitem_message = "[ballot weights:]" ;
         write_logitem_message( ) ;
-        global_graph_scale_divisor = 125.0 / float( global_number_of_proposals ) ;
+        global_graph_scale_divisor = 1000.0 / float( global_number_of_proposals ) ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
             global_logitem_message = "[" ;
@@ -2601,6 +2575,22 @@ void do_negotiation_tool_calculations( )
             global_logitem_message = global_logitem_message + convert_integer_to_text( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) + "]" ;
             write_logitem_message( ) ;
         }
+
+
+//-----------------------------------------------
+//  Log a list of proposals being considered as a possible
+//  most-popular proposal.
+
+       global_logitem_message = "[proposals considered:" ;
+    for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
+    {
+        if ( global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] == global_yes )
+        {
+            global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) ;
+        }
+    }
+    global_logitem_message = global_logitem_message + "]" ;
+    write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2635,20 +2625,6 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  Identify the count values that are largest and
-//  smallest among the provisional coalition
-//  particpiants, and largest and smallest among the
-//  dominant coalition.
-
-        global_bottom_support_minus_opposition_among_provisional_coalition = global_sorted_list_of_support_minus_opposition_counts[ 1 ] ;
-        global_top_support_minus_opposition_among_provisional_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_provisional_coalition_size ] ;
-        global_bottom_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants - global_dominant_coalition_size + 1 ] ;
-        global_top_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants ] ;
-        global_logitem_message = "[key support minus opposition values are " + convert_integer_to_text( global_bottom_support_minus_opposition_among_provisional_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_provisional_coalition ) + "  " + convert_integer_to_text( global_bottom_support_minus_opposition_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_dominant_coalition ) + "]" ;
-        write_logitem_message( ) ;
-
-
-// -----------------------------------------------
 //  Log a crude graphical display of the sorted counts.
 
         global_logitem_message = "[pw counts, use to decide whether to accept this proposal:]" ;
@@ -2664,17 +2640,17 @@ void do_negotiation_tool_calculations( )
 //  pairwise-support-minus-opposition counts for the
 //  dominant coalition.
 
-        global_sum_pairwise_count_for_provisional_coalition = 0 ;
-        for ( global_list_pointer = 1 ; global_list_pointer <= global_provisional_coalition_size ; global_list_pointer ++ )
+        global_sum_pairwise_count_for_opposition_coalition = 0 ;
+        for ( global_list_pointer = 1 ; global_list_pointer <= global_opposition_coalition_size ; global_list_pointer ++ )
         {
-            global_sum_pairwise_count_for_provisional_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
+            global_sum_pairwise_count_for_opposition_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
         }
         global_sum_pairwise_count_for_dominant_coalition = 0 ;
         for ( global_list_pointer = ( global_number_of_participants - global_dominant_coalition_size + 1 ) ; global_list_pointer <= global_number_of_participants ; global_list_pointer ++ )
         {
             global_sum_pairwise_count_for_dominant_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
         }
-        global_disparity_gap = int( ( float( global_sum_pairwise_count_for_dominant_coalition ) / float( global_dominant_coalition_size) ) - ( float( global_sum_pairwise_count_for_provisional_coalition ) / float( global_provisional_coalition_size ) ) ) ;
+        global_disparity_gap = int( ( float( global_sum_pairwise_count_for_dominant_coalition ) / float( global_dominant_coalition_size) ) - ( float( global_sum_pairwise_count_for_opposition_coalition ) / float( global_opposition_coalition_size ) ) ) ;
         global_logitem_message = "[disparity gap is " + convert_integer_to_text( global_disparity_gap ) + "]" ;
         write_logitem_message( ) ;
 
@@ -2755,14 +2731,18 @@ void do_negotiation_tool_calculations( )
     }
     global_logitem_message = "[pw count per participant based on accepted proposals:]" ;
     write_logitem_message( ) ;
-    global_result_text = "[" ;
+    global_graph_scale_divisor = 20.0 / float( global_number_of_proposals ) ;
     for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
     {
         calculate_support_minus_opposition_for_one_participant( ) ;
-        global_result_text = global_result_text + " " + convert_integer_to_text( global_list_support_minus_opposition_for_participant[ global_participant_number ] ) ;
+        global_logitem_message = "[" ;
+        for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_list_support_minus_opposition_for_participant[ global_participant_number ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
+        {
+            global_logitem_message = global_logitem_message + " " ;
+        }
+        global_logitem_message = global_logitem_message + convert_integer_to_text( global_list_support_minus_opposition_for_participant[ global_participant_number ] ) + "]" ;
+        write_logitem_message( ) ;
     }
-    global_logitem_message = global_result_text + "]" ;
-    write_logitem_message( ) ;
 
 
 //-----------------------------------------------

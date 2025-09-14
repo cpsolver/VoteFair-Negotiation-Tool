@@ -1,5 +1,8 @@
 VoteFair-Negotiation-Tool
 
+
+DESCRIPTION
+
 This software negotiation tool can be used to negotiate fair outcomes for real-life situations such as:
 
     * insurance settlements
@@ -49,10 +52,49 @@ Documentation is included within the code.
 
 Information about the Dashrep language is at: www.Dashrep.org
 
+A description of the calculations is below in the ALGORITHM section.
+
 
 KEYWORDS
 
 VoteFair, negotiation, tool, mediation, arbitration, ranking, prioritize, priority, vote, voting, votes, voters
+
+
+ALGORITHM
+
+Here are the highlights about how the calculations are done.  This description assumes you have already read the DESCRIPTION section above.
+
+* A participant's ranking numbers can be regarded as that participant's ballot.
+
+* Each participant's ballot can have full influence, or reduced influence, depending on the calculation step.  At the beginning of the calculations, and at some calculation steps, every ballot has the same full ballot weight.
+
+* A participant's ballot weight can be reduced if that ballot has had more influence choosing which proposals are accepted.  A participant's ballot weight can have more influence if that participant's ranking numbers have had less influence choosing which proposals are accepted.
+
+* Each ranking number is only compared to other ranking numbers supplied by the same participant.  This means a ranking number supplied by one participant is never compared to a ranking number supplied by a different participant.
+
+* The supplied ranking numbers are analyzed using pairwise counting.  This means a proposal ranking is either ranked higher, or lower, or the same as, another proposal ranking on the same ballot.  (For example a proposal ranked at rank 32 is counted as one proposal ranked higher than another proposal ranked at ranked 20.)  The "distance" between ranking numbers is completely ignored!
+
+* The only significant ranking number is zero.  Proposals ranked higher than zero (up to 100) are liked, and in some calculation steps are regarded as "approved" by the participant.  Proposals ranked lower than zero (down to minus 100) are disliked, and in some calculation steps are regarded as "disapproved" by the participant.  Proposals ranked at zero are regarded as neutral, neither liked nor disliked, and neither approved nor disapproved.
+
+* The word "pairwise" refers to two proposals being considered as a pair of proposals.
+
+* A pairwise losing proposal is a proposal that is ranked by every participant as lower than every other proposal still being considered.  At every possible point, pairwise losing proposals are eliminated from consideration, either temporarily or permanently.
+
+* A pairwise support count is the number of proposals still being considered that are ranked lower than the proposal being measured for support.  This count can span across all ballots or be specific to a single ballot.  The pairwise support count is used to help determine which proposal is least popular among the proposals being considered.
+
+* A pairwise opposition count is the number of proposals that are ranked higher than the proposal being measured for opposition.  As with pairwise support counts, this count can span across all ballots or be specific to a single ballot.  The pairwise opposition count is used to help determine which proposal is least popular among the proposals being considered.
+
+* A pairwise support minus opposition count is the pairwise support count minus the pairwise opposition count.  This count can span across all ballots or be specific to a single ballot.
+
+* A pairwise support minus opposition count for a specific proposal and a specific participant is used to measure how much satisfaction that participant will have if that proposal is accepted.
+
+* Possible coalitions are considered.  The size of a possible "opposition" coalition is a fraction such as half the participants, one third of the participants, one fourth of the participants, and so on down to about one seventh of the participants.  Most of the remaining participants are regarded as a possible "dominant" coalition.  The only information used to identify possible coalitions are the rankings on the ballots.
+
+* After each proposal is accepted, calculations are done to determine whether there is a possible coalition of participants who are not well-represented by the accepted proposals.  If such a coalition exists, and if those participants share a clear desire for a specific opposing, yet not-incompatible, proposal, then that proposal (that's liked by the coalition participants) is accepted.  If the "disparity" gap between the opposition participants and the dominant participants is small, the opposition coalition does not get their preferred proposal accepted.
+
+* Any proposals that are not approved (liked rather than neutral or disliked) by a specified percentage of participants are rejected as unpopular.  This rejection occurs before any other popularity calculations.
+
+* For additonal details about the calculation steps, especially for a specific negotiation case, look at the "loginfo" messages within the output JSON file.
 
 
 COPYRIGHT AND LICENCE

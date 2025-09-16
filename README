@@ -10,65 +10,77 @@ DESCRIPTION
 
 This software negotiation tool can be used to negotiate fair outcomes for real-life situations such as:
 
-    * parliaments, state legislatures, and city councils
-    * insurance settlements
+    * parliament, state legislature, or city council
+    * members of a non-profit organization
+    * board of directors
+    * labor union members
+    * insurance settlement
     * buyer-seller bargaining
     * terms of employment
-    * contractor-homeowner disputes
-    * consultant-client contracts
-    * investment contracts
-    * divorce settlements
-    * marriage counseling agreements
-    * inheritance distributions
-    * landlord-tenant contracts
+    * contractor-homeowner dispute
+    * consultant-client contract
+    * investment contract
+    * divorce settlement
+    * marriage counseling agreement
+    * inheritance distribution
+    * landlord-tenant contract
 
-Here are some important characteristics:
 
-* It handles both friendly and hostile situations.
+Here are characteristics about how it can be used:
+
+* It can handle both friendly and hostile situations.
 
 * It can handle dozens of participants, it can handle just two people, or it could be used among all members of Congress.
 
 * It can handle hundreds of proposals (or more).
 
+* Additional software must interact with the participants to collect proposals, share proposals, collect rankings for the proposals, and share the calculated list of "accepted" proposals.  Spreadsheets can be used to enter the rankings, but a well-designed web app would be much easier to use.
+
+
+Here's how the proposals and rankings work:
+
 * Each participant submits proposals.  Each proposal is short, just a single sentence or single paragraph.
 
-* When new proposals are added, each participant indicates which proposals they like, and which proposals they dislike.  All other proposals are ranked as neutral.
+* When each new proposal appears, it is automatically ranked at zero (0), which indicates a neutral ranking, neither liked nor disliked.
 
-* Each time the negotiation tool software runs, it identifies the optimum combination of proposals that are most strongly appreciated by the most participants.
-
-* If the suggested combination of proposals includes proposals that are incompatible with each other, an administrator updates the information about which proposals are incompatible with specified other proposals.  Then running the software again eliminates the incompatible proposals.
-
-* All the participants rank the proposals.
-
-* Ranking level zero (0) is the neutral level, which means the participant neither likes nor dislikes it.
-
-* Each new proposal is automatically ranked at level zero.
-
-* A participant assigns a larger number (up to 100) to indicate the participant likes the proposal.  A participant assigns a smaller number (down to -100, which is negative 100) to indicate the participant dislikes the proposal.
+* Each participant gives a positive ranking number of 1 to 100 for each proposal they like.  The participant gives a negative ranking number of minus 1 (-1) down to minus 100 (-100) for each proposal they dislike.
 
 * Multiple proposals can be ranked at the same ranking number.
 
-* Gaps between the ranking numbers are not significant.  Only the relative rankings compared to other rankings from the same participant are significant.
-
-* Each participant can assign a ranking or rating number to each and every proposal.  Or the participant can leave most proposals at the zero rank and just rank a few liked proposals at numbers larger than one.  The participant can assign negative numbers to disliked proposals.
-
-* Pairwise counting, which is described below in the ALGORITHM section, is used in the calculations.  The pairwise comparisons do not compare numbers from different participants.  The pairwise counting only compares ranking numbers from the same participant.
-
 * Gaps between the numbers, or a lack of gaps between rankings, do not affect the results.  All that matters is whether a proposal is ranked higher or lower than another proposal.
+
+* Each ranking number is only compared to other ranking numbers from the same participant.  This means each participant can choose for themself how to associate ranking numbers with mental ratings such as "weak like," "medium like," "strong like," "extra strong like," "weak dislike," etc.
 
 * A participant cannot change the results by limiting the use of positive ranking numbers, or by heavily using negative ranking numbers.
 
-* If some of the participants distrust an administrator to correctly identify which proposals are incompatible with which other proposals, these incompatibilities can be voted on by participants.  If some incompatibilities are controversial, some of the incompatible proposals may need to be split into smaller possibly-compatible proposals.
+* Pairwise counting, which is described below in the ALGORITHM section, is used in the calculations.  The pairwise comparisons do not compare numbers from different participants.  The pairwise counting only compares ranking numbers from the same participant.
 
-* The list of accepted proposals should not automatically be officially adopted.  If only slightly more than half the participants officially vote to adopt the accepted proposals, the negotiations should continue.
 
-* When negotiation progress slows down, the controversial proposals should be split up into smaller proposals with fewer incompatibilities.
+Here's how the negotiation process works:
+
+* Each time the negotiation tool software runs, it identifies the optimum combination of "accepted" proposals that are most strongly appreciated by the most participants.  This calculation can be done automatically every minute or every hour, or it can be done manually once a day.
+
+* If the suggested combination of proposals includes proposals that are incompatible with each other, an administrator updates the information about which proposals are incompatible with specified other proposals.  Then running the software again eliminates the incompatible proposals.
+
+* Participants view the updated list of "accepted" proposals and change their rankings of the accepted proposals.  Also they may need to change the rankings of the proposals they hope will become accepted proposals.
+
+* If some participants distrust an administrator to correctly identify which proposals are incompatible with which other proposals, these incompatibilities can be voted on by participants.
+
+* When negotiation progress slows down, or if some incompatibilities are controversial, the controversial proposals should be split up into smaller proposals with fewer incompatibilities between these newer proposals.
+
+* Newer proposals with fewer incompatibilities should be ranked higher so that more of these simpler proposals will be among the accepted proposals.  Slowly more of these simpler proposals will replace the greedy proposals that are not widely popular.
 
 * If the negotiation process continues with a spirit of cooperation, the results are likely to converge on a list of proposals that are reasonably well-liked by all participants, or a very large percentage of participants.
 
-* This negotiation tool is not an artificial intelligence tool.  Instead it looks for and finds areas of agreement based on the ranking numbers supplied by the participants.
+* If only slightly more than half the participants would officially vote to adopt the accepted proposals, the negotiations should continue.
+
+* The goal should be to arrive at a list of accepted proposals that are supported by 80 percent or more of the participants.
+
+* Full consensus (100 percent support) would be ideal, but is unlikely.  At least a few participants are likely to withhold their official vote of support until the list of accepted proposals includes an unrelated one of personal interest.
 
 * This negotiation tool is a platform for communication.  However, it cannot force participants to listen to fresh perspectives from other participants, which is the basis for communication.
+
+* As a clarification, this negotiation tool is not an artificial intelligence (AI) tool.  Instead it looks for and finds areas of agreement based on the ranking numbers supplied by the participants.
 
 
 Version 2.00
@@ -99,21 +111,23 @@ ALGORITHM
 
 Here are the highlights about how the calculations are done.  This description assumes you have already read the DESCRIPTION section above.
 
+* A ranking number supplied by one participant is never compared to a ranking number supplied by a different participant.  The ranking numbers just provide a way to identify the sequence in which each participants prefer the proposals.
+
+* The distance between positive numbers and negative numbers is ignored except when a deep tie is encountered.  Resolving a deep tie is is the only time when the distinction between positive and negative numbers can become relevant.
+
 * A participant's ranking numbers can be regarded as that participant's ballot.
 
 * Each participant's ballot can have full influence, or reduced influence, depending on the calculation step.  At the beginning of the calculations, and at some calculation steps, every ballot has the same full ballot weight.
 
 * A participant's ballot weight can be reduced if that ballot has had more influence choosing which proposals are accepted.  A participant's ballot weight can have more influence if that participant's ranking numbers have had less influence choosing which proposals are accepted.
 
-* Each ranking number is only compared to other ranking numbers supplied by the same participant.  This means a ranking number supplied by one participant is never compared to a ranking number supplied by a different participant.
-
-* The supplied ranking numbers are analyzed using pairwise counting.  This means a proposal ranking is either ranked higher, or lower, or the same as, another proposal ranking on the same ballot.  (For example a proposal ranked at rank 32 is counted as one proposal ranked higher than another proposal ranked at ranked 20.)  The "distance" between ranking numbers is completely ignored!
-
-* The distance between positive numbers and negative numbers is also completely ignored.  Only when a deep tie is encountered does the distinction between positive and negative numbers become relevant, and only for resolving the deep tie.
+* The supplied ranking numbers are analyzed using pairwise counting.  This means a proposal ranking is either ranked higher, or lower, or the same as, another proposal ranking on the same ballot.  (For example a proposal ranked at rank 32 is counted as one proposal ranked higher than another proposal ranked at ranked 20.)  As previously explained, the "distance" between ranking numbers is completely ignored!
 
 * The word "pairwise" refers to two proposals being considered as a pair of proposals.
 
 * A pairwise losing proposal is a proposal that is ranked by more than half the participants as lower than every other proposal still being considered.  At every possible point, pairwise losing proposals are eliminated from consideration, either temporarily or permanently.
+
+* To understand the pairwise losing concept using a sports metaphor, a soccer team that loses every game against every other team still in the playoffs is a pariwise losing team, and deserves to be eliminated as a possible championship team.
 
 * A pairwise support count is the number of proposals still being considered that are ranked lower than the proposal being measured for support.  A pairwise support count can span across all ballots or be specific to a single ballot.  The pairwise support count is used to help determine which proposal is least popular among the proposals being considered.
 
@@ -121,27 +135,27 @@ Here are the highlights about how the calculations are done.  This description a
 
 * A pairwise support-minus-opposition count is the pairwise support count minus the pairwise opposition count.  This count can span across all ballots or be specific to a single ballot.
 
-* A pairwise support-minus-opposition count for a specific proposal and a specific participant is used to measure how much satisfaction that participant will have if that proposal is accepted.
+* Based on considering a specific group of proposals, a pairwise support-minus-opposition count for a specific participant is used to measure how much satisfaction that participant would have if that group of proposals were accepted.
 
 * Many possible "opposition coalitions" are considered to identify a group of participants who are not well-represented by the accepted proposals.  All, or most of, the remaining participants are regarded as a possible "dominant coalition."
 
 * The size of an opposition coalition is a fraction such as half the participants, one third of the participants, one fourth of the participants, and so on down to about one seventh of the participants.
 
-* The only information used to identify possible coalitions are the rankings on the ballots.  If any participants might suspect any bias based on any text (non-number) information, comments should be omitted from the input data.  (Any line with a zero as the first number is ignored as if it is a comment.)
+* The only information used to identify possible coalitions are the rankings on the ballots.  If any participants might suspect any bias based on any text (non-number) information, comments should be omitted from the input data.  (Any line with a zero as the first number is ignored as if it's a comment.)
 
 * On a temporary basis, at some calculation steps, the opposition-coalition ballots are give full weight, and the remaining dominant-coalition ballots are given zero weight.  Using these weights the most popular remaining proposal is identified.  This proposal, instead of being accepted, is temporarily considered to be accepted, along with the actually accepted proposals.  Using just this list of proposals, the pairwise support-minus-opposition count for each participant is calculated.  This step can be regarded as measuring the degree to which each participant belongs to the opposition coalition or the dominant coalition.
 
-* Based on the just-described pairwise support-minus-opposition counts for each participant, the ballots are given weights that range from full weight to zero weight.  Specifically the participant with the highest pairwise support-minus-opposition count is given a zero ballot weight, and the participant with the lowest pairwise support-minus-opposition count is given the full ballot weight.  Some of the other participants are likely to have weights between these extremes.  Basically this calculation step inverts the support-minus-opposition counts to become the ballot weights.  Using these adjusted ballot weights, the most popular proposal is identified.  This is the proposal that is most popular among opposition coalition participants.
+* Based on the just-described pairwise support-minus-opposition counts for each participant, the ballots are given weights that range from full weight to zero weight.  Specifically the participant with the highest pairwise support-minus-opposition count is given a zero ballot weight, and the participant with the lowest pairwise support-minus-opposition count is given the full ballot weight.  Typically the other participants will have ballot weights between these extremes.  Basically this calculation step inverts (turns upside-down) the support-minus-opposition counts to become the ballot weights.  Using these adjusted ballot weights, the most popular proposal is identified.  This is the proposal that is most popular among the opposition coalition participants.
 
 * A disparity gap is calculated to determine whether to accept a proposal that is most popular among opposition coalition participants.  This disparity gap equals the average pairwise support-minus-opposition count of the dominant coalition participants minus the average pairwise support-minus-opposition count of the opposition coalition participants.  If the disparity gap is sufficiently large, the proposal is accepted.  If the disparity gap is small, the proposal is not accepted.
 
 * When the number of accepted proposals reaches the specified limit, the calculations end.  If the specified limit equals the number of proposals, the calculations will continue until no more proposals can be accepted.
 
-* Another limit that can be specified is the percentage of participants who dislike a proposal.  If there are any proposals that reach this percentage of dislike, the proposal is rejected at the beginning of the calculations, before any proposal is considered for acceptance.  Neutral rankings, at rank zero, are not counted as dislikes for this purpose.
+* Another limit that can be specified is the percentage of participants who dislike a proposal.  If there are any proposals that reach this percentage of "dislike" rankings, the proposal is rejected at the beginning of the calculations, before any proposal is considered for acceptance.  Neutral rankings, at rank zero, are not counted as dislikes for this purpose.
 
 * Some participants might try to rank only one proposal with a positive number and rank all other proposals with negative numbers, in hopes of pushing that proposal to get accepted.  This tactic does not work because pairwise counting does not recognize the special zero ranking, and disregards the distinction between positive and negative numbers (beyond the fact that negative numbers are smaller).
 
-* If any participants try to get counted in one of the many considered opposition coalitions by giving an insincere high ranking to a proposal they dislike, they risk helping get that proposal accepted.
+* If a participant tries to get counted in one of the many considered opposition coalitions by giving an insincere high ranking to a proposal they dislike, they risk helping get that proposal accepted.
 
 * The way for participants to get what they want is to consider the perspective of other participants and supply proposals that clearly specify reasonable ways to achieve what they want.  Greedy proposals are unlikely to be accepted, and are likely to be incompatible with many other proposals.
 

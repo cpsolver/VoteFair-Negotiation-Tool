@@ -380,7 +380,7 @@ int global_majority_threshold_percent_based_on_majority_participant_count ;
 int global_matrix_column_number ;
 int global_matrix_row_number ;
 int global_maximum_coalition_count ;
-int global_maximum_dislikes_allowed ;
+int global_minimum_dislikes_required_to_reject ;
 int global_maximum_possible_influence_sum ;
 int global_minority_threshold_percent ;
 int global_need_comma ;
@@ -2215,7 +2215,7 @@ void do_negotiation_tool_calculations( )
                 global_dislikes_encountered ++ ;
             }
         }
-        if ( global_dislikes_encountered > global_maximum_dislikes_allowed )
+        if ( global_dislikes_encountered > global_minimum_dislikes_required_to_reject )
         {
             global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] = global_no ;
             global_length_of_list_of_proposals_widely_disliked ++ ;
@@ -2890,7 +2890,7 @@ int main() {
 
     if ( global_limit_maximum_proposals_accepted < 1 )
     {
-        global_limit_maximum_proposals_accepted = global_number_of_proposals + 1 ;
+        global_limit_maximum_proposals_accepted = global_number_of_proposals ;
     }
     global_json_key = "limit_number_of_proposals_to_accept" ;
     global_json_value = convert_integer_to_text( global_limit_maximum_proposals_accepted ) ;
@@ -2903,12 +2903,12 @@ int main() {
 //  getting accepted.  This number is based on the
 //  percentage threshold for rejection.
 
-    global_maximum_dislikes_allowed = int( float( global_number_of_participants * global_percent_threshold_dislike_rejection ) / 100.0 );
+    global_minimum_dislikes_required_to_reject = int( float( global_number_of_participants * global_percent_threshold_dislike_rejection ) / 100.0 );
     global_json_key = "percent_threshold_dislike_rejection" ;
     global_json_value = convert_integer_to_text( global_percent_threshold_dislike_rejection ) ;
     write_json_key_value_pair( ) ;
-    global_json_key = "maximum_dislikes_allowed" ;
-    global_json_value = convert_integer_to_text( global_maximum_dislikes_allowed ) ;
+    global_json_key = "global_minimum_dislikes_required_to_reject" ;
+    global_json_value = convert_integer_to_text( global_minimum_dislikes_required_to_reject ) ;
     write_json_key_value_pair( ) ;
 
 

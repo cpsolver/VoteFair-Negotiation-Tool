@@ -14,16 +14,10 @@ This software negotiation tool can be used to negotiate fair outcomes for real-l
     * members of a non-profit organization
     * board of directors
     * labor union members
-    * insurance settlement
     * buyer-seller bargaining
-    * terms of employment
-    * contractor-homeowner dispute
     * consultant-client contract
-    * investment contract
     * divorce settlement
-    * marriage counseling agreement
     * inheritance distribution
-    * landlord-tenant contract
 
 
 Here are characteristics about how it can be used:
@@ -60,15 +54,17 @@ Here's how the negotiation process works:
 
 * Each time the negotiation tool software runs, it identifies the optimum combination of "accepted" proposals that are most strongly appreciated by the most participants.  This calculation can be done automatically every minute or every hour, or it can be done manually once a day.
 
-* If the suggested combination of proposals includes proposals that are incompatible with each other, an administrator updates the information about which proposals are incompatible with specified other proposals.  Then running the software again eliminates the incompatible proposals.
-
 * Participants view the updated list of "accepted" proposals and change their rankings of the accepted proposals.  Also they may need to change the rankings of the proposals they hope will become accepted proposals.
+
+* If the suggested combination of proposals includes proposals that are incompatible with each other, an administrator updates the information about which proposals are incompatible with specified other proposals.  Then running the software again eliminates the incompatible proposals.
 
 * If some participants distrust an administrator to correctly identify which proposals are incompatible with which other proposals, these incompatibilities can be voted on by participants.
 
-* When negotiation progress slows down, or if some incompatibilities are controversial, the controversial proposals should be split up into smaller proposals with fewer incompatibilities between these newer proposals.
+* If some incompatibilities are controversial, the controversial proposals should be split up into smaller proposals with fewer incompatibilities between these newer proposals.
 
 * Newer proposals with fewer incompatibilities should be ranked higher so that more of these simpler proposals will be among the accepted proposals.  Slowly more of these simpler proposals will replace the greedy proposals that are not widely popular.
+
+* When negotiation progress slows down, participants should ask questions of other participants.  The questions should be sincere attempts to understand why their favorite proposals are not liked by other participants, and why other participants favor proposals the participant dislikes.
 
 * If the negotiation process continues with a spirit of cooperation, the results are likely to converge on a list of proposals that are reasonably well-liked by all participants, or a very large percentage of participants.
 
@@ -81,6 +77,15 @@ Here's how the negotiation process works:
 * This negotiation tool is a platform for communication.  However, it cannot force participants to listen to fresh perspectives from other participants, which is the basis for communication.
 
 * As a clarification, this negotiation tool is not an artificial intelligence (AI) tool.  Instead it looks for and finds areas of agreement based on the ranking numbers supplied by the participants.
+
+* Here's a link to a graphic that summarizes what should, and should not, be specified in a proposal, and what kinds of questions are useful:
+
+https://votefair.org/efficient_negotiation.png
+
+* Here's a link to a graphic that attempts to summarize the nature of this negotiation tool:
+
+https://votefair.org/legislative_negotiation.png
+
 
 
 Version 2.00
@@ -160,6 +165,10 @@ Here are the highlights about how the calculations are done.  This description a
 * The way for participants to get what they want is to consider the perspective of other participants and supply proposals that clearly specify reasonable ways to achieve what they want.  Greedy proposals are unlikely to be accepted, and are likely to be incompatible with many other proposals.
 
 * For additonal details about the calculation steps, especially for a specific negotiation case, look at the "loginfo" messages within the output JSON file.
+
+* Here's a link to a graphic that shows how a ballot is counted to yield a pairwise support count and a pairwise opposition count:
+
+https://votefair.org/pairwise_support_opposition.png
 
 
 

@@ -271,7 +271,6 @@ int global_list_proposal_second_at_pair_count[4001 ] ;
 int global_list_remaining_ballot_weight_for_participant[ 501 ] ;
 int global_list_support_from_participant[ 2001 ] ;
 int global_list_support_minus_opposition_for_participant[ 501 ] ;
-int global_list_tally_first_equal_second_at_pair_count[ 4001 ] ;
 int global_list_tally_first_over_second_at_pair_count[ 4001 ] ;
 int global_list_tally_second_over_first_at_pair_count[ 4001 ] ;
 int global_list_tie_resolution_rank_level_for_proposal[ 2001 ] ;
@@ -1008,21 +1007,21 @@ void read_data( )
 
 // -----------------------------------------------
 // -----------------------------------------------
-//      reset_tally_table
+//      fill_tally_table
 //
-//  Generate an empty tally table and create the needed
-//  pointers to pairs of counts.
+//  Fills the tally table with the ranking numbers from
+//  the participants' ballots.
 
-void reset_tally_table( )
+void fill_tally_table( )
 {
 
 
 // -----------------------------------------------
-//  Create the pairwise proposal counters.  If the storage
-//  limit is exceeded, exit with an error message.
+//  Create the needed pointers to pairs of counts.  If the
+//  storage limit is exceeded, exit with an error
+//  message.
 
     global_pair_counter = 0 ;
-    global_pair_counter_maximum = 0 ;
     for ( global_alias_proposal_first_in_pair = 1 ; global_alias_proposal_first_in_pair < global_number_of_proposals ; global_alias_proposal_first_in_pair ++ )
     {
         if ( global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_first_in_pair ] == global_yes )
@@ -1032,10 +1031,8 @@ void reset_tally_table( )
                 if ( global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_second_in_pair ] == global_yes )
                 {
                     global_pair_counter ++ ;
-                    global_pair_counter_maximum ++ ;
-                    if ( global_pair_counter_maximum >= global_maximum_proposal_pairs )
+                    if ( global_pair_counter >= global_maximum_proposal_pairs )
                     {
-                        global_pair_counter_maximum = 0 ;
                         global_json_key = "error" ;
                         global_json_value = "the number of proposals being pairwise counted exceeds the available storage space." ;
                         write_json_key_value_pair( ) ;
@@ -1047,66 +1044,25 @@ void reset_tally_table( )
             }
         }
     }
+    global_pair_counter_maximum = global_pair_counter ;
 
 
 // -----------------------------------------------
-//  If there were no proposals to pairwise
-//  compare, return with zero in the variable
-//  global_pair_counter_maximum.
-
-    if ( global_pair_counter_maximum == 0 )
-    {
-        return ;
-    }
-
-
-// -----------------------------------------------
-//  Create, and clear, the tally table.
+//  Fill the tally table with the current ballot
+//  information.  Allow the influence amount
+//  (ballot weight) for each ballot to be different.
 
     for ( global_pair_counter = 1 ; global_pair_counter <= global_pair_counter_maximum ; global_pair_counter ++ )
     {
+        global_alias_proposal_first_in_pair = global_list_proposal_first_at_pair_count[ global_pair_counter ] ;
+        global_alias_proposal_second_in_pair = global_list_proposal_second_at_pair_count[ global_pair_counter ] ;
         global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] = 0 ;
         global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] = 0 ;
-        global_list_tally_first_equal_second_at_pair_count[ global_pair_counter ] = 0 ;
-    }
-
-
-// -----------------------------------------------
-//  End of function reset_tally_table.
-
-    return ;
-
-}
-
-
-// -----------------------------------------------
-// -----------------------------------------------
-//      fill_tally_table
-//
-//  Fills the tally table with the ranking numbers from
-//  the participants' ballots.
-
-void fill_tally_table( )
-{
-
-
-// -----------------------------------------------
-//  Update the tally table with the current ballot
-//  information.  The influence amount for each ballot
-//  can be reduced for ballots after they cause a
-//  proposal to win.  The full influence amount applies
-//  to ballots that have not yet caused any proposals to
-//  be accepted.
-
-    for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
-    {
-        for ( global_pair_counter = 1 ; global_pair_counter <= global_pair_counter_maximum ; global_pair_counter ++ )
+        for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
-            global_alias_proposal_first_in_pair = global_list_proposal_first_at_pair_count[ global_pair_counter ] ;
-            global_alias_proposal_second_in_pair = global_list_proposal_second_at_pair_count[ global_pair_counter ] ;
-//            global_logitem_message = "[proposals are " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_first_in_pair ] ) + " and " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_second_in_pair ] ) + "]" ;
-//            write_logitem_message( ) ;
 //            global_logitem_message = "[first ranking is " + convert_integer_to_text( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_first_in_pair ] ) + " second ranking is " + convert_integer_to_text( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_second_in_pair ] ) + "]" ;
+//            write_logitem_message( ) ;
+//            global_logitem_message = "[ballot weight is " + convert_integer_to_text( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) + "]" ;
 //            write_logitem_message( ) ;
             if ( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_first_in_pair ] > global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_second_in_pair ] )
             {
@@ -1114,11 +1070,10 @@ void fill_tally_table( )
             } else if ( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_first_in_pair ] < global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_second_in_pair ] )
             {
                 global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] += global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ;
-            } else
-            {
-                global_list_tally_first_equal_second_at_pair_count[ global_pair_counter ] += global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ;
             }
         }
+        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_first_in_pair ] ) + " versus " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_second_in_pair ] ) + " counts are " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + "]" ;
+        write_logitem_message( ) ;
     }
 
 
@@ -1541,7 +1496,6 @@ void method_instant_pairwise_elimination( )
 //  weight for participants who have not yet gotten much
 //  of what they want.
 
-    reset_tally_table( ) ;
     fill_tally_table( ) ;
 
 

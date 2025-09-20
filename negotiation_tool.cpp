@@ -212,6 +212,7 @@ const int global_no = 0 ;
 //  Specify flags.
 
 const int global_const_start_line_incompatibility_pairs = -1 ;
+const int global_const_start_line_incompatibility_group = -2 ;
 const int global_const_start_line_limit_maximum_proposals_accepted = -10 ;
 const int global_const_start_line_percent_threshold_dislike_rejection = -20 ;
 
@@ -279,6 +280,8 @@ int global_list_yes_or_no_acceptance_possible_for_proposal[ 2001 ] ;
 int global_list_yes_or_no_elimination_continuing_for_proposal[ 2001 ] ;
 int global_list_yes_or_no_popularity_continuing_for_proposal[ 2001 ] ;
 int global_sorted_list_of_support_minus_opposition_counts[ 501 ] ;
+
+int global_list_of_mutually_incompatible_proposals[ 2001 ] ;
 
 
 // -----------------------------------------------
@@ -474,6 +477,8 @@ int global_yes_or_no_find_pairwise_opposition_not_support ;
 int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
+
+int global_length_of_list_of_mutually_incompatible_proposals ;
 
 
 // -----------------------------------------------
@@ -776,6 +781,7 @@ void read_data( )
         global_first_number_in_input_line = 0 ;
         global_actual_proposal_number = 0 ;
         global_incompatible_proposal_number_first_in_pair = 0 ;
+        global_length_of_list_of_mutually_incompatible_proposals = 0 ;
 
 
 // -----------------------------------------------
@@ -913,6 +919,37 @@ void read_data( )
                     global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_current_input_data_number ;
 //                    global_logitem_message = "[proposal " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_current_input_data_number ) + "]" ;
 //                    write_logitem_message( ) ;
+                }
+            }
+
+
+// -----------------------------------------------
+//  If the first number in the line specifies the line
+//  contains a list of proposals that are mutually
+//  incompatible, handle the next number in the same
+//  line, and create all the possible pairs and indicate
+//  every pair is mutually incompatible.  Then repeat the
+//  loop for the next input number.
+
+            if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_incompatibility_group ) )
+            {
+                global_length_of_list_of_mutually_incompatible_proposals ++ ;
+                global_list_of_mutually_incompatible_proposals[ global_length_of_list_of_mutually_incompatible_proposals ] = global_current_input_data_number ;
+                if ( global_length_of_list_of_mutually_incompatible_proposals > 1 )
+                {
+                    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= ( global_length_of_list_of_mutually_incompatible_proposals - 1 ) ; global_pointer_to_list ++ )
+                    {
+                        global_incompatible_proposal_number_first_in_pair = global_list_of_mutually_incompatible_proposals[ global_pointer_to_list ] ;
+                        global_incompatible_proposal_number_second_in_pair = global_list_of_mutually_incompatible_proposals[ global_length_of_list_of_mutually_incompatible_proposals ] ;
+                        global_length_of_list_of_incompatible_pairs ++ ;
+                        global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
+                        global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_second_in_pair ;
+                        global_length_of_list_of_incompatible_pairs ++ ;
+                        global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_second_in_pair ;
+                        global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
+                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_proposal_number_second_in_pair ) + "]" ;
+                        write_logitem_message( ) ;
+                    }
                 }
             }
 

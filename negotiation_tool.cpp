@@ -246,6 +246,7 @@ int global_list_loss_count_for_proposal[ 2001 ] ;
 int global_list_of_all_proposals_ranked[ 2001 ] ;
 int global_list_of_incompatible_proposal_number_for_pair[ 10001 ] ;
 int global_list_of_integers_to_sort[ 501 ] ;
+int global_list_of_mutually_incompatible_proposals[ 2001 ] ;
 int global_list_of_proposals_accepted[ 2001 ] ;
 int global_list_of_proposals_contributing_to_support_minus_opposition_count[ 501 ] ;
 int global_list_of_proposals_incompatible[ 2001 ] ;
@@ -281,8 +282,6 @@ int global_list_yes_or_no_elimination_continuing_for_proposal[ 2001 ] ;
 int global_list_yes_or_no_popularity_continuing_for_proposal[ 2001 ] ;
 int global_sorted_list_of_support_minus_opposition_counts[ 501 ] ;
 
-int global_list_of_mutually_incompatible_proposals[ 2001 ] ;
-
 
 // -----------------------------------------------
 //  Declare global variables.
@@ -296,6 +295,7 @@ int global_adjustment_for_negative_count ;
 int global_adjustment_for_opposing_pairwise_count ;
 int global_adjustment_for_positive_count ;
 int global_adjustment_for_supporting_pairwise_count ;
+int global_alias_just_identified_proposal_number ;
 int global_alias_proposal_accepted ;
 int global_alias_proposal_first_in_pair ;
 int global_alias_proposal_for_support_minus_opposition_count ;
@@ -359,6 +359,7 @@ int global_length_of_list_of_all_participant_participants ;
 int global_length_of_list_of_all_proposals_ranked ;
 int global_length_of_list_of_incompatible_pairs ;
 int global_length_of_list_of_integers_to_sort ;
+int global_length_of_list_of_mutually_incompatible_proposals ;
 int global_length_of_list_of_proposals_accepted ;
 int global_length_of_list_of_proposals_contributing_to_support_minus_opposition_count ;
 int global_length_of_list_of_proposals_not_popular ;
@@ -382,8 +383,8 @@ int global_majority_threshold_percent_based_on_majority_participant_count ;
 int global_matrix_column_number ;
 int global_matrix_row_number ;
 int global_maximum_coalition_count ;
-int global_minimum_dislikes_required_to_reject ;
 int global_maximum_possible_influence_sum ;
+int global_minimum_dislikes_required_to_reject ;
 int global_minority_threshold_percent ;
 int global_need_comma ;
 int global_need_to_initialize_group_ballot_count ;
@@ -472,13 +473,12 @@ int global_weight_value ;
 int global_within_ballots ;
 int global_yes_or_no_at_beginning_of_input_line ;
 int global_yes_or_no_at_incompatibility_info ;
+int global_yes_or_no_at_least_one ;
 int global_yes_or_no_find_largest_not_smallest ;
 int global_yes_or_no_find_pairwise_opposition_not_support ;
 int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
-
-int global_length_of_list_of_mutually_incompatible_proposals ;
 
 
 // -----------------------------------------------
@@ -947,8 +947,8 @@ void read_data( )
                         global_length_of_list_of_incompatible_pairs ++ ;
                         global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_second_in_pair ;
                         global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
-                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_proposal_number_second_in_pair ) + "]" ;
-                        write_logitem_message( ) ;
+//                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_proposal_number_second_in_pair ) + "]" ;
+//                        write_logitem_message( ) ;
                     }
                 }
             }
@@ -1972,6 +1972,15 @@ void accept_one_proposal( )
 //  not found because the number of remaining proposals
 //  should have been checked to be at least one
 //  proposal.
+//
+//  The ballot weight is an integer that can be divided
+//  into amounts that are still integers.  This is
+//  analogous to using the numbers 0 to 100 for "percent"
+//  units.  The suggested number is 2000 units for one
+//  full weight for one ballot.  At some later steps
+//  during the calculations some ballots will have
+//  reduced weight after they contribute to accepting a
+//  proposal.
 
 void calculate_weighted_most_popular_proposal( )
 {
@@ -2071,6 +2080,78 @@ void log_crude_plot( )
 
 // -----------------------------------------------
 //  End of function log_crude_plot.
+
+    return ;
+
+}
+
+
+// -----------------------------------------------
+// -----------------------------------------------
+//      calculate_most_popular_proposal_with_no_coalition
+//
+//  Calculate the most popular proposal when there is no
+//  coalition.
+
+void calculate_most_popular_proposal_with_no_coalition( )
+{
+
+
+// -----------------------------------------------
+//  Calculate the most popular proposal based on all
+//  participants having the same full ballot weight.
+
+    calculate_weighted_most_popular_proposal( ) ;
+
+
+//-----------------------------------------------
+//  Reduce the list of proposals being considered to just
+//  the proposals that are incompatitible with the
+//  just-identified proposal.
+
+    global_alias_just_identified_proposal_number = global_alias_proposal_winner_of_elimination_rounds ;
+    for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
+    {
+        global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_no ;
+    }
+    global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_just_identified_proposal_number ] = global_yes ;
+    global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_just_identified_proposal_number ] = global_yes ;
+    global_logitem_message = "[proposals incompatible with proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_winner_of_elimination_rounds ] ) + ":" ;
+    global_yes_or_no_at_least_one = global_no ;
+    for ( global_pair_counter = 1 ; global_pair_counter <= global_length_of_list_of_incompatible_pairs ; global_pair_counter ++ )
+    {
+        if ( global_list_of_trigger_proposal_number_for_pair[ global_pair_counter ] == global_alias_just_identified_proposal_number )
+        {
+            global_list_yes_or_no_popularity_continuing_for_proposal[ global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ] = global_yes ;
+            global_list_yes_or_no_elimination_continuing_for_proposal[ global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ] = global_yes ;
+            global_yes_or_no_at_least_one = global_yes ;
+            global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ) ;
+        }
+    }
+    global_logitem_message = global_logitem_message + "]" ;
+    write_logitem_message( ) ;
+
+
+// -----------------------------------------------
+//  Identify the most popular proposal among these
+//  incompatible proposals.  If there are no incompatible
+//  proposals, use the same winning proposal that was
+//  just identified.
+
+    if ( global_yes_or_no_at_least_one == global_yes )
+    {
+        count_remaining_proposals( ) ;
+        global_logitem_message = "[finding winner based on " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + " proposals]" ;
+        write_logitem_message( ) ;
+        method_instant_pairwise_elimination( ) ;
+    } else
+    {
+    	global_alias_proposal_winner_of_elimination_rounds = global_alias_just_identified_proposal_number ;
+    }
+
+
+// -----------------------------------------------
+//  End of function calculate_most_popular_proposal_with_no_coalition.
 
     return ;
 
@@ -2352,22 +2433,11 @@ void do_negotiation_tool_calculations( )
 //  If the coalition count equals 1, then specify that all
 //  the ballots have the same ballot weight
 //  (influence amount), and identify which proposal is
-//  most popular, accept this proposal, and repeat the
-//  main loop.
-//
-//  When considering popularity, ignore proposals that
-//  have already been accepted, or are incompatible with
-//  accepted proposals, or were rejected because of too
-//  many dislike rankings.
-//
-//  The ballot weight is an integer that can be divided
-//  into amounts that are still integers.  This is
-//  analogous to using the numbers 0 to 100 for "percent"
-//  units.  The suggested number is 2000 units for one
-//  full weight for one ballot.  At some later steps
-//  during the calculations some ballots will have
-//  reduced weight after they contribute to accepting a
-//  proposal.
+//  most popular, then reduce the possible proposals to
+//  just the ones that are incompatible with that
+//  proposal, and again identify which proposal is most
+//  popular, accept this proposal, and repeat the main
+//  loop.
 
         if ( global_coalition_count == 1 )
         {
@@ -2379,7 +2449,7 @@ void do_negotiation_tool_calculations( )
             {
                 global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] ;
             }
-            calculate_weighted_most_popular_proposal( ) ;
+            calculate_most_popular_proposal_with_no_coalition( ) ;
             global_alias_proposal_accepted = global_alias_proposal_winner_of_elimination_rounds ;
             accept_one_proposal( ) ;
 //  Repeat the main loop:
@@ -2452,7 +2522,7 @@ void do_negotiation_tool_calculations( )
 // -----------------------------------------------
 //  Log a crude graphical display of the sorted counts.
 
-        global_graph_scale_divisor = 25.0 / float( global_number_of_proposals ) ;
+        global_graph_scale_divisor = 30.0 / float( global_number_of_proposals ) ;
         log_crude_plot( ) ;
 
 
@@ -2555,7 +2625,7 @@ void do_negotiation_tool_calculations( )
 
         global_logitem_message = "[ballot weights:]" ;
         write_logitem_message( ) ;
-        global_graph_scale_divisor = 1000.0 / float( global_number_of_proposals ) ;
+        global_graph_scale_divisor = 2000.0 / float( global_number_of_proposals ) ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
             global_logitem_message = "[" ;
@@ -2572,7 +2642,7 @@ void do_negotiation_tool_calculations( )
 //  Log a list of proposals being considered as a possible
 //  most-popular proposal.
 
-       global_logitem_message = "[proposals considered:" ;
+    global_logitem_message = "[proposals considered:" ;
     for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
     {
         if ( global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] == global_yes )
@@ -2620,7 +2690,7 @@ void do_negotiation_tool_calculations( )
 
         global_logitem_message = "[pw counts, use to decide whether to accept this proposal:]" ;
         write_logitem_message( ) ;
-        global_graph_scale_divisor = 25.0 / float( global_number_of_proposals ) ;
+        global_graph_scale_divisor = 30.0 / float( global_number_of_proposals ) ;
         log_crude_plot( ) ;
 
 
@@ -2722,7 +2792,7 @@ void do_negotiation_tool_calculations( )
     }
     global_logitem_message = "[pw count per participant based on accepted proposals:]" ;
     write_logitem_message( ) ;
-    global_graph_scale_divisor = 20.0 / float( global_number_of_proposals ) ;
+    global_graph_scale_divisor = 30.0 / float( global_number_of_proposals ) ;
     for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
     {
         calculate_support_minus_opposition_for_one_participant( ) ;

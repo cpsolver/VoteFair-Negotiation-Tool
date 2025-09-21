@@ -246,10 +246,10 @@ int global_list_loss_count_for_proposal[ 2001 ] ;
 int global_list_of_all_proposals_ranked[ 2001 ] ;
 int global_list_of_incompatible_proposal_number_for_pair[ 10001 ] ;
 int global_list_of_integers_to_sort[ 501 ] ;
-int global_list_of_mutually_incompatible_proposals[ 2001 ] ;
+int global_list_of_proposals_just_incompatible[ 2001 ] ;
 int global_list_of_proposals_accepted[ 2001 ] ;
 int global_list_of_proposals_contributing_to_support_minus_opposition_count[ 501 ] ;
-int global_list_of_proposals_incompatible[ 2001 ] ;
+int global_list_of_proposals_rejected_as_incompatible[ 2001 ] ;
 int global_list_of_proposals_not_popular[ 2001 ] ;
 int global_list_of_proposals_ranked_negative[ 2001 ] ;
 int global_list_of_proposals_ranked_neutral[ 2001 ] ;
@@ -479,6 +479,8 @@ int global_yes_or_no_find_pairwise_opposition_not_support ;
 int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
+
+int global_length_of_list_of_proposals_just_incompatible ;
 
 
 // -----------------------------------------------
@@ -934,13 +936,13 @@ void read_data( )
             if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_incompatibility_group ) )
             {
                 global_length_of_list_of_mutually_incompatible_proposals ++ ;
-                global_list_of_mutually_incompatible_proposals[ global_length_of_list_of_mutually_incompatible_proposals ] = global_current_input_data_number ;
+                global_list_of_proposals_just_incompatible[ global_length_of_list_of_mutually_incompatible_proposals ] = global_current_input_data_number ;
                 if ( global_length_of_list_of_mutually_incompatible_proposals > 1 )
                 {
                     for ( global_pointer_to_list = 1 ; global_pointer_to_list <= ( global_length_of_list_of_mutually_incompatible_proposals - 1 ) ; global_pointer_to_list ++ )
                     {
-                        global_incompatible_proposal_number_first_in_pair = global_list_of_mutually_incompatible_proposals[ global_pointer_to_list ] ;
-                        global_incompatible_proposal_number_second_in_pair = global_list_of_mutually_incompatible_proposals[ global_length_of_list_of_mutually_incompatible_proposals ] ;
+                        global_incompatible_proposal_number_first_in_pair = global_list_of_proposals_just_incompatible[ global_pointer_to_list ] ;
+                        global_incompatible_proposal_number_second_in_pair = global_list_of_proposals_just_incompatible[ global_length_of_list_of_mutually_incompatible_proposals ] ;
                         global_length_of_list_of_incompatible_pairs ++ ;
                         global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
                         global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_second_in_pair ;
@@ -1109,8 +1111,8 @@ void fill_tally_table( )
                 global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] += global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ;
             }
         }
-        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_first_in_pair ] ) + " versus " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_second_in_pair ] ) + " counts are " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + "]" ;
-        write_logitem_message( ) ;
+//        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_first_in_pair ] ) + " versus " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_second_in_pair ] ) + " counts are " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + "]" ;
+//        write_logitem_message( ) ;
     }
 
 
@@ -1895,6 +1897,48 @@ void calculate_support_minus_opposition_for_one_participant( )
 
 // -----------------------------------------------
 // -----------------------------------------------
+//      identify_incompatible_proposals
+//
+//  Identify which proposals are incompatitible with the
+//  proposal specified in the variable named
+//  "global_alias_just_identified_proposal_number".
+
+
+void identify_incompatible_proposals( )
+{
+
+
+// -----------------------------------------------
+//  Identify the incompatible proposals.
+
+    global_length_of_list_of_proposals_just_incompatible = 0 ;
+    global_logitem_message = "[proposals incompatible with proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_just_identified_proposal_number ] ) + ":" ;
+    for ( global_pair_counter = 1 ; global_pair_counter <= global_length_of_list_of_incompatible_pairs ; global_pair_counter ++ )
+    {
+        if ( global_list_of_trigger_proposal_number_for_pair[ global_pair_counter ] == global_alias_just_identified_proposal_number )
+        {
+        	global_length_of_list_of_proposals_just_incompatible ++ ;
+            global_list_of_proposals_just_incompatible[ global_length_of_list_of_proposals_just_incompatible ] = global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ;
+            global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_of_proposals_just_incompatible[ global_length_of_list_of_proposals_just_incompatible ] ) ;
+        }
+    }
+    if ( global_length_of_list_of_proposals_just_incompatible > 0 )
+    {
+        global_logitem_message = global_logitem_message + "]" ;
+        write_logitem_message( ) ;
+    }
+
+
+// -----------------------------------------------
+//  End of function identify_incompatible_proposals.
+
+    return ;
+
+}
+
+
+// -----------------------------------------------
+// -----------------------------------------------
 //      accept_one_proposal
 //
 //  Accepts one proposal, the one specified
@@ -1937,19 +1981,21 @@ void accept_one_proposal( )
 //  Eliminate any proposals that are incompatible with the
 //  just-accepted proposal.
 
-    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= global_length_of_list_of_incompatible_pairs ; global_pointer_to_list ++ )
+    global_alias_just_identified_proposal_number = global_actual_proposal_accepted ;
+    identify_incompatible_proposals( ) ;
+    global_logitem_message = "[proposals rejected as incompatible:" ;
+    for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_just_incompatible ; global_list_pointer ++ )
     {
-        global_actual_proposal_trigger = global_list_of_trigger_proposal_number_for_pair[ global_pointer_to_list ] ;
-        global_actual_proposal_incompatible = global_list_of_incompatible_proposal_number_for_pair[ global_pointer_to_list ] ;
-        if ( global_actual_proposal_trigger == global_actual_proposal_accepted )
-        {
-            global_alias_proposal_incompatible = global_list_alias_proposal_for_actual_proposal[ global_actual_proposal_incompatible ] ;
-            global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_incompatible ] = global_no ;
-            global_length_of_list_of_proposals_rejected_as_incompatible ++ ;
-            global_list_of_proposals_incompatible[ global_length_of_list_of_proposals_rejected_as_incompatible ] = global_alias_proposal_incompatible ;
-            global_logitem_message = "[proposal " + convert_integer_to_text( global_actual_proposal_incompatible ) + " rejected as incompatible with just-accepted proposal]" ;
-            write_logitem_message( ) ;
-        }
+        global_alias_proposal_incompatible = global_list_of_proposals_just_incompatible[ global_list_pointer ] ;
+        global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_incompatible ] = global_no ;
+        global_length_of_list_of_proposals_rejected_as_incompatible ++ ;
+        global_list_of_proposals_rejected_as_incompatible[ global_length_of_list_of_proposals_rejected_as_incompatible ] = global_alias_proposal_incompatible ;
+        global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_incompatible ] ) ;
+    }
+    if ( global_length_of_list_of_proposals_just_incompatible > 0 )
+    {
+        global_logitem_message = global_logitem_message + "]" ;
+        write_logitem_message( ) ;
     }
 
 
@@ -2040,14 +2086,16 @@ void calculate_weighted_most_popular_proposal( )
 //  Write into log lines a crude plot of support minus
 //  opposition counts (with offset included).  Include a
 //  dotted line that separates the opposition coalition
-//  from the dominant coalition.
+//  from the dominant coalition.  Also include another
+//  dotted line that separates the top participants of
+//  the same participant size.
 
 void log_crude_plot( )
 {
 
 
 // -----------------------------------------------
-//  Generate the plot.
+//  Write the lines above the first dotted line.
 
         for ( global_list_pointer = 1 ; global_list_pointer <= global_opposition_coalition_size ; global_list_pointer ++ )
         {
@@ -2059,6 +2107,11 @@ void log_crude_plot( )
             global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ) + "]" ;
             write_logitem_message( ) ;
         }
+
+
+// -----------------------------------------------
+//  Write the first dotted line.
+
         global_logitem_message = "[" ;
         for ( global_column_pointer = 1 ; global_column_pointer <= 50 ; global_column_pointer ++ )
         {
@@ -2066,7 +2119,42 @@ void log_crude_plot( )
         }
         global_logitem_message = global_logitem_message + "]" ;
         write_logitem_message( ) ;
-        for ( global_list_pointer = ( global_number_of_participants - global_dominant_coalition_size + 1 ) ; global_list_pointer <= global_number_of_participants ; global_list_pointer ++ )
+
+
+// -----------------------------------------------
+//  Write the lines between the two dotted lines.
+
+        if ( ( global_opposition_coalition_size + 1 ) < ( global_number_of_participants - global_opposition_coalition_size ) )
+        {
+            for ( global_list_pointer = ( global_opposition_coalition_size + 1 ) ; global_list_pointer <= ( global_number_of_participants - global_opposition_coalition_size ) ; global_list_pointer ++ )
+            {
+                global_logitem_message = "[" ;
+                for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
+                {
+                    global_logitem_message = global_logitem_message + " " ;
+                }
+                global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ) + "]" ;
+                write_logitem_message( ) ;
+            }
+        }
+
+
+// -----------------------------------------------
+//  Write the second dotted line.
+
+        global_logitem_message = "[" ;
+        for ( global_column_pointer = 1 ; global_column_pointer <= 50 ; global_column_pointer ++ )
+        {
+            global_logitem_message = global_logitem_message + "." ;
+        }
+        global_logitem_message = global_logitem_message + "]" ;
+        write_logitem_message( ) ;
+
+
+// -----------------------------------------------
+//  Write the lines below the second dotted line.
+
+        for ( global_list_pointer = ( global_number_of_participants - global_opposition_coalition_size + 1 ) ; global_list_pointer <= global_number_of_participants ; global_list_pointer ++ )
         {
             global_logitem_message = "[" ;
             for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
@@ -2088,70 +2176,87 @@ void log_crude_plot( )
 
 // -----------------------------------------------
 // -----------------------------------------------
-//      calculate_most_popular_proposal_with_no_coalition
+//      calculate_most_popular_proposal_with_incompatibility_check
 //
-//  Calculate the most popular proposal when there is no
-//  coalition.
+//  Calculate the most popular proposal, then if that
+//  proposal is incompatible with any other proposal,
+//  calculate the most popular proposal among the
+//  incompatible proposals.
+//
+//  The two results can be different because the presence
+//  and absence of additional proposals can affect the
+//  pairwise opposition counts and the pairwise support
+//  counts.
+//
+//  This extra calculation helps defeat attempts to "bury"
+//  a proposal under unpopular proposals because this
+//  reduction increases the likelihood that different
+//  participants are using the same "unpopular" proposal
+//  for burial purposes, which makes it likely
+//  the "unpopular" proposal can become the most popular
+//  proposal.
 
-void calculate_most_popular_proposal_with_no_coalition( )
+
+void calculate_most_popular_proposal_with_incompatibility_check( )
 {
 
 
 // -----------------------------------------------
-//  Calculate the most popular proposal based on all
-//  participants having the same full ballot weight.
+//  Calculate the most popular proposal based on the
+//  current ballot weights.
 
     calculate_weighted_most_popular_proposal( ) ;
+    global_alias_just_identified_proposal_number = global_alias_proposal_winner_of_elimination_rounds ;
 
 
 //-----------------------------------------------
-//  Reduce the list of proposals being considered to just
-//  the proposals that are incompatitible with the
-//  just-identified proposal.
+//  Identify which proposals are incompatitible with the
+//  just-identified most-popular proposal.
 
-    global_alias_just_identified_proposal_number = global_alias_proposal_winner_of_elimination_rounds ;
+    identify_incompatible_proposals( ) ;
+
+
+// -----------------------------------------------
+//  If there are no incompatible proposals, return with
+//  the most popular proposal identified.
+
+    if ( global_length_of_list_of_proposals_just_incompatible == 0 )
+    {
+        global_alias_proposal_winner_of_elimination_rounds = global_alias_just_identified_proposal_number ;
+        return ;
+    }
+
+
+//-----------------------------------------------
+//  Reduce the list of proposals being considered to the
+//  just-identified proposal and the proposals that are
+//  incompatitible with that proposal.
+
     for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
     {
         global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_no ;
     }
     global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_just_identified_proposal_number ] = global_yes ;
     global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_just_identified_proposal_number ] = global_yes ;
-    global_logitem_message = "[proposals incompatible with proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_winner_of_elimination_rounds ] ) + ":" ;
-    global_yes_or_no_at_least_one = global_no ;
-    for ( global_pair_counter = 1 ; global_pair_counter <= global_length_of_list_of_incompatible_pairs ; global_pair_counter ++ )
+    for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_just_incompatible ; global_list_pointer ++ )
     {
-        if ( global_list_of_trigger_proposal_number_for_pair[ global_pair_counter ] == global_alias_just_identified_proposal_number )
-        {
-            global_list_yes_or_no_popularity_continuing_for_proposal[ global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ] = global_yes ;
-            global_list_yes_or_no_elimination_continuing_for_proposal[ global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ] = global_yes ;
-            global_yes_or_no_at_least_one = global_yes ;
-            global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ) ;
-        }
+        global_list_yes_or_no_popularity_continuing_for_proposal[ global_list_of_proposals_just_incompatible[ global_list_pointer ] ] = global_yes ;
+        global_list_yes_or_no_elimination_continuing_for_proposal[ global_list_of_proposals_just_incompatible[ global_list_pointer ] ] = global_yes ;
     }
-    global_logitem_message = global_logitem_message + "]" ;
-    write_logitem_message( ) ;
 
 
 // -----------------------------------------------
 //  Identify the most popular proposal among these
-//  incompatible proposals.  If there are no incompatible
-//  proposals, use the same winning proposal that was
-//  just identified.
+//  incompatible proposals.
 
-    if ( global_yes_or_no_at_least_one == global_yes )
-    {
-        count_remaining_proposals( ) ;
-        global_logitem_message = "[finding winner based on " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + " proposals]" ;
-        write_logitem_message( ) ;
-        method_instant_pairwise_elimination( ) ;
-    } else
-    {
-    	global_alias_proposal_winner_of_elimination_rounds = global_alias_just_identified_proposal_number ;
-    }
+    count_remaining_proposals( ) ;
+    global_logitem_message = "[finding winner based on " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + " proposals]" ;
+    write_logitem_message( ) ;
+    method_instant_pairwise_elimination( ) ;
 
 
 // -----------------------------------------------
-//  End of function calculate_most_popular_proposal_with_no_coalition.
+//  End of function calculate_most_popular_proposal_with_incompatibility_check.
 
     return ;
 
@@ -2223,8 +2328,8 @@ void do_negotiation_tool_calculations( )
 //  resolve deep ties.  Log these counts.
 
     count_approvals_and_disapprovals( ) ;
-       global_logitem_message = "[approval counts:" ;
-       global_logitem_text_store_longer = "[disapproval counts:" ;
+    global_logitem_message = "[approval counts:" ;
+    global_logitem_text_store_longer = "[disapproval counts:" ;
     for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
     {
         global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) ;
@@ -2449,7 +2554,7 @@ void do_negotiation_tool_calculations( )
             {
                 global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] ;
             }
-            calculate_most_popular_proposal_with_no_coalition( ) ;
+            calculate_most_popular_proposal_with_incompatibility_check( ) ;
             global_alias_proposal_accepted = global_alias_proposal_winner_of_elimination_rounds ;
             accept_one_proposal( ) ;
 //  Repeat the main loop:
@@ -2542,6 +2647,11 @@ void do_negotiation_tool_calculations( )
 //  If all the ballots will have zero influence, repeat
 //  the main loop.
 
+
+    global_logitem_message = "[todo:  calculate disparity based on bottom third and top third, etc.]" ;
+    write_logitem_message( ) ;
+
+
         if ( global_bottom_support_minus_opposition_among_opposition_coalition == global_bottom_support_minus_opposition_among_dominant_coalition )
         {
             global_logitem_message = "[cannot identify any opposition coalition]" ;
@@ -2605,6 +2715,19 @@ void do_negotiation_tool_calculations( )
         write_logitem_message( ) ;
         global_logitem_message = "[smallest and largest pairwise counts are " + convert_integer_to_text( global_smallest_support_minus_opposition ) + " and " + convert_integer_to_text( global_largest_support_minus_opposition ) + "]" ;
         write_logitem_message( ) ;
+
+
+//-----------------------------------------------
+//  If the largest and smallest pairwise counts are the
+//  same, repeat the main loop because there is no
+//  coalition at this coalition count.
+
+        if ( global_smallest_support_minus_opposition == global_largest_support_minus_opposition )
+        {
+            global_logitem_message = "[smallest and largest pairwise counts are equal, so no coalition of this size]" ;
+            write_logitem_message( ) ;
+            continue ;
+        }
 
 
 //-----------------------------------------------
@@ -2828,7 +2951,7 @@ void do_negotiation_tool_calculations( )
     global_result_text = "" ;
     for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_rejected_as_incompatible ; global_list_pointer ++ )
     {
-        global_result_text = global_result_text + " " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_list_of_proposals_incompatible[ global_list_pointer ] ] ) ;
+        global_result_text = global_result_text + " " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_list_of_proposals_rejected_as_incompatible[ global_list_pointer ] ] ) ;
     }
     global_json_key = "list_of_incompatible_proposals" ;
     global_json_value = global_result_text ;

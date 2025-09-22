@@ -130,3 +130,9 @@
 0  Specify that immediately rejecting a proposal requires all (100 percent) participants must dislike it
 
 -20,100
+
+
+
+0  Test hiding of logging in JSON output file
+
+0  -30

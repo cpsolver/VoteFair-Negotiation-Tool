@@ -2843,11 +2843,6 @@ void do_negotiation_tool_calculations( )
 //  pairwise-support-minus-opposition counts for the
 //  dominant coalition.
 
-
-        global_logitem_message = "[********** todo ********** as needed, improve calculation of disparity gap]" ;
-        write_logitem_message( ) ;
-
-
         global_sum_pairwise_count_for_opposition_coalition = 0 ;
         for ( global_list_pointer = 1 ; global_list_pointer <= global_opposition_coalition_size ; global_list_pointer ++ )
         {
@@ -2858,30 +2853,34 @@ void do_negotiation_tool_calculations( )
         {
             global_sum_pairwise_count_for_dominant_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
         }
-        global_disparity_gap = int( ( float( global_sum_pairwise_count_for_dominant_coalition ) / float( global_dominant_coalition_size) ) - ( float( global_sum_pairwise_count_for_opposition_coalition ) / float( global_opposition_coalition_size ) ) ) ;
+        global_disparity_gap = int( ( float( global_sum_pairwise_count_for_dominant_coalition ) / float( global_dominant_coalition_size) ) - ( float( global_sum_pairwise_count_for_opposition_coalition ) / float( global_opposition_coalition_size ) ) + 0.5 ) ;
         global_logitem_message = "[disparity gap is " + convert_integer_to_text( global_disparity_gap ) + "]" ;
         write_logitem_message( ) ;
 
 
 // -----------------------------------------------
-//  If there is a significant disparity gap, accept this
-//  most-popular proposal, then repeat the main loop.
+//  If the disparity gap is zero, repeat the main loop
+//  without accepting this most-popular proposal.  If the
+//  disparity gap is one, do not accept this proposal
+//  unless there are only two participants.
 
-
-
-        global_logitem_message = "[********** todo ********** as needed, refine this code which chooses whether to accept this proposal based on disparity gap]" ;
+        global_logitem_message = "[********** todo ********** consider the possibility of refining the disparity gap calculation and acceptance criterion]" ;
         write_logitem_message( ) ;
 
-
-
-        if ( global_disparity_gap >= 2 )
+        if ( ( global_disparity_gap <= 0 ) || ( ( global_disparity_gap == 1 ) && ( global_number_of_participants > 2 ) ) )
         {
-            global_alias_proposal_accepted = global_alias_proposal_winner_of_elimination_rounds ;
-            accept_one_proposal( ) ;
+            global_logitem_message = "[disparity gap not big enough to accept this proposal]" ;
+            write_logitem_message( ) ;
             continue ;
         }
-        global_logitem_message = "[disparity gap not big enough to accept this proposal]" ;
-        write_logitem_message( ) ;
+
+
+//-----------------------------------------------
+//  Accept the identified proposal.
+
+
+        global_alias_proposal_accepted = global_alias_proposal_winner_of_elimination_rounds ;
+        accept_one_proposal( ) ;
 
 
 //-----------------------------------------------

@@ -451,7 +451,7 @@ int global_smallest_support_value ;
 int global_successive_elimination_loop_counter ;
 int global_sum_for_possible_dominant_coalition ;
 int global_sum_for_possible_opposition_coalition ;
-int global_sum_pairwise_count_for_dominant_coalition ;
+int global_sum_pairwise_count_for_core_dominant_coalition ;
 int global_sum_pairwise_count_for_opposition_coalition ;
 int global_support_minus_opposition_count ;
 int global_support_minus_opposition_range ;
@@ -1850,7 +1850,7 @@ void sort_support_minus_opposition_counts( )
         global_top_support_minus_opposition_among_opposition_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_opposition_coalition_size ] ;
         global_bottom_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants - global_dominant_coalition_size + 1 ] ;
         global_top_support_minus_opposition_among_dominant_coalition = global_sorted_list_of_support_minus_opposition_counts[ global_number_of_participants ] ;
-        global_logitem_message = "[key support minus opposition values are: " + convert_integer_to_text( global_bottom_support_minus_opposition_among_opposition_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_opposition_coalition ) + "  " + convert_integer_to_text( global_bottom_support_minus_opposition_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_dominant_coalition ) + "]" ;
+        global_logitem_message = "[key support-minus-opposition values are: " + convert_integer_to_text( global_bottom_support_minus_opposition_among_opposition_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_opposition_coalition ) + "  " + convert_integer_to_text( global_bottom_support_minus_opposition_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_support_minus_opposition_among_dominant_coalition ) + "]" ;
         write_logitem_message( ) ;
 
 
@@ -2649,7 +2649,7 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  Sort the pairwise support minus opposition counts.
+//  Sort the pairwise support-minus-opposition counts.
 
         sort_support_minus_opposition_counts( ) ;
 
@@ -2662,14 +2662,14 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  If all the pairwise support minus opposition counts
+//  If all the pairwise support-minus-opposition counts
 //  are the same, repeat the main loop because there is
 //  no difference between the opposition coalition and
 //  the dominant coalition.
 
         if ( global_bottom_support_minus_opposition_among_opposition_coalition == global_top_support_minus_opposition_among_dominant_coalition )
         {
-            global_logitem_message = "[all pairwise support minus opposition counts are the same number]" ;
+            global_logitem_message = "[all pairwise support-minus-opposition counts are the same number]" ;
             write_logitem_message( ) ;
             continue ;
         }
@@ -2804,7 +2804,20 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  Measure pairwise support minus opposition counts
+//  Before calculating pairwise support-minus-opposition
+//  counts, add to the list of considered proposals some
+//  proposals that were desired by participants who have
+//  not been getting their favorite proposals accepted.
+
+
+        global_logitem_message = "[********** todo ********** write this new code to increase representation for small minorities]" ;
+        write_logitem_message( ) ;
+//        global_list_of_proposals_contributing_to_support_minus_opposition_count[ global_list_pointer ]
+
+
+
+// -----------------------------------------------
+//  Measure pairwise support-minus-opposition counts
 //  again, this time including the most popular proposal
 //  just identified as most popular based on ballot
 //  weight adjustments, but not including the proposal
@@ -2822,7 +2835,7 @@ void do_negotiation_tool_calculations( )
 
 
 // -----------------------------------------------
-//  Sort the pairwise support minus opposition counts.
+//  Sort the pairwise support-minus-opposition counts.
 
         sort_support_minus_opposition_counts( ) ;
 
@@ -2840,20 +2853,21 @@ void do_negotiation_tool_calculations( )
 //  Calculate the disparity gap, which is the difference
 //  between the average pairwise-support-minus-opposition
 //  counts for the opposition coalition and the average
-//  pairwise-support-minus-opposition counts for the
-//  dominant coalition.
+//  pairwise-support-minus-opposition counts for the same
+//  number of participants who are at the top of the
+//  sorted support-minus-opposition counts.
 
         global_sum_pairwise_count_for_opposition_coalition = 0 ;
         for ( global_list_pointer = 1 ; global_list_pointer <= global_opposition_coalition_size ; global_list_pointer ++ )
         {
             global_sum_pairwise_count_for_opposition_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
         }
-        global_sum_pairwise_count_for_dominant_coalition = 0 ;
-        for ( global_list_pointer = ( global_number_of_participants - global_dominant_coalition_size + 1 ) ; global_list_pointer <= global_number_of_participants ; global_list_pointer ++ )
+        global_sum_pairwise_count_for_core_dominant_coalition = 0 ;
+        for ( global_list_pointer = ( global_number_of_participants - global_opposition_coalition_size + 1 ) ; global_list_pointer <= global_number_of_participants ; global_list_pointer ++ )
         {
-            global_sum_pairwise_count_for_dominant_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
+            global_sum_pairwise_count_for_core_dominant_coalition += global_sorted_list_of_support_minus_opposition_counts[ global_list_pointer ] ;
         }
-        global_disparity_gap = int( ( float( global_sum_pairwise_count_for_dominant_coalition ) / float( global_dominant_coalition_size) ) - ( float( global_sum_pairwise_count_for_opposition_coalition ) / float( global_opposition_coalition_size ) ) + 0.5 ) ;
+        global_disparity_gap = int( ( float( global_sum_pairwise_count_for_core_dominant_coalition ) / float( global_opposition_coalition_size ) ) - ( float( global_sum_pairwise_count_for_opposition_coalition ) / float( global_opposition_coalition_size ) ) + 0.5 ) ;
         global_logitem_message = "[disparity gap is " + convert_integer_to_text( global_disparity_gap ) + "]" ;
         write_logitem_message( ) ;
 
@@ -2878,7 +2892,6 @@ void do_negotiation_tool_calculations( )
 //-----------------------------------------------
 //  Accept the identified proposal.
 
-
         global_alias_proposal_accepted = global_alias_proposal_winner_of_elimination_rounds ;
         accept_one_proposal( ) ;
 
@@ -2893,7 +2906,7 @@ void do_negotiation_tool_calculations( )
 
 
 //-----------------------------------------------
-//  Calculate a pairwise support minus opposition count
+//  Calculate a pairwise support-minus-opposition count
 //  for each PROPOSAL, and log these counts as a crude
 //  plot.  (Elsewhere in this code each count is for a
 //  participant, not for a proposal).

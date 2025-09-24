@@ -564,6 +564,12 @@ void write_logitem_message( )
     if ( global_yes_or_no_hide_logging_in_json == global_no )
     {
         global_log_item_number ++ ;
+        if ( global_log_item_number == 1 )
+        {
+            global_json_key = "logging_status_note" ;
+            global_json_value = "hide logitem messages by inserting an input line that begins with negative integer " + convert_integer_to_text( global_const_start_line_hide_logging_in_json ) ;
+            write_json_key_value_pair( ) ;
+        }
         global_json_key = "logitem " + convert_integer_to_text( global_log_item_number ) ;
         global_json_value = global_logitem_message ;
         write_json_key_value_pair( ) ;
@@ -2629,8 +2635,17 @@ void do_negotiation_tool_calculations( )
 
 // -----------------------------------------------
 //  Based on the proposals already accepted, calculate a
-//  pairwise support minus pairwise opposition count for
-//  each participant.
+//  satisfaction count for each participant.
+
+//  A satisfaction count combines normalized versions of these three counts:
+//  * pairwise support-minus-opposition count based on accepted proposals
+//  * pairwise opposition-minus-support count based on incompatible proposals
+//  * pairwise opposition-minus-support count based on proposals still available to be accepted
+
+
+        global_logitem_message = "[********** todo **********  calculate satisfaction count rather than support-minus-opposition count. It will consider incompatible proposals and not-yet-adopted proposals, not just accepted proposals.]" ;
+        write_logitem_message( ) ;
+
 
         global_length_of_list_of_proposals_contributing_to_support_minus_opposition_count = 0 ;
         for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_accepted ; global_list_pointer ++ )
@@ -2768,6 +2783,9 @@ void do_negotiation_tool_calculations( )
 //  participants who have had less influence in earlier
 //  popularity calculations.
 
+        global_logitem_message = "[********** todo **********  use satisfaction counts rather than support-minus-opposition counts]" ;
+        write_logitem_message( ) ;
+
         global_support_minus_opposition_range = global_largest_support_minus_opposition - global_smallest_support_minus_opposition ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
@@ -2810,7 +2828,7 @@ void do_negotiation_tool_calculations( )
 //  not been getting their favorite proposals accepted.
 
 
-        global_logitem_message = "[********** todo ********** write this new code to increase representation for small minorities]" ;
+        global_logitem_message = "[********** todo ********** write this new code to increase representation for small minorities.  Hopefully the satisfaction counts will accomplish this.]" ;
         write_logitem_message( ) ;
 //        global_list_of_proposals_contributing_to_support_minus_opposition_count[ global_list_pointer ]
 
@@ -2857,6 +2875,9 @@ void do_negotiation_tool_calculations( )
 //  number of participants who are at the top of the
 //  sorted support-minus-opposition counts.
 
+        global_logitem_message = "[********** todo **********  calculate disparity gap based on satisfaction counts rather than support-minus-opposition counts]" ;
+        write_logitem_message( ) ;
+
         global_sum_pairwise_count_for_opposition_coalition = 0 ;
         for ( global_list_pointer = 1 ; global_list_pointer <= global_opposition_coalition_size ; global_list_pointer ++ )
         {
@@ -2878,7 +2899,7 @@ void do_negotiation_tool_calculations( )
 //  disparity gap is one, do not accept this proposal
 //  unless there are only two participants.
 
-        global_logitem_message = "[********** todo ********** consider the possibility of refining the disparity gap calculation and acceptance criterion]" ;
+        global_logitem_message = "[********** todo ********** refine the disparity gap calculation and acceptance criterion]" ;
         write_logitem_message( ) ;
 
         if ( ( global_disparity_gap <= 0 ) || ( ( global_disparity_gap == 1 ) && ( global_number_of_participants > 2 ) ) )

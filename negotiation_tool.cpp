@@ -216,6 +216,7 @@ const int global_const_start_line_incompatibility_group = -2 ;
 const int global_const_start_line_limit_maximum_proposals_accepted = -10 ;
 const int global_const_start_line_percent_threshold_dislike_rejection = -20 ;
 const int global_const_start_line_hide_logging_in_json = -30 ;
+const int global_const_start_line_disparity_gap_threshold_for_acceptance = -40 ;
 
 
 // -----------------------------------------------
@@ -334,6 +335,7 @@ int global_current_input_data_number ;
 int global_disapproval_count ;
 int global_dislikes_encountered ;
 int global_disparity_gap ;
+int global_disparity_gap_threshold_for_acceptance ;
 int global_do_nothing ;
 int global_dominant_coalition_size ;
 int global_elimination_loop_count_maximum ;
@@ -374,6 +376,7 @@ int global_length_of_list_of_proposals_widely_disliked ;
 int global_length_of_list_of_tied_proposals ;
 int global_limit_maximum_proposals_accepted ;
 int global_list_pointer ;
+int global_list_pointer_to_accepted_proposal ;
 int global_list_tie_resolution_rank_level_for_proposal_being_checked ;
 int global_list_tie_resolution_rank_level_for_proposal_with_largest_sum ;
 int global_log_item_number ;
@@ -445,6 +448,7 @@ int global_question_number ;
 int global_quota_count ;
 int global_ranking_level ;
 int global_ranking_number ;
+int global_ranking_number_of_accepted_proposal ;
 int global_ranking_position ;
 int global_satisfaction_count ;
 int global_satisfaction_count_range ;
@@ -483,9 +487,6 @@ int global_yes_or_no_hide_logging_in_json ;
 int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
-
-int global_list_pointer_to_accepted_proposal ;
-int global_ranking_number_of_accepted_proposal ;
 
 
 // -----------------------------------------------
@@ -532,7 +533,7 @@ std::string convert_integer_to_text( int supplied_integer )
     char c_format_string[ 50 ] ;
     try
     {
-        global_unused_string_length = sprintf( c_format_string , "%1d" , supplied_integer ) ;
+        global_unused_string_length = sprintf( c_format_string , "%01d" , supplied_integer ) ;
         return ( std::string ) c_format_string ;
     }
     catch( ... )
@@ -828,7 +829,7 @@ void read_data( )
             if ( global_yes_or_no_at_beginning_of_input_line == global_yes )
             {
                 global_first_number_in_input_line = global_current_input_data_number ;
-//                global_logitem_message = "[global_first_number_in_input_line: " + convert_integer_to_text( global_first_number_in_input_line ) + "]" ;
+//                global_logitem_message = "[global_first_number_in_input_line: " + convert_integer_to_text( global_first_number_in_input_line ) + " ]" ;
 //                write_logitem_message( ) ;
             }
 
@@ -869,7 +870,7 @@ void read_data( )
                     write_json_key_value_pair( ) ;
                     exit( EXIT_FAILURE ) ;
                 }
-//                global_logitem_message = "[at proposal number " + convert_integer_to_text( global_actual_proposal_number ) + "]" ;
+//                global_logitem_message = "[at proposal number " + convert_integer_to_text( global_actual_proposal_number ) + " ]" ;
 //                write_logitem_message( ) ;
             }
 
@@ -897,7 +898,7 @@ void read_data( )
                 }
                 global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_number ] = global_ranking_number ;
 
-//                global_logitem_message = "[global_ranking_number: " + convert_integer_to_text( global_ranking_number ) + "]" ;
+//                global_logitem_message = "[global_ranking_number: " + convert_integer_to_text( global_ranking_number ) + " ]" ;
 //                write_logitem_message( ) ;
 
             }
@@ -932,7 +933,7 @@ void read_data( )
                     global_length_of_list_of_incompatible_pairs ++ ;
                     global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
                     global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_current_input_data_number ;
-//                    global_logitem_message = "[proposal " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_current_input_data_number ) + "]" ;
+//                    global_logitem_message = "[proposal " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_current_input_data_number ) + " ]" ;
 //                    write_logitem_message( ) ;
                 }
             }
@@ -962,7 +963,7 @@ void read_data( )
                         global_length_of_list_of_incompatible_pairs ++ ;
                         global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_second_in_pair ;
                         global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
-//                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_proposal_number_second_in_pair ) + "]" ;
+//                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_proposal_number_second_in_pair ) + " ]" ;
 //                        write_logitem_message( ) ;
                     }
                 }
@@ -979,7 +980,7 @@ void read_data( )
             if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_limit_maximum_proposals_accepted ) )
             {
                 global_limit_maximum_proposals_accepted = global_current_input_data_number ;
-//                global_logitem_message = "[maximum number of proposals accepted is " + convert_integer_to_text( global_limit_maximum_proposals_accepted ) + "]" ;
+//                global_logitem_message = "[maximum number of proposals accepted is " + convert_integer_to_text( global_limit_maximum_proposals_accepted ) + " ]" ;
 //                write_logitem_message( ) ;
             }
 
@@ -994,7 +995,7 @@ void read_data( )
             if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_percent_threshold_dislike_rejection ) )
             {
                 global_percent_threshold_dislike_rejection = global_current_input_data_number ;
-//                global_logitem_message = "[percent dislikes needed for early rejection " + convert_integer_to_text( global_percent_threshold_dislike_rejection ) + "]" ;
+//                global_logitem_message = "[percent dislikes needed for early rejection " + convert_integer_to_text( global_percent_threshold_dislike_rejection ) + " ]" ;
 //                write_logitem_message( ) ;
             }
 
@@ -1015,6 +1016,21 @@ void read_data( )
                 global_json_key = "logging_status_note" ;
                 global_json_value = "turn on logging by removing (or commenting-out) the input line that begins with negative integer " + convert_integer_to_text( global_const_start_line_hide_logging_in_json ) ;
                 write_json_key_value_pair( ) ;
+            }
+
+
+// -----------------------------------------------
+//  If the first number in the line specified the line
+//  contains the satisfaction disparity threshold that
+//  must be reached to adopt a proposal, and this is the
+//  second number, get this specified number, then repeat
+//  the loop for the next input number.
+
+            if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_disparity_gap_threshold_for_acceptance ) )
+            {
+                global_percent_threshold_dislike_rejection = global_current_input_data_number ;
+//                global_logitem_message = "[percent dislikes needed for early rejection " + convert_integer_to_text( global_percent_threshold_dislike_rejection ) + " ]" ;
+//                write_logitem_message( ) ;
             }
 
 
@@ -1131,9 +1147,9 @@ void fill_tally_table( )
         global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] = 0 ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
-//            global_logitem_message = "[first ranking is " + convert_integer_to_text( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_first_in_pair ] ) + " second ranking is " + convert_integer_to_text( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_second_in_pair ] ) + "]" ;
+//            global_logitem_message = "[first ranking is " + convert_integer_to_text( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_first_in_pair ] ) + " second ranking is " + convert_integer_to_text( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_second_in_pair ] ) + " ]" ;
 //            write_logitem_message( ) ;
-//            global_logitem_message = "[ballot weight is " + convert_integer_to_text( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) + "]" ;
+//            global_logitem_message = "[ballot weight is " + convert_integer_to_text( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) + " ]" ;
 //            write_logitem_message( ) ;
             if ( global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_first_in_pair ] > global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_second_in_pair ] )
             {
@@ -1143,7 +1159,7 @@ void fill_tally_table( )
                 global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] += global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ;
             }
         }
-//        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_first_in_pair ] ) + " versus " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_second_in_pair ] ) + " counts are " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + "]" ;
+//        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_first_in_pair ] ) + " versus " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_second_in_pair ] ) + " counts are " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + " ]" ;
 //        write_logitem_message( ) ;
     }
 
@@ -1183,7 +1199,7 @@ void count_remaining_proposals( )
             global_alias_proposal_possible_single_continuing = global_alias_proposal_number ;
         }
     }
-//    global_logitem_message = "[continuing proposal count is " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + "]" ;
+//    global_logitem_message = "[continuing proposal count is " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + " ]" ;
 //    write_logitem_message( ) ;
 
     return ;
@@ -1217,7 +1233,7 @@ void count_approvals_and_disapprovals( )
                 global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ++ ;
             }
         }
-//        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " has approval count " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) + " and disapproval count " + convert_integer_to_text( global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ) + "]" ;
+//        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " has approval count " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) + " and disapproval count " + convert_integer_to_text( global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ) + " ]" ;
 //        write_logitem_message( ) ;
     }
 
@@ -1248,7 +1264,7 @@ void eliminate_one_proposal( )
 
     global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_to_eliminate ] = global_no ;
     global_elim_sequence = global_elim_sequence + " " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_to_eliminate ] ) ;
-//    global_logitem_message = "[eliminating proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_to_eliminate ] ) + "]" ;
+//    global_logitem_message = "[eliminating proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_to_eliminate ] ) + " ]" ;
 //    write_logitem_message( ) ;
 
 
@@ -1263,7 +1279,7 @@ void eliminate_one_proposal( )
         global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_proposal_number ] = global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] ;
         if ( global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_proposal_number ] == global_yes )
         {
-//            global_logitem_message = "[after elimination, continuing proposals include " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + "]" ;
+//            global_logitem_message = "[after elimination, continuing proposals include " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " ]" ;
 //            write_logitem_message( ) ;
         }
     }
@@ -1426,7 +1442,7 @@ void calculate_pairwise_opposition_or_support( )
         {
             continue ;
         }
-//        global_logitem_message = "[tally info " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + "]" ;
+//        global_logitem_message = "[tally info " + convert_integer_to_text( global_list_tally_second_over_first_at_pair_count[ global_pair_counter ] ) + " and " + convert_integer_to_text( global_list_tally_first_over_second_at_pair_count[ global_pair_counter ] ) + " ]" ;
 //        write_logitem_message( ) ;
         if ( global_yes_or_no_find_pairwise_opposition_not_support == global_yes )
         {
@@ -1454,11 +1470,11 @@ void calculate_pairwise_opposition_or_support( )
             global_opposition_or_support_count = global_list_pairwise_opposition_or_support_count_for_proposal[ global_alias_proposal_number ] ;
             if ( global_yes_or_no_find_pairwise_opposition_not_support == global_yes )
             {
-//                global_logitem_message = "[pairwise opposition count for proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " is " + convert_integer_to_text( global_opposition_or_support_count ) + "]" ;
+//                global_logitem_message = "[pairwise opposition count for proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " is " + convert_integer_to_text( global_opposition_or_support_count ) + " ]" ;
 //                write_logitem_message( ) ;
             } else
             {
-//                global_logitem_message = "[pairwise support count for proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " is " + convert_integer_to_text( global_opposition_or_support_count ) + "]" ;
+//                global_logitem_message = "[pairwise support count for proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " is " + convert_integer_to_text( global_opposition_or_support_count ) + " ]" ;
 //                write_logitem_message( ) ;
             }
             if ( global_length_of_list_of_tied_proposals == 0 )
@@ -1477,7 +1493,7 @@ void calculate_pairwise_opposition_or_support( )
             }
         }
     }
-//    global_logitem_message = "[there are " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " proposals at largest opposition or smallest support count " + convert_integer_to_text( global_largest_or_smallest_count ) + "]" ;
+//    global_logitem_message = "[there are " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " proposals at largest opposition or smallest support count " + convert_integer_to_text( global_largest_or_smallest_count ) + " ]" ;
 //    write_logitem_message( ) ;
 
 
@@ -1509,7 +1525,7 @@ void limit_elimination_continuing_proposals_to_tied_proposals( )
     {
         global_alias_proposal_number = global_list_of_tied_proposals[ global_pointer_to_list_of_tied_proposals ] ;
         global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_proposal_number ] = global_yes ;
-//        global_logitem_message = "[one of the " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " tied proposals to eliminate is proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + "]" ;
+//        global_logitem_message = "[one of the " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " tied proposals to eliminate is proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " ]" ;
 //        write_logitem_message( ) ;
     }
     global_elim_sequence = global_elim_sequence + " tie" ;
@@ -1592,9 +1608,9 @@ void method_instant_pairwise_elimination( )
         if ( global_count_of_elimination_continuing_proposals == 1 )
         {
             global_alias_proposal_winner_of_elimination_rounds = global_alias_proposal_possible_single_continuing ;
-            global_logitem_message = "[winner of IPE elimination rounds is proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_winner_of_elimination_rounds ] ) + "]" ;
+            global_logitem_message = "[winner of IPE is proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_winner_of_elimination_rounds ] ) + " ]" ;
             write_logitem_message( ) ;
-            global_elim_sequence = global_elim_sequence + " win " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_winner_of_elimination_rounds ] ) + "]" ;
+            global_elim_sequence = global_elim_sequence + " win " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_winner_of_elimination_rounds ] ) + " ]" ;
             global_logitem_message = global_elim_sequence ;
             write_logitem_message( ) ;
             return ;
@@ -1654,11 +1670,11 @@ void method_instant_pairwise_elimination( )
             {
                 if ( global_yes_or_no_find_pairwise_opposition_not_support == global_yes )
                 {
-//                    global_logitem_message = "[there are " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " proposals with the largest opposition count of " + convert_integer_to_text( global_largest_or_smallest_count ) + "]" ;
+//                    global_logitem_message = "[there are " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " proposals with the largest opposition count of " + convert_integer_to_text( global_largest_or_smallest_count ) + " ]" ;
 //                    write_logitem_message( ) ;
                 } else
                 {
-//                    global_logitem_message = "[there are " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " proposals with the lowest support count of " + convert_integer_to_text( global_largest_or_smallest_count ) + "]" ;
+//                    global_logitem_message = "[there are " + convert_integer_to_text( global_length_of_list_of_tied_proposals ) + " proposals with the lowest support count of " + convert_integer_to_text( global_largest_or_smallest_count ) + " ]" ;
 //                    write_logitem_message( ) ;
                 }
             }
@@ -1705,17 +1721,17 @@ void method_instant_pairwise_elimination( )
             {
                 if ( global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_proposal_number ] == global_yes )
                 {
-//                    global_logitem_message = "[considering proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + "]" ;
+//                    global_logitem_message = "[considering proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " ]" ;
 //                    write_logitem_message( ) ;
                     if ( global_one_for_approval_two_for_disapproval == 1 )
                     {
                         global_approval_or_disapproval_count = global_list_approval_count_for_proposal[ global_alias_proposal_number ] ;
-//                        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " has approval count of " + convert_integer_to_text( global_approval_or_disapproval_count ) + "]" ;
+//                        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " has approval count of " + convert_integer_to_text( global_approval_or_disapproval_count ) + " ]" ;
 //                        write_logitem_message( ) ;
                     } else
                     {
                         global_approval_or_disapproval_count = global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ;
-//                        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " has disapproval count of " + convert_integer_to_text( global_approval_or_disapproval_count ) + "]" ;
+//                        global_logitem_message = "[proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " has disapproval count of " + convert_integer_to_text( global_approval_or_disapproval_count ) + " ]" ;
 //                        write_logitem_message( ) ;
                     }
                     if ( global_length_of_list_of_tied_proposals == 0 )
@@ -1736,11 +1752,11 @@ void method_instant_pairwise_elimination( )
             }
             if ( global_one_for_approval_two_for_disapproval == 1 )
             {
-//                global_logitem_message = "[smallest approval count is " + convert_integer_to_text( global_smallest_approval_or_largest_disapproval_count ) + "]" ;
+//                global_logitem_message = "[smallest approval count is " + convert_integer_to_text( global_smallest_approval_or_largest_disapproval_count ) + " ]" ;
 //                write_logitem_message( ) ;
             } else
             {
-//                global_logitem_message = "[largest disapproval count is " + convert_integer_to_text( global_smallest_approval_or_largest_disapproval_count ) + "]" ;
+//                global_logitem_message = "[largest disapproval count is " + convert_integer_to_text( global_smallest_approval_or_largest_disapproval_count ) + " ]" ;
 //                write_logitem_message( ) ;
             }
             if ( global_length_of_list_of_tied_proposals == 1 )
@@ -1798,7 +1814,7 @@ void method_instant_pairwise_elimination( )
 // -----------------------------------------------
 //  An endless loop was encountered.
 
-    global_logitem_message = "[endless loop reached count " + convert_integer_to_text( global_elimination_round_count ) + "]" ;
+    global_logitem_message = "[endless loop reached count " + convert_integer_to_text( global_elimination_round_count ) + " ]" ;
     write_logitem_message( ) ;
 
 
@@ -1839,7 +1855,7 @@ void identify_incompatible_proposals( )
     }
     if ( global_length_of_list_of_proposals_just_incompatible > 0 )
     {
-        global_logitem_message = global_logitem_message + "]" ;
+        global_logitem_message = global_logitem_message + " ]" ;
 //        write_logitem_message( ) ;
     }
 
@@ -1899,7 +1915,7 @@ void calculate_satisfaction_counts( )
     for ( global_list_pointer_to_accepted_proposal = 1 ; global_list_pointer_to_accepted_proposal <= global_length_of_list_of_proposals_accepted ; global_list_pointer_to_accepted_proposal ++ )
     {
         global_alias_accepted_proposal_number = global_list_of_proposals_accepted[ global_list_pointer_to_accepted_proposal ] ;
-//        global_logitem_message = "[accepted proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_accepted_proposal_number ] ) + "]" ;
+//        global_logitem_message = "[accepted proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_accepted_proposal_number ] ) + " ]" ;
 //        write_logitem_message( ) ;
 
 
@@ -1912,7 +1928,7 @@ void calculate_satisfaction_counts( )
         for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_just_incompatible ; global_list_pointer ++ )
         {
             global_alias_proposal_for_satisfaction_count = global_list_of_proposals_just_incompatible[ global_list_pointer ] ;
-//            global_logitem_message = "[incompatible proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_for_satisfaction_count ] ) + "]" ;
+//            global_logitem_message = "[incompatible proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_for_satisfaction_count ] ) + " ]" ;
 //            write_logitem_message( ) ;
 
 
@@ -1922,7 +1938,7 @@ void calculate_satisfaction_counts( )
             for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
             {
                 global_ranking_number_of_accepted_proposal = global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_accepted_proposal_number ] ;
-//                global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number_of_accepted_proposal ) + "]" ;
+//                global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number_of_accepted_proposal ) + " ]" ;
 //                write_logitem_message( ) ;
 
 
@@ -1938,7 +1954,7 @@ void calculate_satisfaction_counts( )
                 {
                     global_list_satisfaction_count_for_participant[ global_participant_number ] -= 2 ;
                 }
-//                global_logitem_message = "[satisfaction count is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+//                global_logitem_message = "[satisfaction count is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + " ]" ;
 //                write_logitem_message( ) ;
 
 
@@ -1964,7 +1980,7 @@ void calculate_satisfaction_counts( )
         {
             if ( global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] == global_yes )
             {
-//                global_logitem_message = "[available proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + "]" ;
+//                global_logitem_message = "[available proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + " ]" ;
 //                write_logitem_message( ) ;
 
 
@@ -1981,7 +1997,7 @@ void calculate_satisfaction_counts( )
 //  proposal not yet accepted.
 
                     global_ranking_number_of_accepted_proposal = global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_accepted_proposal_number ] ;
-//                    global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number_of_accepted_proposal ) + "]" ;
+//                    global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number_of_accepted_proposal ) + " ]" ;
 //                    write_logitem_message( ) ;
                     if ( global_ranking_number_of_accepted_proposal > global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_number ] )
                     {
@@ -1990,7 +2006,7 @@ void calculate_satisfaction_counts( )
                     {
                         global_list_satisfaction_count_for_participant[ global_participant_number ] -- ;
                     }
-//                    global_logitem_message = "[satisfaction count is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+//                    global_logitem_message = "[satisfaction count is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + " ]" ;
 //                    write_logitem_message( ) ;
 
 
@@ -2034,8 +2050,8 @@ void calculate_satisfaction_counts( )
             global_largest_satisfaction_count = global_satisfaction_count ;
         }
     }
-    global_logitem_message = "[smallest and largest raw satisfaction counts are " + convert_integer_to_text( global_smallest_satisfaction_count ) + " and " + convert_integer_to_text( global_largest_satisfaction_count ) + "]" ;
-    write_logitem_message( ) ;
+//    global_logitem_message = "[smallest and largest raw satisfaction counts are " + convert_integer_to_text( global_smallest_satisfaction_count ) + " and " + convert_integer_to_text( global_largest_satisfaction_count ) + " ]" ;
+//    write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2046,7 +2062,7 @@ void calculate_satisfaction_counts( )
     for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
     {
         global_list_satisfaction_count_for_participant[ global_participant_number ] = int( float( global_full_ballot_weight * ( global_list_satisfaction_count_for_participant[ global_participant_number ] - global_smallest_satisfaction_count ) ) / float( global_satisfaction_count_range ) ) ;
-//        global_logitem_message = "[par" + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_participant_number] ) + " normalized value is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+//        global_logitem_message = "[par_" + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_participant_number] ) + " normalized value is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + " ]" ;
 //        write_logitem_message( ) ;
     }
 
@@ -2054,19 +2070,25 @@ void calculate_satisfaction_counts( )
 // -----------------------------------------------
 //  Log the calculated normalized satisfaction counts.
 
-    global_logitem_message = "[normalized satisfaction counts:]" ;
+    global_logitem_message = "[*****]" ;
+    write_logitem_message( ) ;
+    global_logitem_message = "[***** normalized satisfaction counts begin *****]" ;
     write_logitem_message( ) ;
     for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
     {
         global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
-        global_logitem_message = "[par" + convert_integer_to_text( global_participant_number ) + "  " ;
+        global_logitem_message = "[par_" + convert_integer_to_text( global_participant_number ) + "  " ;
         for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_list_satisfaction_count_for_participant[ global_participant_number ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
         {
             global_logitem_message = global_logitem_message + " " ;
         }
-        global_logitem_message = global_logitem_message + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+        global_logitem_message = global_logitem_message + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + " ]" ;
         write_logitem_message( ) ;
     }
+    global_logitem_message = "[***** normalized satisfaction counts end *****]" ;
+    write_logitem_message( ) ;
+    global_logitem_message = "[*****]" ;
+    write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2126,8 +2148,8 @@ void sort_satisfaction_counts( )
         global_top_satisfaction_count_among_opposition_coalition = global_sorted_list_of_satisfaction_counts[ global_opposition_coalition_size ] ;
         global_bottom_satisfaction_count_among_dominant_coalition = global_sorted_list_of_satisfaction_counts[ global_number_of_participants - global_dominant_coalition_size + 1 ] ;
         global_top_satisfaction_count_among_dominant_coalition = global_sorted_list_of_satisfaction_counts[ global_number_of_participants ] ;
-        global_logitem_message = "[key satisfaction values are: " + convert_integer_to_text( global_bottom_satisfaction_count_among_opposition_coalition ) + "  " + convert_integer_to_text( global_top_satisfaction_count_among_opposition_coalition ) + "  " + convert_integer_to_text( global_bottom_satisfaction_count_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_satisfaction_count_among_dominant_coalition ) + "]" ;
-        write_logitem_message( ) ;
+//        global_logitem_message = "[key satisfaction values are: " + convert_integer_to_text( global_bottom_satisfaction_count_among_opposition_coalition ) + "  " + convert_integer_to_text( global_top_satisfaction_count_among_opposition_coalition ) + "  " + convert_integer_to_text( global_bottom_satisfaction_count_among_dominant_coalition ) + "  " + convert_integer_to_text( global_top_satisfaction_count_among_dominant_coalition ) + " ]" ;
+//        write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2152,7 +2174,7 @@ void accept_one_proposal( )
 //  Translate the alias proposal number into the actual proposal number.
 
     global_actual_proposal_accepted = global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_accepted ] ;
-    global_logitem_message = "[proposal " + convert_integer_to_text( global_actual_proposal_accepted ) + " is accepted]" ;
+    global_logitem_message = "[accepting proposal " + convert_integer_to_text( global_actual_proposal_accepted ) + " ]" ;
     write_logitem_message( ) ;
 
 
@@ -2194,7 +2216,7 @@ void accept_one_proposal( )
     }
     if ( global_length_of_list_of_proposals_just_incompatible > 0 )
     {
-        global_logitem_message = global_logitem_message + "]" ;
+        global_logitem_message = global_logitem_message + " ]" ;
         write_logitem_message( ) ;
     }
 
@@ -2246,7 +2268,7 @@ void calculate_weighted_most_popular_proposal( )
                 global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) ;
             }
         }
-        global_logitem_message = global_logitem_message + "]" ;
+        global_logitem_message = global_logitem_message + " ]" ;
         write_logitem_message( ) ;
 
 
@@ -2254,7 +2276,7 @@ void calculate_weighted_most_popular_proposal( )
 //  Log the count of remaining proposals.
 
         count_remaining_proposals( ) ;
-        global_logitem_message = "[finding winner based on " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + " proposals]" ;
+        global_logitem_message = "[finding winner among " + convert_integer_to_text( global_count_of_elimination_continuing_proposals ) + " proposals]" ;
         write_logitem_message( ) ;
 
 
@@ -2290,15 +2312,23 @@ void calculate_weighted_most_popular_proposal( )
 // -----------------------------------------------
 //      log_crude_plot
 //
-//  Write into log lines a crude plot of support minus
-//  opposition counts (with offset included).  Include a
-//  dotted line that separates the opposition coalition
-//  from the dominant coalition.  Also include another
-//  dotted line that separates the top participants of
-//  the same participant size.
+//  Write into log lines a crude plot of satisfaction
+//  counts.  Include a dotted line that separates the
+//  opposition coalition from the dominant coalition, and
+//  another dotted line that separates the top
+//  participants of the same participant size.
 
 void log_crude_plot( )
 {
+
+
+// -----------------------------------------------
+//  Write the opening line.
+
+        global_logitem_message = "[*****]" ;
+        write_logitem_message( ) ;
+        global_logitem_message = "[***** satisfaction counts sorted begin *****]" ;
+        write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2311,7 +2341,7 @@ void log_crude_plot( )
             {
                 global_logitem_message = global_logitem_message + " " ;
             }
-            global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ) + "]" ;
+            global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ) + " ]" ;
             write_logitem_message( ) ;
         }
 
@@ -2324,7 +2354,7 @@ void log_crude_plot( )
         {
             global_logitem_message = global_logitem_message + "." ;
         }
-        global_logitem_message = global_logitem_message + "]" ;
+        global_logitem_message = global_logitem_message + " ]" ;
         write_logitem_message( ) ;
 
 
@@ -2340,7 +2370,7 @@ void log_crude_plot( )
                 {
                     global_logitem_message = global_logitem_message + " " ;
                 }
-                global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ) + "]" ;
+                global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ) + " ]" ;
                 write_logitem_message( ) ;
             }
         }
@@ -2354,7 +2384,7 @@ void log_crude_plot( )
         {
             global_logitem_message = global_logitem_message + "." ;
         }
-        global_logitem_message = global_logitem_message + "]" ;
+        global_logitem_message = global_logitem_message + " ]" ;
         write_logitem_message( ) ;
 
 
@@ -2368,9 +2398,18 @@ void log_crude_plot( )
             {
                 global_logitem_message = global_logitem_message + " " ;
             }
-            global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ) + "]" ;
+            global_logitem_message = global_logitem_message + convert_integer_to_text( global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ) + " ]" ;
             write_logitem_message( ) ;
         }
+
+
+// -----------------------------------------------
+//  Write the closing line.
+
+        global_logitem_message = "[***** satisfaction counts sorted end *****]" ;
+        write_logitem_message( ) ;
+        global_logitem_message = "[*****]" ;
+        write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2542,10 +2581,10 @@ void do_negotiation_tool_calculations( )
         global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_approval_count_for_proposal[ global_alias_proposal_number ] ) ;
         global_logitem_text_store_longer = global_logitem_text_store_longer + " " + convert_integer_to_text( global_list_disapproval_count_for_proposal[ global_alias_proposal_number ] ) ;
     }
-    global_logitem_message = global_logitem_message + "]" ;
-    write_logitem_message( ) ;
-    global_logitem_message = global_logitem_text_store_longer + "]" ;
-    write_logitem_message( ) ;
+    global_logitem_message = global_logitem_message + " ]" ;
+//    write_logitem_message( ) ;
+    global_logitem_message = global_logitem_text_store_longer + " ]" ;
+//    write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2671,7 +2710,7 @@ void do_negotiation_tool_calculations( )
                 global_number_of_proposals_remaining_for_possible_acceptance ++ ;
             }
         }
-        global_logitem_message = "[remaining " + convert_integer_to_text( global_number_of_proposals_remaining_for_possible_acceptance ) + "   accepted " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + "   incompatible " + convert_integer_to_text( global_length_of_list_of_proposals_rejected_as_incompatible ) + "]" ;
+        global_logitem_message = "[remaining " + convert_integer_to_text( global_number_of_proposals_remaining_for_possible_acceptance ) + "   accepted " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + "   incompatible " + convert_integer_to_text( global_length_of_list_of_proposals_rejected_as_incompatible ) + " ]" ;
         write_logitem_message( ) ;
 
 
@@ -2734,7 +2773,7 @@ void do_negotiation_tool_calculations( )
         if ( ( global_coalition_count > 2 ) && ( global_coalition_count >= global_length_of_list_of_proposals_accepted ) )
         {
             global_coalition_count = 1 ;
-            global_logitem_message = "[coalition count limited to number of proposals accepted so far, which is " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + "]" ;
+            global_logitem_message = "[coalition count limited to number of proposals accepted so far, which is " + convert_integer_to_text( global_length_of_list_of_proposals_accepted ) + " ]" ;
             write_logitem_message( ) ;
         }
         global_logitem_message = "[********** coalition count " + convert_integer_to_text( global_coalition_count ) + " **********]" ;
@@ -2797,10 +2836,10 @@ void do_negotiation_tool_calculations( )
 //  the median.
 
         global_opposition_coalition_size = int( float( global_number_of_participants ) / float ( global_coalition_count ) ) ;
-//        global_logitem_message = "[opposition coalition size is " + convert_integer_to_text( global_opposition_coalition_size ) + "]" ;
+//        global_logitem_message = "[opposition coalition size is " + convert_integer_to_text( global_opposition_coalition_size ) + " ]" ;
 //        write_logitem_message( ) ;
         global_dominant_coalition_size = global_opposition_coalition_size * ( global_coalition_count - 1 ) ;
-//        global_logitem_message = "[dominant coalition size is " + convert_integer_to_text( global_dominant_coalition_size ) + "]" ;
+//        global_logitem_message = "[dominant coalition size is " + convert_integer_to_text( global_dominant_coalition_size ) + " ]" ;
 //        write_logitem_message( ) ;
 
 
@@ -2853,19 +2892,25 @@ void do_negotiation_tool_calculations( )
 //-----------------------------------------------
 //  Log the ballot weights as a crude plot.
 
-        global_logitem_message = "[ballot weights:]" ;
+        global_logitem_message = "[*****]" ;
+        write_logitem_message( ) ;
+        global_logitem_message = "[***** ballot weights begin *****]" ;
         write_logitem_message( ) ;
         global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
-            global_logitem_message = "[" ;
+            global_logitem_message = "[par_" + convert_integer_to_text( global_participant_number ) + "  " ;
             for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
             {
                 global_logitem_message = global_logitem_message + " " ;
             }
-            global_logitem_message = global_logitem_message + convert_integer_to_text( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) + "]" ;
+            global_logitem_message = global_logitem_message + convert_integer_to_text( global_list_remaining_ballot_weight_for_participant[ global_participant_number ] ) + " ]" ;
             write_logitem_message( ) ;
         }
+        global_logitem_message = "[***** ballot weights end *****]" ;
+        write_logitem_message( ) ;
+        global_logitem_message = "[*****]" ;
+        write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -2896,17 +2941,19 @@ void do_negotiation_tool_calculations( )
             global_sum_satisfaction_counts_for_core_dominant_coalition += global_sorted_list_of_satisfaction_counts[ global_list_pointer ] ;
         }
         global_disparity_gap = int( ( float( global_sum_satisfaction_counts_for_core_dominant_coalition ) / float( global_opposition_coalition_size ) ) - ( float( global_sum_satisfaction_counts_for_opposition_coalition ) / float( global_opposition_coalition_size ) ) + 0.5 ) ;
-        global_logitem_message = "[disparity gap is " + convert_integer_to_text( global_disparity_gap ) + "]" ;
+        global_logitem_message = "[satisfaction disparity gap is " + convert_integer_to_text( global_disparity_gap ) + " ]" ;
         write_logitem_message( ) ;
 
 
 // -----------------------------------------------
-//  If the disparity gap is zero, repeat the main loop
-//  without accepting this most-popular proposal.  If the
-//  disparity gap is one, do not accept this proposal
-//  unless there are only two participants.
+//  If the disparity gap is less than the specified
+//  threshold, repeat the main loop without accepting
+//  this most-popular proposal.
+//
+//  If there are just two participants, a smaller
+//  disparity gap might be acceptable.
 
-        if ( ( global_disparity_gap <= 0 ) || ( ( global_disparity_gap == 1 ) && ( global_number_of_participants > 2 ) ) )
+        if ( global_disparity_gap <= global_disparity_gap_threshold_for_acceptance )
         {
             global_logitem_message = "[disparity gap not big enough to accept this proposal]" ;
             write_logitem_message( ) ;
@@ -2925,7 +2972,7 @@ void do_negotiation_tool_calculations( )
 //  Repeat the loop that identifies the next proposal to
 //  be accepted.
 
-//        global_logitem_message = "[endless loop counter = " + convert_integer_to_text( global_endless_loop_counter ) + "]" ;
+//        global_logitem_message = "[endless loop counter = " + convert_integer_to_text( global_endless_loop_counter ) + " ]" ;
 //        write_logitem_message( ) ;
     }
 
@@ -2966,7 +3013,7 @@ void do_negotiation_tool_calculations( )
         {
             global_logitem_message = global_logitem_message + " " ;
         }
-        global_logitem_message = global_logitem_message + convert_integer_to_text( global_pairwise_count_for_proposal ) + "]" ;
+        global_logitem_message = global_logitem_message + convert_integer_to_text( global_pairwise_count_for_proposal ) + " ]" ;
         write_logitem_message( ) ;
     }
 
@@ -3084,6 +3131,7 @@ int main() {
 
     global_percent_threshold_dislike_rejection = 80 ;
     global_limit_maximum_proposals_accepted = 0 ;
+    global_disparity_gap_threshold_for_acceptance = int( float( global_full_ballot_weight ) / 40.0 ) ;
 
 
 // -----------------------------------------------
@@ -3130,6 +3178,21 @@ int main() {
     }
     global_json_key = "limit_number_of_proposals_to_accept" ;
     global_json_value = convert_integer_to_text( global_limit_maximum_proposals_accepted ) ;
+    write_json_key_value_pair( ) ;
+
+
+//-----------------------------------------------
+//  If the threshold for acceptance based on satisfaction
+//  count is too small, increase it. accepted is less
+//  than zero, set this limit to allow as many proposals
+//  as the number of proposals.
+
+    if ( global_disparity_gap_threshold_for_acceptance  < 5 )
+    {
+        global_disparity_gap_threshold_for_acceptance = 10 ;
+    }
+    global_json_key = "satisfaction_count_threshold_needed_for_acceptance" ;
+    global_json_value = convert_integer_to_text( global_disparity_gap_threshold_for_acceptance ) ;
     write_json_key_value_pair( ) ;
 
 

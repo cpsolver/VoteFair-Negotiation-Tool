@@ -485,6 +485,7 @@ int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
 
 int global_list_pointer_to_accepted_proposal ;
+int global_ranking_number_of_accepted_proposal ;
 
 
 // -----------------------------------------------
@@ -1839,7 +1840,7 @@ void identify_incompatible_proposals( )
     if ( global_length_of_list_of_proposals_just_incompatible > 0 )
     {
         global_logitem_message = global_logitem_message + "]" ;
-        write_logitem_message( ) ;
+//        write_logitem_message( ) ;
     }
 
 
@@ -1883,6 +1884,15 @@ void calculate_satisfaction_counts( )
 
 
 // -----------------------------------------------
+//  Initialization.
+
+    for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
+    {
+        global_list_satisfaction_count_for_participant[ global_participant_number ] = 0 ;
+    }
+
+
+// -----------------------------------------------
 //  Begin a loop that considers each accepted proposal.
 
 
@@ -1915,24 +1925,25 @@ void calculate_satisfaction_counts( )
 
             for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
             {
-                global_list_satisfaction_count_for_participant[ global_participant_number ] = global_number_of_proposals ;
+                global_ranking_number_of_accepted_proposal = global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_accepted_proposal_number ] ;
+//                global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number_of_accepted_proposal ) + "]" ;
+//                write_logitem_message( ) ;
 
 
 // -----------------------------------------------
-//  Increment or decrement the satisfaction count based on
-//  comparing the accepted proposal rank with the
-//  incompatible proposal rank.
+//  Increment or decrement by two (not one) the
+//  satisfaction count based on comparing the accepted
+//  proposal rank with the incompatible proposal rank.
 
-                global_ranking_number = global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_accepted_proposal_number ] ;
-//                    global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number ) + "]" ;
-//                    write_logitem_message( ) ;
-                if ( global_ranking_number > global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_for_satisfaction_count ] )
+                if ( global_ranking_number_of_accepted_proposal > global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_for_satisfaction_count ] )
                 {
-                    global_list_satisfaction_count_for_participant[ global_participant_number ] ++ ;
-                } else if ( global_ranking_number < global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_for_satisfaction_count ] )
+                    global_list_satisfaction_count_for_participant[ global_participant_number ] += 2 ;
+                } else if ( global_ranking_number_of_accepted_proposal < global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_for_satisfaction_count ] )
                 {
-                    global_list_satisfaction_count_for_participant[ global_participant_number ] -- ;
+                    global_list_satisfaction_count_for_participant[ global_participant_number ] -= 2 ;
                 }
+//                global_logitem_message = "[satisfaction count is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+//                write_logitem_message( ) ;
 
 
 // -----------------------------------------------
@@ -1945,6 +1956,60 @@ void calculate_satisfaction_counts( )
 //  Repeat the loop to handle the next proposal that is
 //  incompatible with the current accepted proposal.
 
+        }
+
+
+// -----------------------------------------------
+//  Begin a loop that compares the accepted proposal with
+//  every other proposal that is still available to be
+//  accepted.
+
+        for ( global_alias_proposal_number = 1 ; global_alias_proposal_number <= global_number_of_proposals ; global_alias_proposal_number ++ )
+        {
+            if ( global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_number ] == global_yes )
+            {
+//                global_logitem_message = "[available proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_number ] ) + "]" ;
+//                write_logitem_message( ) ;
+
+
+// -----------------------------------------------
+//  Begin a loop that handles each participant.
+
+                for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
+                {
+
+
+// -----------------------------------------------
+//  Increment or decrement the satisfaction count based on
+//  comparing the accepted proposal rank with the next
+//  proposal not yet accepted.
+
+                    global_ranking_number_of_accepted_proposal = global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_accepted_proposal_number ] ;
+//                    global_logitem_message = "[rank " + convert_integer_to_text( global_ranking_number_of_accepted_proposal ) + "]" ;
+//                    write_logitem_message( ) ;
+                    if ( global_ranking_number_of_accepted_proposal > global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_number ] )
+                    {
+                        global_list_satisfaction_count_for_participant[ global_participant_number ] ++ ;
+                    } else if ( global_ranking_number_of_accepted_proposal < global_array_ranking_for_participant_and_proposal[ global_participant_number ][ global_alias_proposal_number ] )
+                    {
+                        global_list_satisfaction_count_for_participant[ global_participant_number ] -- ;
+                    }
+//                    global_logitem_message = "[satisfaction count is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+//                    write_logitem_message( ) ;
+
+
+// -----------------------------------------------
+//  Repeat the loop to handle the next participant.
+
+                }
+
+
+// -----------------------------------------------
+//  Repeat the loop to handle the next available proposal
+//  that is being compared to the current accepted
+//  proposal.
+
+            }
         }
 
 
@@ -1973,8 +2038,21 @@ void calculate_satisfaction_counts( )
             global_largest_satisfaction_count = global_satisfaction_count ;
         }
     }
-    global_logitem_message = "[smallest and largest pairwise counts are " + convert_integer_to_text( global_smallest_satisfaction_count ) + " and " + convert_integer_to_text( global_largest_satisfaction_count ) + "]" ;
+    global_logitem_message = "[smallest and largest satisfaction counts are " + convert_integer_to_text( global_smallest_satisfaction_count ) + " and " + convert_integer_to_text( global_largest_satisfaction_count ) + "]" ;
     write_logitem_message( ) ;
+
+
+// -----------------------------------------------
+//  Normalize the satisfaction counts to range from zero
+//  to the full ballot weight.
+
+    global_satisfaction_count_range = global_largest_satisfaction_count - global_smallest_satisfaction_count ;
+    for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
+    {
+        global_list_satisfaction_count_for_participant[ global_participant_number ] = int( float( global_full_ballot_weight * ( global_list_satisfaction_count_for_participant[ global_participant_number ] - global_smallest_satisfaction_count ) ) / float( global_satisfaction_count_range ) ) ;
+//        global_logitem_message = "[par" + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_participant_number] ) + " normalized value is " + convert_integer_to_text( global_list_satisfaction_count_for_participant[ global_participant_number ] ) + "]" ;
+//        write_logitem_message( ) ;
+    }
 
 
 // -----------------------------------------------
@@ -1984,8 +2062,8 @@ void calculate_satisfaction_counts( )
     write_logitem_message( ) ;
     for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
     {
-        global_graph_scale_divisor = 30.0 / float( global_number_of_proposals ) ;
-        global_logitem_message = "[par" + convert_integer_to_text( global_participant_number ) ;
+        global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
+        global_logitem_message = "[par" + convert_integer_to_text( global_participant_number ) + "  " ;
         for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_list_satisfaction_count_for_participant[ global_participant_number ] ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
         {
             global_logitem_message = global_logitem_message + " " ;
@@ -2746,7 +2824,7 @@ void do_negotiation_tool_calculations( )
 // -----------------------------------------------
 //  Log a crude graphical display of the sorted counts.
 
-        global_graph_scale_divisor = 30.0 / float( global_number_of_proposals ) ;
+        global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
         log_crude_plot( ) ;
 
 
@@ -2764,14 +2842,15 @@ void do_negotiation_tool_calculations( )
 
 
 //-----------------------------------------------
-//  Use the just-calculated satisfaction counts to give
-//  more influence to participants who have had less
-//  influence in earlier popularity calculations.
+//  Invert the just-calculated satisfaction counts and use
+//  those inverted values to give more influence to
+//  participants who have had less influence in earlier
+//  popularity calculations.
 
         global_satisfaction_count_range = global_largest_satisfaction_count - global_smallest_satisfaction_count ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
-            global_list_remaining_ballot_weight_for_participant[ global_participant_number ] = int( float( global_full_ballot_weight * ( global_largest_satisfaction_count - global_list_satisfaction_count_for_participant[ global_participant_number ] ) / float( global_satisfaction_count_range ) ) ) ;
+            global_list_remaining_ballot_weight_for_participant[ global_participant_number ] = global_full_ballot_weight - global_list_satisfaction_count_for_participant[ global_participant_number ] ;
         }
 
 
@@ -2780,7 +2859,7 @@ void do_negotiation_tool_calculations( )
 
         global_logitem_message = "[ballot weights:]" ;
         write_logitem_message( ) ;
-        global_graph_scale_divisor = 2000.0 / float( global_number_of_proposals ) ;
+        global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
         for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
         {
             global_logitem_message = "[" ;
@@ -2864,10 +2943,9 @@ void do_negotiation_tool_calculations( )
     global_logitem_message = "********* todo ************ code here probably needs editing]" ;
     write_logitem_message( ) ;
 
-    global_logitem_message = "[pairwise counts for accepted proposals:]" ;
+    global_logitem_message = "[satisfaction counts for accepted proposals:]" ;
     write_logitem_message( ) ;
-    global_graph_scale_divisor = 50.0 / float( global_number_of_proposals ) ;
-    global_graph_scale_offset = 3 ;
+    global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
     for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_accepted ; global_list_pointer ++ )
     {
         global_first_proposal_number = global_list_of_proposals_accepted[ global_list_pointer ] ;
@@ -2887,7 +2965,8 @@ void do_negotiation_tool_calculations( )
             }
         }
         global_logitem_message = "[pro" + convert_integer_to_text( global_actual_proposal_number ) + " " ;
-        for ( global_column_pointer = 1 ; global_column_pointer <= ( int( float( global_pairwise_count_for_proposal ) / global_graph_scale_divisor ) + global_graph_scale_offset ) ; global_column_pointer ++ )
+        global_graph_scale_divisor = float( global_full_ballot_weight ) / 30.0 ;
+        for ( global_column_pointer = 1 ; global_column_pointer <= int( float( global_pairwise_count_for_proposal ) / global_graph_scale_divisor ) ; global_column_pointer ++ )
         {
             global_logitem_message = global_logitem_message + " " ;
         }
@@ -2902,7 +2981,6 @@ void do_negotiation_tool_calculations( )
 
     global_logitem_message = "[satisfaction count per participant based on accepted proposals:]" ;
     write_logitem_message( ) ;
-//    global_graph_scale_divisor = 30.0 / float( global_number_of_proposals ) ;
     calculate_satisfaction_counts( ) ;
 
 

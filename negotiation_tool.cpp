@@ -1858,12 +1858,13 @@ void identify_incompatible_proposals( )
 //
 //  Calculate a satisfaction count for each participant.
 //  Offset each count by the number of proposals so these
-//  counts are always positive, never negative.
-//
-//  A satisfaction count combines normalized versions of these counts:
-//  * pairwise support-minus-opposition count based on accepted proposals
-//  * pairwise opposition-minus-support count based on incompatible proposals
-//  * maybe:  pairwise opposition-minus-support count based on proposals still available to be accepted
+//  counts are always positive, never negative. The
+//  satisfaction count is a normalized value that is
+//  based on pairwise support-minus-opposition counts.
+//  These counts are based on comparing accepted
+//  proposals with incompatible proposals, and comparing
+//  accepted proposals with all proposals.  Details are
+//  explained in the comments.
 
 void calculate_satisfaction_counts( )
 {
@@ -1894,11 +1895,6 @@ void calculate_satisfaction_counts( )
 
 // -----------------------------------------------
 //  Begin a loop that considers each accepted proposal.
-
-
-    global_logitem_message = "[********** todo **********  debug calculate satisfaction count]" ;
-    write_logitem_message( ) ;
-
 
     for ( global_list_pointer_to_accepted_proposal = 1 ; global_list_pointer_to_accepted_proposal <= global_length_of_list_of_proposals_accepted ; global_list_pointer_to_accepted_proposal ++ )
     {
@@ -2021,8 +2017,8 @@ void calculate_satisfaction_counts( )
 
 
 // -----------------------------------------------
-//  Calculate and log the smallest and largest
-//  satisfaction counts.
+//  Calculate and log the smallest and largest raw
+//  (not-yet_normalized) satisfaction counts.
 
     global_smallest_satisfaction_count = 0 ;
     global_largest_satisfaction_count = 0 ;
@@ -2038,7 +2034,7 @@ void calculate_satisfaction_counts( )
             global_largest_satisfaction_count = global_satisfaction_count ;
         }
     }
-    global_logitem_message = "[smallest and largest satisfaction counts are " + convert_integer_to_text( global_smallest_satisfaction_count ) + " and " + convert_integer_to_text( global_largest_satisfaction_count ) + "]" ;
+    global_logitem_message = "[smallest and largest raw satisfaction counts are " + convert_integer_to_text( global_smallest_satisfaction_count ) + " and " + convert_integer_to_text( global_largest_satisfaction_count ) + "]" ;
     write_logitem_message( ) ;
 
 
@@ -2056,9 +2052,9 @@ void calculate_satisfaction_counts( )
 
 
 // -----------------------------------------------
-//  Log the calculated satisfaction counts.
+//  Log the calculated normalized satisfaction counts.
 
-    global_logitem_message = "[satisfaction counts:]" ;
+    global_logitem_message = "[normalized satisfaction counts:]" ;
     write_logitem_message( ) ;
     for ( global_participant_number = 1 ; global_participant_number <= global_number_of_participants ; global_participant_number ++ )
     {

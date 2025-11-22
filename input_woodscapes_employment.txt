@@ -1,0 +1,79 @@
+0  Scenario title:
+0  Terms of hiring George at Woodscapes, Inc.
+
+
+0  Participants:
+
+0  2 Woodscapes, Inc. (employer)
+0  3 George (prospective employee)
+
+
+0  Ratings/rankings:
+
+1,50,-21
+2,-22,50
+3,-15,41
+4,36,-14
+5,-21,49
+6,49,-20
+7,-14,40
+8,41,36
+9,-20,48
+10,48,-19
+11,-19,47
+12,-11,43
+13,39,-15
+14,38,-12
+15,47,-18
+16,-18,46
+17,-17,45
+18,46,-17
+19,-16,44
+
+21,-13,37
+22,45,-16
+23,-12,35
+24,44,-13
+25,37,42
+26,42,-11
+27,40,38
+
+
+0  Proposals:
+
+0  1  $15 per hour
+0  2  $32 per hour
+0  3  Pay all moving expenses
+0  4  Pay up to $1500 moving expenses
+0  5  $28 per hour
+0  6  $18 per hour
+0  7  Vacation: 4 weeks paid
+0  8  Vacation: 2 weeks paid, 2 weeks unpaid
+0  9  $26 per hour
+0  10  $19.50 per hour
+0  11  $24 per hour
+0  12  Telecommute one day per week
+0  13  Telecommute one day per month
+0  14  Telecommute two days per month
+0  15  $19.75
+0  16  $22.50 per hour
+0  17  $22.25 per hour
+0  18  $20 per hour
+0  19  $22 per hour
+0  20  unused
+0  21  Moving expenses: Pay up to $2,500
+0  21  $21.50 per hour
+0  22  $20.50 per hour
+0  23  $21.25
+0  24  $20.75 per hour
+0  25  Telecommute 3 days per month
+0  26  $21 per hour
+0  27  Vacation: 3 weeks paid, one week unpaid
+
+
+0  Incompatibility info:
+
+-2 , 1,2,5,6,9,10,11,15,16,17,18,19,22,23,24,26
+-2 , 3,4,21
+-2 , 7,8,27
+-2 , 12,13,14,25

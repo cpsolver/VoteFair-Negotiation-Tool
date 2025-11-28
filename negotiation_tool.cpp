@@ -54,7 +54,7 @@
 //  The following sample code compiles and
 //  executes this software under Linux.
 //
-//      g++ negotiation_tool.cpp -o negotiation_tool
+//      g++ negotiation_tool.cpp -o negotiation_tool.exe
 //      ./negotiation_tool.exe < input_negotiation_tool.csv > output_negotiation_tool.json
 //
 //  If this software is executed under under a typical Windows environment then the g++ compiler and the mingw32 library must be installed.  Also the following path command must be executed once:
@@ -246,20 +246,22 @@ int global_list_elimination_sequence[ 2001 ] ;
 int global_list_integer_count_for_proposal[ 2001 ] ;
 int global_list_loss_count_for_proposal[ 2001 ] ;
 int global_list_of_all_proposals_ranked[ 2001 ] ;
-int global_list_of_incompatible_proposal_number_for_pair[ 10001 ] ;
+int global_list_of_incompatible_actual_proposal_number_for_pair[ 10001 ] ;
+int global_list_of_incompatible_alias_proposal_number_for_pair[ 10001 ] ;
 int global_list_of_integers_to_sort[ 501 ] ;
-int global_list_of_proposals_just_incompatible[ 2001 ] ;
 int global_list_of_proposals_accepted[ 2001 ] ;
 int global_list_of_proposals_contributing_to_satisfaction_counts[ 501 ] ;
-int global_list_of_proposals_rejected_as_incompatible[ 2001 ] ;
+int global_list_of_proposals_actual_just_incompatible[ 2001 ] ;
 int global_list_of_proposals_not_popular[ 2001 ] ;
 int global_list_of_proposals_ranked_negative[ 2001 ] ;
 int global_list_of_proposals_ranked_neutral[ 2001 ] ;
 int global_list_of_proposals_ranked_positive[ 2001 ] ;
+int global_list_of_proposals_rejected_as_incompatible[ 2001 ] ;
 int global_list_of_proposals_tied[ 2001 ] ;
 int global_list_of_proposals_widely_disliked[ 2001 ] ;
 int global_list_of_tied_proposals[ 2001 ] ;
-int global_list_of_trigger_proposal_number_for_pair[ 10001 ] ;
+int global_list_of_trigger_actual_proposal_number_for_pair[ 10001 ] ;
+int global_list_of_trigger_alias_proposal_number_for_pair[ 10001 ] ;
 int global_list_opposing_count_for_proposal_count[ 2001 ] ;
 int global_list_overall_ranking_criteria_for_proposal[ 2001 ] ;
 int global_list_pairwise_opposition_or_support_count_for_proposal[ 2001 ] ;
@@ -273,8 +275,8 @@ int global_list_proposal_first_at_pair_count[ 4001 ] ;
 int global_list_proposal_for_proposal_count[ 2001 ] ;
 int global_list_proposal_second_at_pair_count[4001 ] ;
 int global_list_remaining_ballot_weight_for_participant[ 501 ] ;
-int global_list_support_from_participant[ 2001 ] ;
 int global_list_satisfaction_count_for_participant[ 501 ] ;
+int global_list_support_from_participant[ 2001 ] ;
 int global_list_tally_first_over_second_at_pair_count[ 4001 ] ;
 int global_list_tally_second_over_first_at_pair_count[ 4001 ] ;
 int global_list_tie_resolution_rank_level_for_proposal[ 2001 ] ;
@@ -348,8 +350,8 @@ int global_highest_negative_ranked_count ;
 int global_highest_preference_level ;
 int global_highest_preference_level_of_any_remaining_proposal ;
 int global_highest_vote_transfer_count ;
-int global_incompatible_proposal_number_first_in_pair ;
-int global_incompatible_proposal_number_second_in_pair ;
+int global_incompatible_actual_proposal_number_first_in_pair ;
+int global_incompatible_actual_proposal_number_second_in_pair ;
 int global_input_line_number ;
 int global_input_pointer_start_next_case ;
 int global_largest_disapproval_count ;
@@ -487,6 +489,8 @@ int global_yes_or_no_hide_logging_in_json ;
 int global_yes_or_no_input_is_integer ;
 int global_yes_or_no_largest_or_smallest_count_initialized ;
 int global_yes_or_no_tie_breaking_affected_outcome ;
+
+int global_incompatible_loop_counter ;
 
 
 // -----------------------------------------------
@@ -796,7 +800,7 @@ void read_data( )
         global_yes_or_no_at_beginning_of_input_line = global_yes ;
         global_first_number_in_input_line = 0 ;
         global_actual_proposal_number = 0 ;
-        global_incompatible_proposal_number_first_in_pair = 0 ;
+        global_incompatible_actual_proposal_number_first_in_pair = 0 ;
         global_length_of_list_of_mutually_incompatible_proposals = 0 ;
 
 
@@ -925,16 +929,16 @@ void read_data( )
 
             if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_incompatibility_pairs ) )
             {
-                if ( global_incompatible_proposal_number_first_in_pair == 0 )
+                if ( global_incompatible_actual_proposal_number_first_in_pair == 0 )
                 {
-                    global_incompatible_proposal_number_first_in_pair = global_current_input_data_number ;
+                    global_incompatible_actual_proposal_number_first_in_pair = global_current_input_data_number ;
                 } else
                 {
                     global_length_of_list_of_incompatible_pairs ++ ;
-                    global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_proposal_number_first_in_pair ;
-                    global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_current_input_data_number ;
-//                    global_logitem_message = "[proposal " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_current_input_data_number ) + " ]" ;
-//                    write_logitem_message( ) ;
+                    global_list_of_trigger_actual_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_actual_proposal_number_first_in_pair ;
+                    global_list_of_incompatible_actual_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_current_input_data_number ;
+                    global_logitem_message = "[proposal " + convert_integer_to_text( global_incompatible_actual_proposal_number_first_in_pair ) + " is incompatible with proposal " + convert_integer_to_text( global_current_input_data_number ) + " ]" ;
+                    write_logitem_message( ) ;
                 }
             }
 
@@ -950,20 +954,20 @@ void read_data( )
             if ( ( global_yes_or_no_at_beginning_of_input_line == global_no ) && ( global_first_number_in_input_line == global_const_start_line_incompatibility_group ) )
             {
                 global_length_of_list_of_mutually_incompatible_proposals ++ ;
-                global_list_of_proposals_just_incompatible[ global_length_of_list_of_mutually_incompatible_proposals ] = global_current_input_data_number ;
+                global_list_of_proposals_actual_just_incompatible[ global_length_of_list_of_mutually_incompatible_proposals ] = global_current_input_data_number ;
                 if ( global_length_of_list_of_mutually_incompatible_proposals > 1 )
                 {
                     for ( global_pointer_to_list = 1 ; global_pointer_to_list <= ( global_length_of_list_of_mutually_incompatible_proposals - 1 ) ; global_pointer_to_list ++ )
                     {
-                        global_incompatible_proposal_number_first_in_pair = global_list_of_proposals_just_incompatible[ global_pointer_to_list ] ;
-                        global_incompatible_proposal_number_second_in_pair = global_list_of_proposals_just_incompatible[ global_length_of_list_of_mutually_incompatible_proposals ] ;
+                        global_incompatible_actual_proposal_number_first_in_pair = global_list_of_proposals_actual_just_incompatible[ global_pointer_to_list ] ;
+                        global_incompatible_actual_proposal_number_second_in_pair = global_list_of_proposals_actual_just_incompatible[ global_length_of_list_of_mutually_incompatible_proposals ] ;
                         global_length_of_list_of_incompatible_pairs ++ ;
-                        global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_list_alias_proposal_for_actual_proposal[ global_incompatible_proposal_number_first_in_pair ] ;
-                        global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_list_alias_proposal_for_actual_proposal[ global_incompatible_proposal_number_second_in_pair ] ;
+                        global_list_of_trigger_actual_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_actual_proposal_number_first_in_pair ;
+                        global_list_of_incompatible_actual_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_actual_proposal_number_second_in_pair ;
                         global_length_of_list_of_incompatible_pairs ++ ;
-                        global_list_of_trigger_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_list_alias_proposal_for_actual_proposal[ global_incompatible_proposal_number_second_in_pair ] ;
-                        global_list_of_incompatible_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_list_alias_proposal_for_actual_proposal[ global_incompatible_proposal_number_first_in_pair ] ;
-//                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_proposal_number_second_in_pair ) + " ]" ;
+                        global_list_of_trigger_actual_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_actual_proposal_number_second_in_pair ;
+                        global_list_of_incompatible_actual_proposal_number_for_pair[ global_length_of_list_of_incompatible_pairs ] = global_incompatible_actual_proposal_number_first_in_pair ;
+//                        global_logitem_message = "[mutually incompatible, proposals " + convert_integer_to_text( global_incompatible_actual_proposal_number_first_in_pair ) + " and " + convert_integer_to_text( global_incompatible_actual_proposal_number_second_in_pair ) + " ]" ;
 //                        write_logitem_message( ) ;
                     }
                 }
@@ -1063,6 +1067,13 @@ void read_data( )
 //  the input file.
 
     }
+
+
+
+// -----------------------------------------------
+//  Write the counts for the number of participants and
+//  the number of proposals.
+
     global_json_key = "number_of_participants" ;
     global_json_value = convert_integer_to_text( global_number_of_participants ) ;
     write_json_key_value_pair( ) ;
@@ -1071,14 +1082,27 @@ void read_data( )
     write_json_key_value_pair( ) ;
 
 
-// -----------------------------------------------
-//  If a meaningful number of participants were not found,
-//  indicate this lack of data as a fatal error.
+//-----------------------------------------------
+//  If there are not at least two participants, exit with
+//  a fatal error.
 
     if ( global_number_of_participants < 2 )
     {
         global_json_key = "error" ;
-        global_json_value = "fewer than two participants." ;
+        global_json_value = "There are not at least two participants." ;
+        write_json_key_value_pair( ) ;
+        exit( EXIT_FAILURE ) ;
+    }
+
+
+//-----------------------------------------------
+//  If there is not at least two proposals, exit with a
+//  fatal error.
+
+    if ( global_number_of_proposals < 2 )
+    {
+        global_json_key = "error" ;
+        global_json_value = "There are not at least two proposals." ;
         write_json_key_value_pair( ) ;
         exit( EXIT_FAILURE ) ;
     }
@@ -1846,17 +1870,17 @@ void identify_incompatible_proposals( )
     global_logitem_message = "[proposals incompatible with proposal " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_just_identified_proposal_number ] ) + ":" ;
     for ( global_pair_counter = 1 ; global_pair_counter <= global_length_of_list_of_incompatible_pairs ; global_pair_counter ++ )
     {
-        if ( global_list_of_trigger_proposal_number_for_pair[ global_pair_counter ] == global_alias_just_identified_proposal_number )
+        if ( global_list_of_trigger_alias_proposal_number_for_pair[ global_pair_counter ] == global_alias_just_identified_proposal_number )
         {
             global_length_of_list_of_proposals_just_incompatible ++ ;
-            global_list_of_proposals_just_incompatible[ global_length_of_list_of_proposals_just_incompatible ] = global_list_of_incompatible_proposal_number_for_pair[ global_pair_counter ] ;
-            global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_of_proposals_just_incompatible[ global_length_of_list_of_proposals_just_incompatible ] ) ;
+            global_list_of_proposals_actual_just_incompatible[ global_length_of_list_of_proposals_just_incompatible ] = global_list_of_incompatible_actual_proposal_number_for_pair[ global_pair_counter ] ;
+            global_logitem_message = global_logitem_message + " " + convert_integer_to_text( global_list_of_proposals_actual_just_incompatible[ global_length_of_list_of_proposals_just_incompatible ] ) ;
         }
     }
     global_logitem_message = global_logitem_message + " ]" ;
     if ( global_length_of_list_of_proposals_just_incompatible > 0 )
     {
-        write_logitem_message( ) ;
+//        write_logitem_message( ) ;
     }
 
 
@@ -1925,9 +1949,9 @@ void calculate_satisfaction_counts( )
 
         global_alias_just_identified_proposal_number = global_alias_accepted_proposal_number ;
         identify_incompatible_proposals( ) ;
-        for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_just_incompatible ; global_list_pointer ++ )
+        for ( global_incompatible_loop_counter = 1 ; global_incompatible_loop_counter <= global_length_of_list_of_proposals_just_incompatible ; global_incompatible_loop_counter ++ )
         {
-            global_alias_proposal_for_satisfaction_count = global_list_of_proposals_just_incompatible[ global_list_pointer ] ;
+            global_alias_proposal_for_satisfaction_count = global_list_alias_proposal_for_actual_proposal[ global_list_of_proposals_actual_just_incompatible[ global_incompatible_loop_counter ] ] ;
 //            global_logitem_message = "[incompatible proposal is " + convert_integer_to_text( global_list_actual_proposal_for_alias_proposal[ global_alias_proposal_for_satisfaction_count ] ) + " ]" ;
 //            write_logitem_message( ) ;
 
@@ -2208,7 +2232,7 @@ void accept_one_proposal( )
     global_logitem_message = "[proposals rejected as incompatible:" ;
     for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_just_incompatible ; global_list_pointer ++ )
     {
-        global_alias_proposal_incompatible = global_list_of_proposals_just_incompatible[ global_list_pointer ] ;
+        global_alias_proposal_incompatible = global_list_alias_proposal_for_actual_proposal[ global_list_of_proposals_actual_just_incompatible[ global_list_pointer ] ] ;
         global_list_yes_or_no_acceptance_possible_for_proposal[ global_alias_proposal_incompatible ] = global_no ;
         global_length_of_list_of_proposals_rejected_as_incompatible ++ ;
         global_list_of_proposals_rejected_as_incompatible[ global_length_of_list_of_proposals_rejected_as_incompatible ] = global_alias_proposal_incompatible ;
@@ -2486,8 +2510,9 @@ void calculate_most_popular_proposal_focus_on_incompatible_proposals( )
     global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_just_identified_proposal_number ] = global_yes ;
     for ( global_list_pointer = 1 ; global_list_pointer <= global_length_of_list_of_proposals_just_incompatible ; global_list_pointer ++ )
     {
-        global_list_yes_or_no_popularity_continuing_for_proposal[ global_list_of_proposals_just_incompatible[ global_list_pointer ] ] = global_yes ;
-        global_list_yes_or_no_elimination_continuing_for_proposal[ global_list_of_proposals_just_incompatible[ global_list_pointer ] ] = global_yes ;
+        global_alias_proposal_number = global_list_alias_proposal_for_actual_proposal[ global_list_of_proposals_actual_just_incompatible[ global_list_pointer ] ] ;
+        global_list_yes_or_no_popularity_continuing_for_proposal[ global_alias_proposal_number ] = global_yes ;
+        global_list_yes_or_no_elimination_continuing_for_proposal[ global_alias_proposal_number ] = global_yes ;
     }
 
 
@@ -2655,10 +2680,10 @@ void do_negotiation_tool_calculations( )
 //  proposals are incompatible with which other
 //  proposals.
 
-    for ( global_pointer_to_list = 1 ; global_pointer_to_list <= global_length_of_list_of_incompatible_pairs ; global_pointer_to_list ++ )
+    for ( global_pair_counter = 1 ; global_pair_counter <= global_length_of_list_of_incompatible_pairs ; global_pair_counter ++ )
     {
-        global_actual_proposal_trigger = global_list_of_trigger_proposal_number_for_pair[ global_pointer_to_list ] ;
-        global_actual_proposal_incompatible = global_list_of_incompatible_proposal_number_for_pair[ global_pointer_to_list ] ;
+        global_actual_proposal_trigger = global_list_of_trigger_actual_proposal_number_for_pair[ global_pair_counter ] ;
+        global_actual_proposal_incompatible = global_list_of_incompatible_actual_proposal_number_for_pair[ global_pair_counter ] ;
 //        global_logitem_message = "[if proposal " + convert_integer_to_text( global_actual_proposal_trigger ) + " is accepted then incompatible proposal " + convert_integer_to_text( global_actual_proposal_incompatible ) + " cannot be accepted]" ;
 //        write_logitem_message( ) ;
     }
@@ -3135,36 +3160,23 @@ int main() {
 
 
 // -----------------------------------------------
+//  In case the incompatibility data contains an actual
+//  proposal number that is never encountered in the
+//  ranking data, initialize the alias version of the
+//  incompatibility info to zero.
+
+    for ( global_pair_counter = 0 ; global_pair_counter <= 10000 ; global_pair_counter ++ )
+    {
+        global_list_of_trigger_alias_proposal_number_for_pair[ global_pair_counter ] = 0 ;
+        global_list_of_incompatible_alias_proposal_number_for_pair[ global_pair_counter ] = 0 ;
+    }
+
+
+// -----------------------------------------------
 //  Read input data from standard input (which
 //  typically is a file).
 
     read_data( ) ;
-
-
-//-----------------------------------------------
-//  If there are not at least two participants, return
-//  with an error message.
-
-    if ( global_number_of_participants < 2 )
-    {
-        global_json_key = "error" ;
-        global_json_value = "There are not at least two participants." ;
-        write_json_key_value_pair( ) ;
-        exit( EXIT_FAILURE ) ;
-    }
-
-
-//-----------------------------------------------
-//  If there is not at least two proposals, return with
-//  an error message.
-
-    if ( global_number_of_proposals < 2 )
-    {
-        global_json_key = "error" ;
-        global_json_value = "There are not at least two proposals." ;
-        write_json_key_value_pair( ) ;
-        exit( EXIT_FAILURE ) ;
-    }
 
 
 //-----------------------------------------------
@@ -3209,6 +3221,28 @@ int main() {
     global_json_key = "global_minimum_dislikes_required_to_reject" ;
     global_json_value = convert_integer_to_text( global_minimum_dislikes_required_to_reject ) ;
     write_json_key_value_pair( ) ;
+
+
+// -----------------------------------------------
+//  Convert the incompatible proposal numbers from actual
+//  proposal numbers into alias proposal numbers. If the
+//  actual proposal number was never encountered in the
+//  rating info, indicate a fatal error.
+
+    for ( global_pair_counter = 1 ; global_pair_counter <= global_length_of_list_of_incompatible_pairs ; global_pair_counter ++ )
+    {
+        if ( ( global_list_alias_proposal_for_actual_proposal[ global_list_of_trigger_actual_proposal_number_for_pair[ global_pair_counter ] ] > 0 ) && ( global_list_alias_proposal_for_actual_proposal[ global_list_of_incompatible_actual_proposal_number_for_pair[ global_pair_counter ] ] > 0 ) )
+        {
+            global_list_of_trigger_alias_proposal_number_for_pair[ global_pair_counter ] = global_list_alias_proposal_for_actual_proposal[ global_list_of_trigger_actual_proposal_number_for_pair[ global_pair_counter ] ] ;
+            global_list_of_incompatible_alias_proposal_number_for_pair[ global_pair_counter ] = global_list_alias_proposal_for_actual_proposal[ global_list_of_incompatible_actual_proposal_number_for_pair[ global_pair_counter ] ] ;
+        } else
+        {
+            global_json_key = "error" ;
+            global_json_value = "Proposal number in incompatibility info was never encountered in ranking data." ;
+            write_json_key_value_pair( ) ;
+            exit( EXIT_FAILURE ) ;
+        }
+    }
 
 
 // -----------------------------------------------

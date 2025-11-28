@@ -2,7 +2,11 @@
 
 echo "compiling"
 
-g++ negotiation_tool.cpp -o negotiation_tool
+g++ negotiation_tool.cpp -o negotiation_tool.exe
+
+echo "done, waiting for keypress"
+
+read keypress
 
 echo "random data example"
 
@@ -16,4 +20,6 @@ echo "cabinet ministers example"
 
 ./negotiation_tool.exe < input_cabinet_ministers.txt > output_cabinet_ministers.json
 
-echo "done"
+echo "done, waiting for keypress"
+
+read keypress

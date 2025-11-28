@@ -3,7 +3,7 @@ VoteFair-Negotiation-Tool
 
 SOFTWARE
 
-The file named "negotiation_tool.cpp" within this folder contains all the code needed to calculate results for VoteFair Negotiation Ranking.  The RUNNING secion below explains how to run this software.  The ALGORITHM section below explains how the calculations are done.
+The file named "negotiation_tool.cpp" within this folder contains all the code needed to calculate results for VoteFair Negotiation Ranking.  The RUNNING section below explains how to run this software.  The ALGORITHM section below explains how the calculations are done.
 
 
 Version 2.00
@@ -20,7 +20,7 @@ What real-life situations is this tool designed to handle?
     * legislative committee members writing a bill
     * city council members designing a tax change
     * political party writing a party platform
-    * labor union verus management negotating a new contract
+    * labor union versus management negotiating a new contract
     * proportionally filling seats on a board of directors
     * non-profit organization members resolving their differences
     * consultant and client negotiating a contract
@@ -146,7 +146,7 @@ RUNNING
 
 g++ negotiation_tool.cpp -o negotiation_tool.exe
 
-./negotiation_tool.ext < input_negotiation_tool.csv > output_negotiation_tool.json
+./negotiation_tool.exe < input_negotiation_tool.csv > output_negotiation_tool.json
 
 
 SUPPORT AND DOCUMENTATION
@@ -228,7 +228,7 @@ Here are the highlights about how the calculations are done.  This description a
 
 * If any participant might suspect any bias based on any text (non-number) information in the input data file, comments should be omitted from the input data file.
 
-* For additonal details about the calculation steps, especially for a specific negotiation case, look at the "loginfo" messages within the output JSON file.  These messages can be turned off by including an appropriate data line in the input file.
+* For additional details about the calculation steps, especially for a specific negotiation case, look at the "loginfo" messages within the output JSON file.  These messages can be turned off by including an appropriate data line in the input file.
 
 * Here's a link to a graphic that shows how a ballot is counted to yield a single-ballot pairwise support count and a single-ballot pairwise opposition count:
 
